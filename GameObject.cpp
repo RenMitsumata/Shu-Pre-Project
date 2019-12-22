@@ -7,6 +7,7 @@ GameObject::GameObject() :
 	rot(XMFLOAT3(0.0f, 0.0f, 0.0f)),
 	siz(XMFLOAT3(1.0f, 1.0f, 1.0f)),
 	front(XMFLOAT3(0.0f, 0.0f, 1.0f)),
+	up(XMFLOAT3(0.0f,1.0f,0.0f)),
 	velocity(XMFLOAT3(0.0f,0.0f,0.0f))
 {
 }

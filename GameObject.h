@@ -16,6 +16,7 @@ protected:
 	XMFLOAT3 siz;
 
 	XMFLOAT3 front;
+	XMFLOAT3 up;
 	XMFLOAT3 velocity;
 
 	GameObject*				parent;			// 親GameObjectクラス（１つ）

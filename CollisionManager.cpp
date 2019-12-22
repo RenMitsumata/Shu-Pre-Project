@@ -22,4 +22,5 @@ void CollisionManager::Uninit()
 
 void CollisionManager::AddCollision(Collision* col)
 {
+	collisionList.push_back(col);
 }
