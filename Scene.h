@@ -4,6 +4,7 @@
 #include "Component.h"
 #include <list>
 #include "GameObject.h"
+#include "CollisionManager.h"
 
 // ëOï˚êÈåæ
 
@@ -29,6 +30,7 @@ protected:
 	XMFLOAT3* p_CameraPos;
 	std::list<GameObject*> objectList[5];
 	DIVISION division;
+	CollisionManager colMgr;
 public:
 	
 
@@ -73,5 +75,6 @@ public:
 	XMFLOAT4X4* GetProjectionMatrix() { return p_CameraProjectionMatrix; }
 	XMFLOAT3* GetCameraPos() { return p_CameraPos; }
 	DIVISION* GetDivision() { return &division; }
+	CollisionManager* GetCollisionManager() { return &colMgr; }
 };
 

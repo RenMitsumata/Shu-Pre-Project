@@ -1,8 +1,10 @@
+#define NOMINMAX
 #include "Manager.h"
 #include "DXManager.h"
 #include "Component.h"
 #include "Texture.h"
 #include "Scene.h"
+#include "Model.h"
 #include "Shader3D_Normal.h"
 #include <Windows.h>
 #include <stdio.h>

@@ -1,30 +1,33 @@
 #include "DXManager.h"
-#include "GameObject.h"
-#include "CollisionSphere.h"
 #include "CollisionOBB.h"
+#include "CollisionSphere.h"
 #include "Manager.h"
 
-CollisionSphere::CollisionSphere() : radius(1.0f)
+CollisionOBB::CollisionOBB(float f, float r, float u)
 {
+	frontLength = f;
+	rightLength = r;
+	upLength = u;
 	Manager::Get()->GetScene()->GetCollisionManager()->AddCollision(this);
 }
 
-
-CollisionSphere::~CollisionSphere()
+CollisionOBB::~CollisionOBB()
 {
 }
 
-bool CollisionSphere::isCollision(CollisionSphere* other)
+void CollisionOBB::Dispatch(Collision* other)
 {
-	GameObject* object = other->GetOwner();
-	XMFLOAT3 otherPos = object->GetPos();
-	float distance = (otherPos.x - owner->GetPos().x)*(otherPos.x - owner->GetPos().x) + (otherPos.y - owner->GetPos().y)*(otherPos.y - owner->GetPos().y) + (otherPos.z - owner->GetPos().z)*(otherPos.z - owner->GetPos().z);
-	return distance < (other->GetRadius() * other->GetRadius()) + (this->radius * this->radius);
+	other->isCollision(this);
 }
 
-bool CollisionSphere::isCollision(CollisionOBB* other)
+void CollisionOBB::CollisionAction(Collision* other)
+{
+}
+
+bool CollisionOBB::isCollision(CollisionSphere* other)
 {
 	XMFLOAT3 otherPos = other->GetOwner()->GetPos();
+	float otherRadius = other->GetRadius();
 
 
 
@@ -32,22 +35,18 @@ bool CollisionSphere::isCollision(CollisionOBB* other)
 
 	XMFLOAT3 distance = GetOwner()->GetPos() - other->GetOwner()->GetPos();
 	XMVECTOR distanceVec = XMLoadFloat3(&distance);
-	XMFLOAT3 front = other->GetOwner()->GetFront();
-	XMFLOAT3 up = other->GetOwner()->GetUp();
+	XMFLOAT3 front = GetOwner()->GetFront();
+	XMFLOAT3 up = GetOwner()->GetUp();
 	XMVECTOR frontDir = XMVector3Normalize(XMLoadFloat3(&front));
 	XMVECTOR upDir = XMVector3Normalize(XMLoadFloat3(&up));
 	XMVECTOR rightDir = XMVector3Normalize(XMVector3Cross(upDir, frontDir));
 	XMFLOAT3 right;
 	XMStoreFloat3(&right, rightDir);
-	XMFLOAT3 lengths = other->GetLengths();
-	float frontLength = lengths.x;
-	float upLength = lengths.y;
-	float rightLength = lengths.z;
 
 	// front•ûŒü‚ÌŒvŽZ
 	XMVECTOR lengthVec = XMVector3Length(XMVector3Dot(frontDir, distanceVec)) / frontLength;
 	float scalarF;
-	XMStoreFloat(&scalarF, lengthVec);
+	XMStoreFloat(&scalarF,lengthVec);
 	scalarF = fabs(scalarF);
 	if (scalarF > 1) {
 		XMFLOAT3 delta = (1 - scalarF) * frontLength * front;
@@ -76,19 +75,12 @@ bool CollisionSphere::isCollision(CollisionOBB* other)
 	XMVECTOR resultLengthVec = XMVector3Length(XMLoadFloat3(&result));
 	float resultLength;
 	XMStoreFloat(&resultLength, resultLengthVec);
+	
+	return resultLength < otherRadius;
 
-	return resultLength < radius;
 }
 
-void CollisionSphere::Dispatch(Collision* other)
+bool CollisionOBB::isCollision(CollisionOBB* other)
 {
-	bool judge = other->isCollision(this);
-	if (judge) {
-		CollisionAction(other);
-	}
-}
-
-void CollisionSphere::CollisionAction(Collision* other)
-{
-	other->GetOwner()->SetDestroy();
+	return false;
 }

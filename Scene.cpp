@@ -33,6 +33,14 @@ void Scene::Update()
 			obj->Update();
 		}
 	}
+	colMgr.Update();
+	for (int i = 0; i < 5; i++) {
+		
+		objectList[i].remove_if([](GameObject* object) {return object->IsDestroy(); });
+		
+	}
+
+
 }
 
 void Scene::Draw()

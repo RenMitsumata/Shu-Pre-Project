@@ -134,6 +134,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="CollisionOBB.cpp" />
     <ClCompile Include="CollisionSphere.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentFactory.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="Shader3D.cpp" />
     <ClCompile Include="Shader3D_Normal.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Wall.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +160,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="CollisionOBB.h" />
     <ClInclude Include="CollisionSphere.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentFactory.h" />
@@ -175,6 +178,7 @@
     <ClInclude Include="Shader3D.h" />
     <ClInclude Include="Shader3D_Normal.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Wall.h" />
     <ClInclude Include="window.h" />
   </ItemGroup>
   <ItemGroup>

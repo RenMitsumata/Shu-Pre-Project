@@ -3,6 +3,11 @@
 
 
 
+
+//　前方宣言
+struct MATERIAL;
+struct LIGHT;
+
 // 頂点構造体
 struct VERTEX_3D_Normal
 {
@@ -13,50 +18,6 @@ struct VERTEX_3D_Normal
 	XMFLOAT4 Diffuse;
 	XMFLOAT2 TexCoord;
 };
-
-
-// 色構造体
-struct COLOR
-{
-	COLOR() {}
-	COLOR(float _r, float _g, float _b, float _a)
-	{
-		r = _r;
-		g = _g;
-		b = _b;
-		a = _a;
-	}
-
-	float r;
-	float g;
-	float b;
-	float a;
-
-	COLOR operator = (XMFLOAT4 color) {
-		this->r = color.x;
-		this->g = color.y;
-		this->b = color.z;
-		this->a = color.w;
-		return*this;
-	}
-
-
-
-};
-
-
-
-// マテリアル構造体
-struct MATERIAL
-{
-	COLOR		Ambient;
-	COLOR		Diffuse;
-	COLOR		Specular;
-	COLOR		Emission;
-	float		Shininess;
-	float		Dummy[3];//16bit境界用
-};
-
 
 
 /*
@@ -79,12 +40,7 @@ struct DX11_SUBSET
 };
 */
 
-struct LIGHT
-{
-	XMFLOAT4	Direction;
-	COLOR		Diffuse;
-	COLOR		Ambient;
-};
+
 
 // シェーダ定数バッファ構造体
 struct CONSTANT3D
