@@ -5,6 +5,8 @@
 
 // ‘O•ûéŒ¾
 class Model;
+class CollisionOBB;
+class CollisionSphere;
 
 class ComponentFactory
 {
@@ -21,7 +23,7 @@ public:
 	static T* CreateComponent(){
 		T* comp = new T;
 		comp->Init();
-		return new T;
+		return comp;
 	}
 };
 

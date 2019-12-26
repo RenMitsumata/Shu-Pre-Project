@@ -13,6 +13,7 @@ public:
 	~CollisionManager();
 	void Init();
 	void Uninit();
+	void Update();
 	void AddCollision(Collision* col);
 };
 

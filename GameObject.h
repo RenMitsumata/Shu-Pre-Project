@@ -19,6 +19,8 @@ protected:
 	XMFLOAT3 up;
 	XMFLOAT3 velocity;
 
+	bool isDestroy = false;
+
 	GameObject*				parent;			// 親GameObjectクラス（１つ）
 	std::list<GameObject*>	childrensList;	// 子GameObjectクラス（複数）
 	std::list<Component*>	componentsList;	// コンポーネント（複数）
@@ -45,9 +47,12 @@ public:
 	void SetRot(XMFLOAT3 rot) { this->rot = rot; }
 	void SetSiz(XMFLOAT3 siz) { this->siz = siz; }
 	XMFLOAT3 GetFront() { return front; }
+	XMFLOAT3 GetUp() { return up; }
 	XMFLOAT3 GetVelocity() { return velocity; }
 	void SetVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
 	void AddVelocity(XMFLOAT3 velocity) { this->velocity += velocity; }
 	bool isJudge(WORD otherNum);
+	void SetDestroy() { isDestroy = true; }
+	bool IsDestroy() { return isDestroy; }
 };
 

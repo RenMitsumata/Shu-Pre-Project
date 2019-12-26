@@ -216,6 +216,10 @@ void DXManager::End()
 	swapChain->Present(1, 0);
 }
 
+/*
+	DirectXMath関係のオペレータのオーバーロード
+*/
+
 
 XMFLOAT3 operator+ (XMFLOAT3 a, XMFLOAT3 b) {
 	XMFLOAT3 ret;
@@ -240,6 +244,15 @@ XMFLOAT3 operator*(XMFLOAT3& a, float b)
 	ret.x = a.x * b;
 	ret.y = a.y * b;
 	ret.z = a.z * b;
+	return ret;
+}
+
+XMFLOAT3 operator*(float a, XMFLOAT3 & b)
+{
+	XMFLOAT3 ret;
+	ret.x = b.x * a;
+	ret.y = b.y * a;
+	ret.z = b.z * a;
 	return ret;
 }
 
