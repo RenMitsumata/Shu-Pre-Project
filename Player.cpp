@@ -20,7 +20,7 @@ void Player::Init()
 	siz = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	front = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	Model* model = ComponentFactory::CreateComponent<Model>();
-	model->Load("Assets/Models/human.fbx");
+	model->Load("Assets/Models/SambaDancing2.fbx");
 	model->SetOwner(this);
 	componentsList.push_back(model);
 	input = Manager::Get()->GetInput();
@@ -64,10 +64,7 @@ void Player::Update()
 
 
 
-	if (input->GetKeyPress('A')) {
-		rot.y += 0.1f;
-	}
-
+	
 
 
 
