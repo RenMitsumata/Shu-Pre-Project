@@ -51,7 +51,7 @@ SamplerState samplerState : register(s0);
 
 float4 main(in PS_IN input) : SV_TARGET{
 	
-
+	
 	float3 normalMap = (normalTexture.Sample(samplerState,input.texcoord)) * 2.0f - 1.0f;
 	normalMap = normalize(normalMap);
 
@@ -96,9 +96,9 @@ float4 main(in PS_IN input) : SV_TARGET{
 
 
 
-	//float height = (normalTexture.Sample(samplerState, input.texcoord)).a * 2.0f - 1.0f;	// aは高さマッピングのグレースケール値
+	float height = (normalTexture.Sample(samplerState, input.texcoord)).a * 2.0f - 1.0f;	// aは高さマッピングのグレースケール値
 
-	//float2 parallax_uv = input.texcoord + height * 0.2f * toEyeT.xy;	// 0.2fは高さマッピングの精度により変える ＋より→はずらしたい量
+	float2 parallax_uv = input.texcoord + height * 0.2f * toEyeT.xy;	// 0.2fは高さマッピングの精度により変える ＋より→はずらしたい量
 	
 	
 
@@ -178,7 +178,7 @@ float4 main(in PS_IN input) : SV_TARGET{
 
 
 
-
+	/*
 
 	
 	const int DIVISION_NUM = 32;
@@ -203,9 +203,9 @@ float4 main(in PS_IN input) : SV_TARGET{
 	float2 parallax_uv = rayPos.xz;
 	
 
+	*/
 
-
-	
+	//return outTexture.Sample(samplerState, input.texcoord);
 
 	return float4(outTexture.Sample(samplerState, parallax_uv).rgb * light,1.0f) + specularColor;
 
