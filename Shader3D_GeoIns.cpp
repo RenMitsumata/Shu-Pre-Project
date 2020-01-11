@@ -1,24 +1,23 @@
-
 #include "Manager.h"
 #include "DXManager.h"
 #include "Component.h"
 #include "Texture.h"
-#include "Shader3D.h"
+#include "Shader3D_GeoIns.h"
 #include <Windows.h>
 #include <stdio.h>
 #include <io.h>
 
 
-Shader3D::Shader3D()
+Shader3D_GeoIns::Shader3D_GeoIns()
 {
 }
 
 
-Shader3D::~Shader3D()
+Shader3D_GeoIns::~Shader3D_GeoIns()
 {
 }
 
-void Shader3D::Init(const char * VS_Filename, const char * PS_Filename)
+void Shader3D_GeoIns::Init(const char * VS_Filename, const char * PS_Filename)
 {
 	// 初期化に必要なデバイス取得
 	device = Manager::Get()->GetDXManager()->GetDevice();
@@ -41,18 +40,23 @@ void Shader3D::Init(const char * VS_Filename, const char * PS_Filename)
 		unsigned char* buffer = new unsigned char[fsize];
 		fread(buffer, fsize, 1, file);
 		fclose(file);
-		
+
 
 		device->CreateVertexShader(buffer, fsize, NULL, &vertexShader);
+
 
 
 		// 入力レイアウト生成
 		D3D11_INPUT_ELEMENT_DESC layout[] =
 		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 4 * 6, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 4 * 10, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+			{ "POSITION"	, 0, DXGI_FORMAT_R32G32B32_FLOAT	, 0, 0		, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "NORMAL"		, 0, DXGI_FORMAT_R32G32B32_FLOAT	, 0, 4 * 3	, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "COLOR"		, 0, DXGI_FORMAT_R32G32B32A32_FLOAT	, 0, 4 * 6	, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD"	, 0, DXGI_FORMAT_R32G32_FLOAT		, 0, 4 * 10	, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "WORLDMTX_L1" , 0, DXGI_FORMAT_R32G32B32A32_FLOAT	, 1, 4 * 0	, D3D11_INPUT_PER_INSTANCE_DATA, 1},
+			{ "WORLDMTX_L2" , 0, DXGI_FORMAT_R32G32B32A32_FLOAT	, 1, 4 * 4	, D3D11_INPUT_PER_INSTANCE_DATA, 1},
+			{ "WORLDMTX_L3" , 0, DXGI_FORMAT_R32G32B32A32_FLOAT	, 1, 4 * 8	, D3D11_INPUT_PER_INSTANCE_DATA, 1},
+			{ "WORLDMTX_L4" , 0, DXGI_FORMAT_R32G32B32A32_FLOAT	, 1, 4 * 12	, D3D11_INPUT_PER_INSTANCE_DATA, 1},
 		};
 		UINT numElements = ARRAYSIZE(layout);
 
@@ -83,7 +87,7 @@ void Shader3D::Init(const char * VS_Filename, const char * PS_Filename)
 		delete[] buffer;
 	}
 
-	
+
 
 
 	// 定数バッファ生成
@@ -108,18 +112,18 @@ void Shader3D::Init(const char * VS_Filename, const char * PS_Filename)
 	device->CreateBuffer(&hBufferDesc, NULL, &projectionBuffer);
 	context->VSSetConstantBuffers(2, 1, &projectionBuffer);
 	*/
-	
+
 	hBufferDesc.ByteWidth = sizeof(MATERIAL);
 
 	device->CreateBuffer(&hBufferDesc, NULL, &materialBuffer);
 	context->VSSetConstantBuffers(1, 1, &materialBuffer);
 	context->PSSetConstantBuffers(0, 1, &materialBuffer);
-	
+
 	hBufferDesc.ByteWidth = sizeof(LIGHT);
 
 	device->CreateBuffer(&hBufferDesc, NULL, &lightBuffer);
 	context->VSSetConstantBuffers(2, 1, &lightBuffer);
-	
+
 
 
 
@@ -131,7 +135,7 @@ void Shader3D::Init(const char * VS_Filename, const char * PS_Filename)
 	context->VSSetShader(vertexShader, NULL, 0);
 	context->PSSetShader(pixelShader, NULL, 0);
 
-	
+
 
 	// ライト初期化
 	LIGHT light;
@@ -165,10 +169,10 @@ void Shader3D::Init(const char * VS_Filename, const char * PS_Filename)
 	device->CreateSamplerState(&samplerDesc, &samplerState);
 
 	context->PSSetSamplers(0, 1, &samplerState);
-	
+
 }
 
-void Shader3D::Uninit()
+void Shader3D_GeoIns::Uninit()
 {
 	if (lightBuffer) { lightBuffer->Release(); }
 	if (materialBuffer) { materialBuffer->Release(); }
@@ -180,7 +184,7 @@ void Shader3D::Uninit()
 }
 
 
-void Shader3D::Set()
+void Shader3D_GeoIns::Set()
 {
 	if (device == nullptr || context == nullptr) {
 		MessageBox(NULL, "シェーダが初期化されていません", "デバイス取得失敗", MB_ICONHAND);
@@ -205,7 +209,7 @@ void Shader3D::Set()
 	//context->PSSetConstantBuffers(0, 1, &constantBuffer);
 }
 
-void Shader3D::SetWorldMatrix(XMFLOAT4X4* worldMatrix)
+void Shader3D_GeoIns::SetWorldMatrix(XMFLOAT4X4* worldMatrix)
 {
 	if (device == nullptr || context == nullptr) {
 		MessageBox(NULL, "シェーダが初期化されていません", "デバイス取得失敗", MB_ICONHAND);
@@ -217,7 +221,7 @@ void Shader3D::SetWorldMatrix(XMFLOAT4X4* worldMatrix)
 	constantValue.worldMatrix = matrix;
 }
 
-void Shader3D::SetViewMatrix(XMFLOAT4X4* viewMatrix)
+void Shader3D_GeoIns::SetViewMatrix(XMFLOAT4X4* viewMatrix)
 {
 	if (device == nullptr || context == nullptr) {
 		MessageBox(NULL, "シェーダが初期化されていません", "デバイス取得失敗", MB_ICONHAND);
@@ -229,7 +233,7 @@ void Shader3D::SetViewMatrix(XMFLOAT4X4* viewMatrix)
 	constantValue.viewMatrix = matrix;
 }
 
-void Shader3D::SetProjMatrix(XMFLOAT4X4* projMatrix)
+void Shader3D_GeoIns::SetProjMatrix(XMFLOAT4X4* projMatrix)
 {
 	if (device == nullptr || context == nullptr) {
 		MessageBox(NULL, "シェーダが初期化されていません", "デバイス取得失敗", MB_ICONHAND);
@@ -241,7 +245,7 @@ void Shader3D::SetProjMatrix(XMFLOAT4X4* projMatrix)
 	constantValue.projMatrix = matrix;
 }
 
-void Shader3D::SetMaterial(MATERIAL* material)
+void Shader3D_GeoIns::SetMaterial(MATERIAL* material)
 {
 	if (device == nullptr || context == nullptr) {
 		MessageBox(NULL, "シェーダが初期化されていません", "デバイス取得失敗", MB_ICONHAND);
@@ -250,7 +254,7 @@ void Shader3D::SetMaterial(MATERIAL* material)
 	context->UpdateSubresource(materialBuffer, 0, NULL, material, 0, 0);
 }
 
-void Shader3D::SetLight(LIGHT* light)
+void Shader3D_GeoIns::SetLight(LIGHT* light)
 {
 	if (device == nullptr || context == nullptr) {
 		MessageBox(NULL, "シェーダが初期化されていません", "デバイス取得失敗", MB_ICONHAND);
@@ -259,7 +263,7 @@ void Shader3D::SetLight(LIGHT* light)
 	context->UpdateSubresource(lightBuffer, 0, NULL, light, 0, 0);
 }
 
-void Shader3D::SetTexture(Texture* texture)
+void Shader3D_GeoIns::SetTexture(Texture* texture)
 {
 	ID3D11ShaderResourceView* srv[1] = { texture->GetShaderResourceView() };
 	context->PSSetShaderResources(0, 1, srv);

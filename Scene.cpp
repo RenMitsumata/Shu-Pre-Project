@@ -28,6 +28,7 @@ void Scene::Uninit()
 
 void Scene::Update()
 {
+	colMgr.PreUpdate();
 	for (int i = 0; i < 5; i++) {
 		for (GameObject* obj : objectList[i]) {
 			obj->Update();

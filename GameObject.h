@@ -46,6 +46,9 @@ public:
 	void SetPos(XMFLOAT3 pos) { this->pos = pos; }
 	void SetRot(XMFLOAT3 rot) { this->rot = rot; }
 	void SetSiz(XMFLOAT3 siz) { this->siz = siz; }
+	void AddPos(XMFLOAT3 pos) { this->pos += pos; }
+	void AddRot(XMFLOAT3 rot) { this->rot += rot; }
+	void AddSiz(XMFLOAT3 siz) { this->siz += siz; }
 	XMFLOAT3 GetFront() { return front; }
 	XMFLOAT3 GetUp() { return up; }
 	XMFLOAT3 GetVelocity() { return velocity; }

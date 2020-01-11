@@ -23,7 +23,7 @@ void Bullet::Init()
 	componentsList.push_back(model);
 	CollisionSphere* col = new CollisionSphere;
 	col->Init();
-	col->SetRadius(0.2f);
+	col->SetRadius(1.0f);
 	col->SetOwner(this);
 	componentsList.push_back(col);
 

@@ -13,7 +13,7 @@ public:
 	virtual void Uninit();
 	virtual void Update();
 	virtual void Draw();
-	void SetOwner(GameObject* owner) { this->owner = owner; }
+	virtual void SetOwner(GameObject* owner) { this->owner = owner; }
 	GameObject* GetOwner() { return owner; }
 };
 

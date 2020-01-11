@@ -6,5 +6,6 @@ class Wall :
 public:
 	Wall();
 	~Wall();
+	void Update()override;
 };
 

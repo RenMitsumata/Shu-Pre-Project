@@ -123,6 +123,18 @@
     <ClCompile Include="Texture.cpp">
       <Filter>ソース ファイル\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Shader3D_GeoIns.cpp">
+      <Filter>ソース ファイル\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader2D.cpp">
+      <Filter>ソース ファイル\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Polygon.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -197,6 +209,18 @@
     <ClInclude Include="Texture.h">
       <Filter>ヘッダー ファイル\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Shader3D_GeoIns.h">
+      <Filter>ヘッダー ファイル\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader2D.h">
+      <Filter>ヘッダー ファイル\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="vertexShader3D.hlsl">
@@ -209,6 +233,24 @@
       <Filter>ソース ファイル\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="VS_Normal.hlsl">
+      <Filter>ソース ファイル\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_GeometryInstance.hlsl">
+      <Filter>ソース ファイル\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_GeometryInstance.hlsl">
+      <Filter>ソース ファイル\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_UI.hlsl">
+      <Filter>ソース ファイル\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_UI.hlsl">
+      <Filter>ソース ファイル\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_WireFrame.hlsl">
+      <Filter>ソース ファイル\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_WireFrame.hlsl">
       <Filter>ソース ファイル\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

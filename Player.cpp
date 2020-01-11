@@ -3,7 +3,7 @@
 #include "InputManager.h"
 #include "Camera.h"
 #include "Bullet.h"
-
+#include "CollisionSphere.h"
 
 Player::Player()
 {
@@ -23,19 +23,26 @@ void Player::Init()
 	model->Load("Assets/Models/SambaDancing2.fbx");
 	model->SetOwner(this);
 	componentsList.push_back(model);
+
+	
+	CollisionSphere* col = ComponentFactory::CreateComponent<CollisionSphere>();
+	col->SetRadius(1.0f);
+	col->SetTag(e_COLTYPE_PLAYER);
+	col->SetOwner(this);
+	componentsList.push_back(col);
+	
+	
 	input = Manager::Get()->GetInput();
 	//Camera* camera = Manager::Get()->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA);
 	//camera->SetOwner(this);
 	scene = Manager::Get()->GetScene();
 }
 
-//void Player::Uninit()
-//{
-
-//}
 
 void Player::Update()
 {
+	
+
 	if (input->GetKeyPress(VK_UP)) {
 		pos.z += 0.1f;
 	}
@@ -61,11 +68,4 @@ void Player::Update()
 		
 		bullet->SetVelocity(front * 0.5f);
 	}
-
-
-
-	
-
-
-
 }

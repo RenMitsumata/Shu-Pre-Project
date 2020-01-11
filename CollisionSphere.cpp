@@ -7,6 +7,11 @@
 CollisionSphere::CollisionSphere() : radius(1.0f)
 {
 	Manager::Get()->GetScene()->GetCollisionManager()->AddCollision(this);
+	shader = new Shader3D;
+	shader->Init("VS_WireFrame.cso", "PS_WireFrame.cso");
+	manager = Manager::Get();
+	device = manager->GetDXManager()->GetDevice();
+	context = manager->GetDXManager()->GetDeviceContext();
 }
 
 
@@ -91,4 +96,105 @@ void CollisionSphere::Dispatch(Collision* other)
 void CollisionSphere::CollisionAction(Collision* other)
 {
 	other->GetOwner()->SetDestroy();
+}
+
+void CollisionSphere::Draw()
+{
+	UINT stride = sizeof(VERTEX_3D);
+	UINT offset = 0;
+
+	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	XMFLOAT4X4 MatLoc = owner->GetTransformMatrix();
+	XMMATRIX worldMat = XMLoadFloat4x4(&MatLoc);
+	worldMat = XMMatrixScaling(100.0f, 100.0f, 100.0f) * worldMat;
+	XMStoreFloat4x4(&MatLoc, worldMat);
+	shader->SetWorldMatrix(&MatLoc);
+	shader->SetViewMatrix(manager->GetScene()->GetViewMatrix());
+	shader->SetProjMatrix(manager->GetScene()->GetProjectionMatrix());
+
+	shader->Set();
+	context->DrawIndexed(264, 0, 0);
+}
+
+void CollisionSphere::SetOwner(GameObject* owner)
+{
+	this->owner = owner;
+	// 頂点情報の作製
+	VERTEX_3D vertex[62];
+	vertex[0].Position = XMFLOAT3(0.0f, radius, 0.0f);
+	for (int i = 1; i < 6; i++) {
+		for (int j = 0; j < 12; j++) {
+			vertex[(i - 1) * 12 + j + 1].Position = 
+				XMFLOAT3(
+					radius * cosf(XMConvertToRadians(i * 30 + 90)) * cosf(XMConvertToRadians(j * 30)),	// X
+					radius * sinf(XMConvertToRadians(i * 30 + 90)),										// Y
+					radius * cosf(XMConvertToRadians(i * 30 + 90)) * sinf(XMConvertToRadians(j * 30))	// Z
+				);
+		}
+	}
+	vertex[61].Position = XMFLOAT3(0.0f, -radius, 0.0f);
+	for (int i = 0; i < 62; i++) {
+		vertex[i].Diffuse = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+		vertex[i].Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
+		vertex[i].TexCoord = XMFLOAT2(0.0f, 0.0f);
+	}
+	   	 	
+
+	// 頂点バッファの作製
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	vertexBufferDesc.ByteWidth = sizeof(VERTEX_3D) * 62;
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.StructureByteStride = 0;
+	D3D11_SUBRESOURCE_DATA vbData;
+	vbData.pSysMem = vertex;
+	vbData.SysMemPitch = 0;
+	vbData.SysMemSlicePitch = 0;
+	device->CreateBuffer(&vertexBufferDesc, &vbData, &vertexBuffer);
+
+
+	// インデックス情報の登録
+	unsigned short indexList[264];
+	unsigned short Cnt = 0;
+	for (int i = 0; i < 12; i++, Cnt += 12) {
+		indexList[Cnt] = 0;
+		indexList[Cnt + 1] = indexList[Cnt + 2] = 1 + i;
+		indexList[Cnt + 3] = indexList[Cnt + 4] = 13 + i;
+		indexList[Cnt + 5] = indexList[Cnt + 6] = 25 + i;
+		indexList[Cnt + 7] = indexList[Cnt + 8] = 37 + i;
+		indexList[Cnt + 9] = indexList[Cnt + 10] = 49 + i;
+		indexList[Cnt + 11] = 61;
+	}
+	for (int i = 0; i < 5; i++, Cnt += 24) {
+		indexList[Cnt] = indexList[Cnt + 23] = 12 * i + 1;
+		indexList[Cnt + 1] = indexList[Cnt + 2] = 12 * i + 2;
+		indexList[Cnt + 3] = indexList[Cnt + 4] = 12 * i + 3;
+		indexList[Cnt + 5] = indexList[Cnt + 6] = 12 * i + 4;
+		indexList[Cnt + 7] = indexList[Cnt + 8] = 12 * i + 5;
+		indexList[Cnt + 9] = indexList[Cnt + 10] = 12 * i + 6;
+		indexList[Cnt + 11] = indexList[Cnt + 12] = 12 * i + 7;
+		indexList[Cnt + 13] = indexList[Cnt + 14] = 12 * i + 8;
+		indexList[Cnt + 15] = indexList[Cnt + 16] = 12 * i + 9;
+		indexList[Cnt + 17] = indexList[Cnt + 18] = 12 * i + 10;
+		indexList[Cnt + 19] = indexList[Cnt + 20] = 12 * i + 11;
+		indexList[Cnt + 21] = indexList[Cnt + 22] = 12 * i + 12;
+	}
+
+	   	  
+	D3D11_BUFFER_DESC indexBufferDesc;
+	indexBufferDesc.ByteWidth = sizeof(unsigned short) * 264;
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+	indexBufferDesc.StructureByteStride = 0;
+	D3D11_SUBRESOURCE_DATA ibData;
+	ibData.pSysMem = indexList;
+	ibData.SysMemPitch = 0;
+	ibData.SysMemSlicePitch = 0;
+	device->CreateBuffer(&indexBufferDesc, &ibData, &indexBuffer);
 }

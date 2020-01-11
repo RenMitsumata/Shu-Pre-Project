@@ -58,7 +58,6 @@ void Model::Draw()
 	XMMATRIX mat = XMLoadFloat4x4(&MatLoc);
 	//mat = XMMatrixTranspose(mat);
 	DrawNode(rootNode,mat);
-
 }
 
 void Model::Load(const char* filename)
