@@ -19,6 +19,7 @@ public:
 	~CollisionSphere();
 	bool isCollision(CollisionSphere* other);
 	bool isCollision(CollisionOBB* other);
+	bool isCollision(CollisionCapsule* other);
 	void Dispatch(Collision* other)override;
 	void CollisionAction(Collision* other)override;
 	float GetRadius() { return radius; }

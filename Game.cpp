@@ -26,7 +26,7 @@ void Game::Init()
 	for (int i = 0; i < 5; i++) {
 		Wall* wall = AddGameObject<Wall>(e_LAYER_GAMEOBJECT);
 		wall->SetPos(XMFLOAT3(0.0f, 1.0f, i * 3));
-		//wall->SetRot(XMFLOAT3(0.0f, XMConvertToRadians(60), 0.0f));
+		wall->SetRot(XMFLOAT3(0.0f, XMConvertToRadians(60 * i), 0.0f));
 	}
 	
 	

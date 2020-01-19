@@ -44,7 +44,16 @@ public:
 	XMFLOAT3 GetSiz() { return siz; }
 	DWORD GetDivisionNum() { return divisionNum; }
 	void SetPos(XMFLOAT3 pos) { this->pos = pos; }
-	void SetRot(XMFLOAT3 rot) { this->rot = rot; }
+	void SetRot(XMFLOAT3 rot) 
+	{
+		this->rot = rot;
+		
+		XMMATRIX mat = XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z);
+		XMVECTOR frontVec = XMLoadFloat3(&front);
+		frontVec = XMVector3TransformNormal(frontVec, mat);
+		frontVec = XMVector3Normalize(frontVec);
+		XMStoreFloat3(&front, frontVec);
+	}
 	void SetSiz(XMFLOAT3 siz) { this->siz = siz; }
 	void AddPos(XMFLOAT3 pos) { this->pos += pos; }
 	void AddRot(XMFLOAT3 rot) { this->rot += rot; }

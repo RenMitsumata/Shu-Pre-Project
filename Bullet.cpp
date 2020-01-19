@@ -14,7 +14,7 @@ Bullet::~Bullet()
 
 void Bullet::Init()
 {
-	pos = XMFLOAT3(0.0f, 1.5f, 0.0f);
+	pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	siz = XMFLOAT3(0.002f, 0.002f, 0.002f);
 	front = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	Model* model = ComponentFactory::CreateComponent<Model>();

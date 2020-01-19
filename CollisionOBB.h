@@ -23,6 +23,7 @@ public:
 	void CollisionAction(Collision* other)override;
 	bool isCollision(CollisionSphere* other)override;
 	bool isCollision(CollisionOBB* other)override;
+	bool isCollision(CollisionCapsule* other);
 	XMFLOAT3 GetLengths() { return XMFLOAT3(frontLength, rightLength, upLength); }
 	void SetParams(float f = 1.0f, float r = 1.0f, float u = 1.0f, XMFLOAT3 pos = XMFLOAT3(0.0f, 0.0f, 0.0f));
 	void Draw()override;

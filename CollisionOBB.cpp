@@ -2,6 +2,7 @@
 #include "DXManager.h"
 #include "CollisionOBB.h"
 #include "CollisionSphere.h"
+#include "CollisionCapsule.h"
 
 CollisionOBB::CollisionOBB(float f, float r, float u, XMFLOAT3 pos)
 {
@@ -25,7 +26,10 @@ CollisionOBB::~CollisionOBB()
 
 void CollisionOBB::Dispatch(Collision* other)
 {
-	other->isCollision(this);
+	bool judge = other->isCollision(this);
+	if (judge) {
+		CollisionAction(other);
+	}
 }
 
 void CollisionOBB::CollisionAction(Collision* other)
@@ -103,6 +107,184 @@ bool CollisionOBB::isCollision(CollisionOBB* other)
 	return false;
 }
 
+bool CollisionOBB::isCollision(CollisionCapsule * other)
+{
+	XMFLOAT2 otherParam = other->GetParams();
+	float otherHeight = otherParam.x;
+	float otherRadius = otherParam.y;
+	XMFLOAT3 otherUp = other->GetOwner()->GetUp();
+	XMVECTOR otherUpVec = XMLoadFloat3(&otherUp);
+	// カプセルとの最接近頂点を求める
+	XMFLOAT3 front = owner->GetFront();
+	XMFLOAT3 up = owner->GetUp();
+	XMVECTOR frontVec = XMLoadFloat3(&front);
+	XMVECTOR upVec = XMLoadFloat3(&up);
+	frontVec = XMVector3Normalize(frontVec);
+	XMStoreFloat3(&front, frontVec);
+	upVec = XMVector3Normalize(upVec);
+	XMStoreFloat3(&up, upVec);
+	XMFLOAT3 right;
+	XMVECTOR rightVec = XMVector3Cross(upVec, frontVec);
+	rightVec = XMVector3Normalize(rightVec);
+	XMStoreFloat3(&right, rightVec);
+
+	XMFLOAT3 distance = other->GetPos() - GetPos();
+	XMVECTOR distanceVec = XMLoadFloat3(&distance);
+	
+	// カプセルの上座標とOBBの各軸との最短距離を求める
+	XMFLOAT3 pointOther;
+	XMFLOAT3 point;
+	XMFLOAT3 nearest;
+	XMVECTOR nearestVec;
+	
+	float nearestDis;
+	float d1,d2,dv;
+	float boxNearDis;
+	bool skip = false;
+
+	// まずはfront方向から
+	XMStoreFloat(&d1, XMVector3Dot(otherUpVec, distanceVec));
+	XMStoreFloat(&d2, XMVector3Dot(frontVec, distanceVec));
+	XMStoreFloat(&dv, XMVector3Dot(otherUpVec, frontVec));
+	float s = (d1 * dv - d2) / (dv * dv - 1);
+	float t = (d1 - d2 * dv) / (dv * dv - 1);
+	
+	if (fabs(t) > otherHeight + otherRadius) {
+		skip = true;
+	}
+	if (fabs(s) > frontLength + otherRadius) {
+		skip = true;
+	}
+
+	if (!skip) {
+		pointOther = other->GetPos() + t * otherUp;
+		point = GetPos() + s * front;
+		nearest = pointOther - point;
+		nearestVec = XMLoadFloat3(&nearest);
+		XMStoreFloat(&nearestDis, XMVector3Length(nearestVec));
+		nearestVec = XMVector3Normalize(nearestVec);
+		float boxNearDis;
+		XMVECTOR resultA = XMVector3Normalize(XMVector3Dot(rightVec, nearestVec)) * rightLength;
+		XMVECTOR resultB = XMVector3Normalize(XMVector3Dot(upVec, nearestVec)) * upLength;
+		XMStoreFloat(&boxNearDis, XMVector3Length(resultA + resultB));
+		float resultRadius = otherRadius;
+
+		if (fabs(t) > otherHeight) {
+			float per = (t - otherHeight) / otherRadius;
+			resultRadius *= cosf(XMConvertToRadians(90 * per));
+		}
+		if (nearestDis < (resultRadius + boxNearDis)) {
+			return true;
+		}		
+	}
+	skip = false;
+
+	// 次にup方向
+	XMStoreFloat(&d1, XMVector3Dot(otherUpVec, distanceVec));
+	XMStoreFloat(&d2, XMVector3Dot(upVec, distanceVec));
+	XMStoreFloat(&dv, XMVector3Dot(otherUpVec, upVec));
+	// dv=1or-1なら、２軸は平行
+	if (dv*dv == 1.0f) {
+		float length;
+		XMStoreFloat(&length,-XMVector3Dot(distanceVec, upVec));
+		XMVECTOR nearVec = distanceVec + length * otherUpVec;
+		XMStoreFloat(&nearestDis, XMVector3Length(nearVec));
+		if (fabs(length) > otherHeight + otherRadius) {
+			skip = true;
+		}
+		else {
+			float resultRadius = otherRadius;
+			XMVECTOR resultA = XMVector3Normalize(XMVector3Dot(frontVec, nearestVec)) * frontLength;
+			XMVECTOR resultB = XMVector3Normalize(XMVector3Dot(rightVec, nearestVec)) * rightLength;
+			XMStoreFloat(&boxNearDis, XMVector3Length(resultA + resultB));
+			if (fabs(length) > otherHeight) {
+				float per = (length - otherHeight) / otherRadius;
+				resultRadius *= cosf(XMConvertToRadians(90 * per));
+			}
+			
+			if (nearestDis < (resultRadius + boxNearDis)) {
+				//return true;
+			}
+			
+		}
+		skip = true;
+		
+	}
+	else {
+		s = (d1 * dv - d2) / (dv * dv - 1);
+		t = (d1 - d2 * dv) / (dv * dv - 1);
+		if (fabs(t) > otherHeight + otherRadius) {
+			skip = true;
+		}
+		if (fabs(s) > upLength + otherRadius) {
+			skip = true;
+		}
+	}
+
+	
+
+	if (!skip) {
+		pointOther = other->GetPos() + t * otherUp;
+		point = GetPos() + s * up;
+		nearest = pointOther - point;
+		nearestVec = XMLoadFloat3(&nearest);
+		XMStoreFloat(&nearestDis, XMVector3Length(nearestVec));
+		nearestVec = XMVector3Normalize(nearestVec);
+		
+		XMVECTOR resultA = XMVector3Normalize(XMVector3Dot(frontVec, nearestVec)) * frontLength;
+		XMVECTOR resultB = XMVector3Normalize(XMVector3Dot(rightVec, nearestVec)) * rightLength;
+		XMStoreFloat(&boxNearDis, XMVector3Length(resultA + resultB));
+		float resultRadius = otherRadius;
+
+		if (fabs(t) > otherHeight) {
+			float per = (t - otherHeight) / otherRadius;
+			resultRadius *= cosf(XMConvertToRadians(90 * per));
+		}
+		if (nearestDis < (resultRadius + boxNearDis)) {
+			return true;
+		}
+	}
+
+	skip = false;
+	// 最後にright方向
+	XMStoreFloat(&d1, XMVector3Dot(otherUpVec, distanceVec));
+	XMStoreFloat(&d2, XMVector3Dot(rightVec, distanceVec));
+	XMStoreFloat(&dv, XMVector3Dot(otherUpVec, rightVec));
+	s = (d1 * dv - d2) / (dv * dv - 1);
+	t = (d1 - d2 * dv) / (dv * dv - 1);
+	if (fabs(t) > otherHeight + otherRadius) {
+		skip = true;
+	}
+	if (fabs(s) > rightLength + otherRadius) {
+		skip = true;
+	}
+
+	if (!skip) {
+		pointOther = other->GetPos() + t * otherUp;
+		point = GetPos() + s * right;
+		nearest = pointOther - point;
+		nearestVec = XMLoadFloat3(&nearest);
+		XMStoreFloat(&nearestDis, XMVector3Length(nearestVec));
+		nearestVec = XMVector3Normalize(nearestVec);
+		float boxNearDis;
+		XMVECTOR resultA = XMVector3Normalize(XMVector3Dot(frontVec, nearestVec)) * frontLength;
+		XMVECTOR resultB = XMVector3Normalize(XMVector3Dot(upVec, nearestVec)) * upLength;
+		XMStoreFloat(&boxNearDis, XMVector3Length(resultA + resultB));
+		float resultRadius = otherRadius;
+
+		if (fabs(t) > otherHeight) {
+			float per = (t - otherHeight) / otherRadius;
+			resultRadius *= cosf(XMConvertToRadians(90 * per));
+		}
+		if (nearestDis < (resultRadius + boxNearDis)) {
+			return true;
+		}
+	}
+	// くぐり抜けたら当たってない
+	return false;
+
+}
+
 void CollisionOBB::SetParams(float f, float r, float u, XMFLOAT3 pos)
 {
 	frontLength = f;
@@ -137,9 +319,9 @@ void CollisionOBB::SetOwner(GameObject* owner)
 	this->owner = owner;
 	
 	// 頂点情報の作製
-	XMFLOAT3 xDir = { 0.0f,0.0f,1.0f };
+	XMFLOAT3 xDir = { 1.0f,0.0f,0.0f };
 	XMFLOAT3 yDir = { 0.0f,1.0f,0.0f };
-	XMFLOAT3 zDir = { 1.0f,0.0f,0.0f };
+	XMFLOAT3 zDir = { 0.0f,0.0f,1.0f };
 	xDir *= rightLength;
 	yDir *= upLength;
 	zDir *= frontLength;

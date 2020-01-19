@@ -21,7 +21,7 @@ Wall::Wall()
 	componentsList.push_back(model);
 
 	CollisionOBB* col = ComponentFactory::CreateComponent<CollisionOBB>();
-	col->SetParams(0.2f, 1.0f, 1.0f, XMFLOAT3(0.0f, 1.0f, 0.0f));
+	col->SetParams(0.1f, 1.0f, 1.0f, XMFLOAT3(0.0f, 1.0f, 0.0f));
 	col->SetOwner(this);
 	componentsList.push_back(col);
 }

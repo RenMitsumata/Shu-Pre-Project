@@ -113,6 +113,7 @@
       <SDLCheck>false</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -140,6 +141,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="CollisionCapsule.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CollisionOBB.cpp" />
     <ClCompile Include="CollisionSphere.cpp" />
@@ -161,6 +163,7 @@
     <ClCompile Include="Shader3D.cpp" />
     <ClCompile Include="Shader3D_GeoIns.cpp" />
     <ClCompile Include="Shader3D_Normal.cpp" />
+    <ClCompile Include="SkyDome.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Wall.cpp" />
@@ -170,6 +173,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="CollisionCapsule.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="CollisionOBB.h" />
     <ClInclude Include="CollisionSphere.h" />
@@ -191,6 +195,7 @@
     <ClInclude Include="Shader3D.h" />
     <ClInclude Include="Shader3D_GeoIns.h" />
     <ClInclude Include="Shader3D_Normal.h" />
+    <ClInclude Include="SkyDome.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Wall.h" />

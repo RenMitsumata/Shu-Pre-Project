@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "CollisionSphere.h"
 #include "CollisionOBB.h"
+#include "CollisionCapsule.h"
 #include "Manager.h"
 
 CollisionSphere::CollisionSphere() : radius(1.0f)
@@ -83,6 +84,57 @@ bool CollisionSphere::isCollision(CollisionOBB* other)
 	XMStoreFloat(&resultLength, resultLengthVec);
 
 	return resultLength < radius;
+}
+
+bool CollisionSphere::isCollision(CollisionCapsule * other)
+{
+	XMFLOAT3 up = other->GetOwner()->GetUp();
+	XMFLOAT2 params = other->GetParams();
+	float otherHeight = params.x;
+	float otherRadius = params.y;
+	XMFLOAT3 otherPos = other->GetOwner()->GetPos();
+	XMFLOAT3 distance = owner->GetPos() - otherPos;
+	XMVECTOR distanceVec = XMLoadFloat3(&distance);
+	XMVECTOR upVec = XMVector3Normalize(XMLoadFloat3(&up));
+
+	XMVECTOR lengthVec;
+	float length;
+
+	lengthVec = XMVector3Dot(upVec, distanceVec);
+	XMStoreFloat(&length, lengthVec);
+
+	if (fabsf(length) < otherHeight) {
+		// “›‚Æ‚Ì“–‚½‚è”»’è
+		float ref;
+		XMVECTOR refVec = XMVector3Length(distanceVec);
+		XMStoreFloat(&ref, refVec);
+		return (otherRadius + radius) > ref;
+	}
+	else{
+		float ref;
+		XMVECTOR refVec;
+		if (length > 0) {
+			// upŽ²³•ûŒü‚Ì‹…‚Æ“–‚½‚è”»’è
+			otherPos = otherPos + otherHeight * up;
+			distance = owner->GetPos() - otherPos;
+			distanceVec = XMLoadFloat3(&distance);
+			refVec = XMVector3Length(distanceVec);
+			XMStoreFloat(&ref, refVec);
+			return (otherRadius + radius) > ref;
+		}
+		else {
+			// upŽ²•‰•ûŒü‚Ì‹…‚Æ“–‚½‚è”»’è
+			otherPos = otherPos - otherHeight * up;
+			distance = owner->GetPos() - otherPos;
+			distanceVec = XMLoadFloat3(&distance);
+			refVec = XMVector3Length(distanceVec);
+			XMStoreFloat(&ref, refVec);
+			return (otherRadius + radius) > ref;
+		}
+	}
+
+
+
 }
 
 void CollisionSphere::Dispatch(Collision* other)
