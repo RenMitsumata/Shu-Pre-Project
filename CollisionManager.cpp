@@ -20,6 +20,13 @@ void CollisionManager::Uninit()
 {
 }
 
+void CollisionManager::PreUpdate() 
+{
+	for (Collision* col : collisionList) {
+		col->SetLastPos(col->GetOwner()->GetPos());
+	}
+}
+
 void CollisionManager::Update()
 {
 	/*

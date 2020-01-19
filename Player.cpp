@@ -3,7 +3,9 @@
 #include "InputManager.h"
 #include "Camera.h"
 #include "Bullet.h"
-
+#include "CollisionSphere.h"
+#include "CollisionCapsule.h"
+#include "SkyDome.h"
 
 Player::Player()
 {
@@ -19,23 +21,43 @@ void Player::Init()
 	pos = XMFLOAT3(0.0f, 1.0f, 0.0f);
 	siz = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	front = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	
+	
+	SkyDome* dome = ComponentFactory::CreateComponent<SkyDome>();
+	dome->Set(100.0f);
+	dome->SetOwner(this);
+	componentsList.push_back(dome);
+
 	Model* model = ComponentFactory::CreateComponent<Model>();
 	model->Load("Assets/Models/SambaDancing2.fbx");
 	model->SetOwner(this);
 	componentsList.push_back(model);
+
+	/*
+	CollisionSphere* col = ComponentFactory::CreateComponent<CollisionSphere>();
+	col->SetRadius(1.0f);
+	col->SetTag(e_COLTYPE_PLAYER);
+	col->SetOwner(this);
+	componentsList.push_back(col);
+	*/
+
+	CollisionCapsule* col = ComponentFactory::CreateComponent<CollisionCapsule>();
+	col->SetParams(1.2f, 0.2f);
+	col->SetTag(e_COLTYPE_PLAYER);
+	col->SetOwner(this);
+	componentsList.push_back(col);
+	
 	input = Manager::Get()->GetInput();
 	//Camera* camera = Manager::Get()->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA);
 	//camera->SetOwner(this);
 	scene = Manager::Get()->GetScene();
 }
 
-//void Player::Uninit()
-//{
-
-//}
 
 void Player::Update()
 {
+	
+
 	if (input->GetKeyPress(VK_UP)) {
 		pos.z += 0.1f;
 	}
@@ -61,11 +83,4 @@ void Player::Update()
 		
 		bullet->SetVelocity(front * 0.5f);
 	}
-
-
-
-	
-
-
-
 }

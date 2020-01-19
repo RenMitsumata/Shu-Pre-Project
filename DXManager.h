@@ -46,7 +46,9 @@ XMFLOAT3 operator+ (XMFLOAT3 a, XMFLOAT3 b);
 XMFLOAT3 operator- (XMFLOAT3 a, XMFLOAT3 b);
 XMFLOAT3 operator* (XMFLOAT3& a, float b);
 XMFLOAT3 operator* (float a, XMFLOAT3& b);
+XMFLOAT3 operator/ (XMFLOAT3 a, float b);
 void operator+= (XMFLOAT3& a, XMFLOAT3& b);
+void operator*= (XMFLOAT3& a, float b);
 /* -----（インクルードガード）----- */
 
 #endif

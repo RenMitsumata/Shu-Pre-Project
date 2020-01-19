@@ -256,8 +256,25 @@ XMFLOAT3 operator*(float a, XMFLOAT3 & b)
 	return ret;
 }
 
+XMFLOAT3 operator/(XMFLOAT3 a, float b)
+{
+	XMFLOAT3 ret;
+	ret.x = a.x / b;
+	ret.y = a.y / b;
+	ret.z = a.z / b;
+	return ret;
+}
+
 void operator+= (XMFLOAT3& a, XMFLOAT3& b) {
 	a.x += b.x;
 	a.y += b.y;
 	a.z += b.z;
 }
+
+void operator*=(XMFLOAT3& a, float b)
+{
+	a.x *= b;
+	a.y *= b;
+	a.z *= b;
+}
+

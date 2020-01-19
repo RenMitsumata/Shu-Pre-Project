@@ -96,7 +96,7 @@ void Texture::LoadTextureFromMemory(const unsigned char* pData, int len) {
 	pImage = stbi_load_from_memory(pData, len, &width, &height, &bpp, STBI_rgb_alpha);
 	unsigned int size = width * height * bpp;
 	
-	D3D11_TEXTURE2D_DESC desc;
+	D3D11_TEXTURE2D_DESC desc = {};
 	desc.Width = width;
 	desc.Height = height;
 	desc.MipLevels = 1;
@@ -111,8 +111,9 @@ void Texture::LoadTextureFromMemory(const unsigned char* pData, int len) {
 
 	D3D11_SUBRESOURCE_DATA initData;
 	initData.pSysMem = pImage;
-	initData.SysMemPitch = 4;
+	initData.SysMemPitch = width * 4;
 	initData.SysMemSlicePitch = size;
+
 
 	ID3D11Device* device = Manager::Get()->GetDXManager()->GetDevice();
 
