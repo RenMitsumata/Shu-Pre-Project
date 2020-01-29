@@ -97,8 +97,7 @@ void Shader2D::Init(const char * VS_Filename, const char * PS_Filename)
 	device->CreateBuffer(&hBufferDesc, NULL, &constantBuffer);
 	context->VSSetConstantBuffers(0, 1, &constantBuffer);
 
-	// プロジェクション行列初期化（ウィンドウいっぱい、後から変えない設定）
-	XMMATRIX projection;
+	// プロジェクション行列初期化
 	projection = XMMatrixOrthographicOffCenterLH(0.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.0f, 0.0f, 1.0f);
 	context->UpdateSubresource(constantBuffer, 0, NULL, &XMMatrixTranspose(projection), 0, 0);
 
@@ -154,6 +153,9 @@ void Shader2D::Set()
 	// 入力レイアウト設定
 	context->IASetInputLayout(vertexLayout);
 
+	// プロジェクション行列初期化（ウィンドウいっぱい、後から変えない設定）
+
+
 	// 定数バッファ設定(定数バッファの形が異なる場合、引数を変える)
 	context->VSSetConstantBuffers(0, 1, &constantBuffer);
 	
@@ -163,4 +165,10 @@ void Shader2D::SetTexture(Texture * texture)
 {
 	ID3D11ShaderResourceView* srv[1] = { texture->GetShaderResourceView() };
 	context->PSSetShaderResources(0, 1, srv);
+}
+
+void Shader2D::SetProjMatrix(XMMATRIX mat)
+{
+	projection = mat;
+	context->UpdateSubresource(constantBuffer, 0, NULL, &XMMatrixTranspose(projection), 0, 0);
 }

@@ -54,34 +54,40 @@ void DXManager::Init()
 
 
 
-	//ステンシル用テクスチャー作成
-	ID3D11Texture2D* depthTexture = NULL;
-	D3D11_TEXTURE2D_DESC td;
-	ZeroMemory(&td, sizeof(td));
-	td.Width = sd.BufferDesc.Width;
-	td.Height = sd.BufferDesc.Height;
-	td.MipLevels = 1;
-	td.ArraySize = 1;
-	td.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	td.SampleDesc = sd.SampleDesc;
-	td.Usage = D3D11_USAGE_DEFAULT;
-	td.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	td.CPUAccessFlags = 0;
-	td.MiscFlags = 0;
-	device->CreateTexture2D(&td, NULL, &depthTexture);
+	
+	{
+		//ステンシル用テクスチャー作成
+		ID3D11Texture2D* depthTexture = NULL;
+		D3D11_TEXTURE2D_DESC td;
+		ZeroMemory(&td, sizeof(td));
+		td.Width = sd.BufferDesc.Width;
+		td.Height = sd.BufferDesc.Height;
+		td.MipLevels = 1;
+		td.ArraySize = 1;
+		td.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		td.SampleDesc = sd.SampleDesc;
+		td.Usage = D3D11_USAGE_DEFAULT;
+		td.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		td.CPUAccessFlags = 0;
+		td.MiscFlags = 0;
+		device->CreateTexture2D(&td, NULL, &depthTexture);
 
-	//ステンシルターゲット作成
-	D3D11_DEPTH_STENCIL_VIEW_DESC dsvd;
-	ZeroMemory(&dsvd, sizeof(dsvd));
-	dsvd.Format = td.Format;
-	dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	dsvd.Flags = 0;
-	device->CreateDepthStencilView(depthTexture, &dsvd, &depthStencilView);
+		//ステンシルターゲット作成
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvd;
+		ZeroMemory(&dsvd, sizeof(dsvd));
+		dsvd.Format = td.Format;
+		dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvd.Flags = 0;
+		HRESULT hr = device->CreateDepthStencilView(depthTexture, &dsvd, &depthStencilView);
+		if (FAILED(hr))
+		{
+			assert(false);
+		}
 
+		deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+		
 
-	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
-
-
+	}
 	// ビューポート設定
 	D3D11_VIEWPORT vp;
 	vp.Width = (FLOAT)WINDOW_WIDTH;
@@ -149,15 +155,46 @@ void DXManager::Init()
 	deviceContext->OMSetDepthStencilState(depthStateEnable, NULL);
 
 
+	{
+		// レンダーターゲット切替用
 
 
-	
+		//ステンシル用テクスチャー作成
+		ID3D11Texture2D* lightDepthTexture = NULL;
+		D3D11_TEXTURE2D_DESC td;
+		ZeroMemory(&td, sizeof(td));
+		td.Width = sd.BufferDesc.Width;
+		td.Height = sd.BufferDesc.Height;
+		td.MipLevels = 1;
+		td.ArraySize = 1;
+		td.Format = DXGI_FORMAT_R32_TYPELESS;
+		td.SampleDesc = sd.SampleDesc;
+		td.Usage = D3D11_USAGE_DEFAULT;
+		td.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+		td.CPUAccessFlags = 0;
+		td.MiscFlags = 0;
+		device->CreateTexture2D(&td, NULL, &lightDepthTexture);
+
+		//ステンシルターゲット作成
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvd;
+		ZeroMemory(&dsvd, sizeof(dsvd));
+		dsvd.Format = DXGI_FORMAT_D32_FLOAT;
+		dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvd.Flags = 0;
+
+		device->CreateDepthStencilView(lightDepthTexture, &dsvd, &lightDepthStencilView);
+
+		D3D11_SHADER_RESOURCE_VIEW_DESC SRVdesc = {};
+		SRVdesc.Format = DXGI_FORMAT_R32_FLOAT;
+		SRVdesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		SRVdesc.Texture2D.MipLevels = 1;
+		device->CreateShaderResourceView(lightDepthTexture, &SRVdesc, &lightDepthShaderResourceView);
 
 
 
-	// ここから、シェーダクラスに分離
+	}
+	int a = 0;
 
-	
 }
 
 void DXManager::Uninit()
@@ -204,10 +241,26 @@ void DXManager::SetDepthEnable(bool enable)
 
 void DXManager::Begin()
 {
+	deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+	// 引数：カラーバッファ数、カラーバッファの先頭アドレス、Ｚバッファ
+
 	// バックバッファクリア
 	deviceContext->ClearRenderTargetView(renderTargetView, BACKBUFFERCOLOR);
 	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+}
+
+void DXManager::BeginDepth()
+{
+	deviceContext->OMSetRenderTargets(0, NULL, lightDepthStencilView);
+
+	deviceContext->ClearDepthStencilView(lightDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void DXManager::SetDepthTexture(unsigned int slot)
+{
+	ID3D11ShaderResourceView* srv[1] = { lightDepthShaderResourceView };
+	deviceContext->PSSetShaderResources(slot, 1, srv);
 }
 
 

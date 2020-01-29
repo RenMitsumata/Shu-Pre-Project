@@ -25,7 +25,10 @@ private:
 	IDXGISwapChain*         swapChain;
 	ID3D11RenderTargetView* renderTargetView;
 	ID3D11DepthStencilView* depthStencilView;
-	
+	// レンダーターゲット切り替え用
+	ID3D11DepthStencilView* lightDepthStencilView;
+	ID3D11ShaderResourceView* lightDepthShaderResourceView;
+
 	ID3D11DepthStencilState* depthStateEnable;
 	ID3D11DepthStencilState* depthStateDisable;
 	const float BACKBUFFERCOLOR[4] = { 0.0f, 0.0f, 0.5f, 1.0f };
@@ -36,6 +39,8 @@ public:
 	void Uninit();
 	void SetDepthEnable(bool enable);
 	void Begin();
+	void BeginDepth();
+	void SetDepthTexture(unsigned int slot);
 	void End();
 	ID3D11Device* GetDevice() { return device; }
 	ID3D11DeviceContext* GetDeviceContext() { return deviceContext; }

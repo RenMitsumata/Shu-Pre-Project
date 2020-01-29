@@ -1,7 +1,7 @@
 
 #include "Scene.h"
-
-
+#include <algorithm>
+#include "Camera.h"
 
 Scene::Scene()
 {
@@ -37,10 +37,9 @@ void Scene::Update()
 	colMgr.Update();
 	for (int i = 0; i < 5; i++) {
 		
-		objectList[i].remove_if([](GameObject* object) {return object->IsDestroy(); });
-		
-	}
+		objectList[i].erase(std::remove_if(objectList[i].begin(), objectList[i].end(), [](GameObject* obj) {return obj->IsDestroy(); }), objectList[i].end());
 
+	}
 
 }
 
@@ -57,4 +56,10 @@ void Scene::SetCameraMatrix(XMFLOAT4X4* p_ViewMatrix, XMFLOAT4X4* p_ProjectionMa
 {
 	p_CameraViewMatrix = p_ViewMatrix;
 	p_CameraProjectionMatrix = p_ProjectionMatrix;
+}
+
+void Scene::SetAnotherCamMatrix(XMFLOAT4X4 * p_ViewMatrix, XMFLOAT4X4 * p_ProjectionMatrix)
+{
+	p_AnotherCamViewMat = p_ViewMatrix;
+	p_AnotherCamProjMat = p_ProjectionMatrix;
 }

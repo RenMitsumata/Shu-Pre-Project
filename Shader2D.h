@@ -17,8 +17,8 @@ private:
 	ID3D11PixelShader*      pixelShader;
 	ID3D11InputLayout*      vertexLayout;
 	ID3D11SamplerState*		samplerState = NULL;
-
 	ID3D11Buffer*			constantBuffer;
+	XMMATRIX				projection;
 public:
 	Shader2D();
 	~Shader2D();
@@ -26,5 +26,6 @@ public:
 	void Uninit();
 	void Set();
 	void SetTexture(Texture* texture);
+	void SetProjMatrix(XMMATRIX mat);
 };
 

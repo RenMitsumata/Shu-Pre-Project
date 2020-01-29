@@ -18,6 +18,7 @@ class DXManager;
 class Scene;
 class InputManager;
 class CollisionManager;
+class AudioManager;
 
 class Manager
 {
@@ -29,6 +30,7 @@ private:
 	Scene* scene;
 	InputManager* input;
 	CollisionManager* colManager;
+	AudioManager* audio;
 	// コンストラクタ、コピーコンストラクター、オペレータ＝は秘匿
 	Manager();
 	~Manager();
@@ -39,15 +41,17 @@ public:
 	void Uninit();
 	void Update();
 	void Draw();
+	void ChangeScene(Scene* nextScene);
 
 	static Manager* Get();
 	static void Delete();
-
+	
 	Window* GetWindow();
 	DXManager* GetDXManager();
 	Scene* GetScene();
 	InputManager* GetInput();
 	CollisionManager* GetColManager();
+	AudioManager* GetAudio();
 };
 
 /* -----（インクルードガード）----- */

@@ -20,6 +20,7 @@ private:
 	XMFLOAT3 at = { 0.0f,2.5f,0.0f };
 	XMVECTOR up = XMLoadFloat3(&upDst);
 	float focusLength;
+	bool isMain = false;
 public:
 	Camera();
 	~Camera();
@@ -28,5 +29,6 @@ public:
 	void Update();
 	void Draw();
 	void SetOwner(GameObject* obj) { owner = obj; }
+	bool GetMain() { return isMain; }
 };
 

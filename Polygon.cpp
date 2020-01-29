@@ -28,12 +28,19 @@ void Polygon::Init()
 {
 	device = Manager::Get()->GetDXManager()->GetDevice();
 	context = Manager::Get()->GetDXManager()->GetDeviceContext();
+	dxManager = Manager::Get()->GetDXManager();
 
 	VERTEX_UI vertex[4];
 	for (int i = 0; i < 4; i++) {
-		vertex[i].pos = XMFLOAT2((i % 2)*WINDOW_WIDTH - 0.5f * WINDOW_WIDTH, (i / 2)*WINDOW_HEIGHT - 0.5f * WINDOW_HEIGHT);
+		//vertex[i].pos = XMFLOAT2((i % 2) * WINDOW_WIDTH, (i / 2) * WINDOW_HEIGHT);
+		vertex[i].pos = XMFLOAT2((i % 2) * 200, (i / 2) * 200);
 		vertex[i].texcoord = XMFLOAT2(i % 2, i / 2);
 	}
+
+	/*vertex[0] = { XMFLOAT2(-0.5f,-0.5f),XMFLOAT2(0.0f,0.0f) };
+	vertex[1] = { XMFLOAT2(0.5f,-0.5f),XMFLOAT2(1.0f,0.0f) };
+	vertex[2] = { XMFLOAT2(-0.5f,0.5f),XMFLOAT2(0.0f,1.0f) };
+	vertex[3] = { XMFLOAT2(0.5f,0.5f),XMFLOAT2(1.0f,1.0f) };*/
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
@@ -71,20 +78,27 @@ void Polygon::Draw()
 	UINT stride = sizeof(VERTEX_UI);
 	UINT offset = 0;
 
-	shader->SetTexture(texture);
-	shader->Set();
+	
 
 	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//dxManager->SetDepthTexture(0);
 
-	
+	shader->SetTexture(texture);
+	//shader->SetProjMatrix(projMat);
+	shader->Set();
 
-	context->DrawIndexed(3, 0, 0);
+	context->DrawIndexed(6, 0, 0);
 }
 
 void Polygon::SetTexture(const char * filename)
 {
 	texture = ComponentFactory::CreateComponent<Texture>();
 	texture->Load(filename);
+}
+
+void Polygon::SetSize(float width, float height, XMFLOAT2 screenPos)
+{
+	//projMat = XMMatrixOrthographicOffCenterLH(screenPos.x - width / 2, screenPos.x + width / 2, screenPos.y + height / 2, screenPos.y - height / 2, 0.0f, 1.0f);
 }

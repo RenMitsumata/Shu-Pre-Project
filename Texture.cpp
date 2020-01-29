@@ -95,7 +95,8 @@ void Texture::LoadTextureFromMemory(const unsigned char* pData, int len) {
 	int bpp;
 	pImage = stbi_load_from_memory(pData, len, &width, &height, &bpp, STBI_rgb_alpha);
 	unsigned int size = width * height * bpp;
-	
+
+
 	D3D11_TEXTURE2D_DESC desc = {};
 	desc.Width = width;
 	desc.Height = height;

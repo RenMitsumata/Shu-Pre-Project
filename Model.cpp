@@ -56,6 +56,7 @@ void Model::Draw()
 	manager->GetDXManager()->SetDepthEnable(true);
 	
 	XMMATRIX mat = XMLoadFloat4x4(&MatLoc);
+	mat = XMMatrixRotationRollPitchYaw(0.0f, XMConvertToRadians(180.0f), 0.0f) * mat;
 	//mat = XMMatrixTranspose(mat);
 	DrawNode(rootNode,mat);
 }
@@ -326,7 +327,7 @@ void Model::Load(const char* filename)
 			v.Normal = XMFLOAT3(pScene->mMeshes[i]->mNormals[j].x, pScene->mMeshes[i]->mNormals[j].y, pScene->mMeshes[i]->mNormals[j].z);
 			
 			if (pScene->mMeshes[i]->mTextureCoords[0] != nullptr) {
-				v.TexCoord = XMFLOAT2(pScene->mMeshes[i]->mTextureCoords[0][j].x, pScene->mMeshes[i]->mTextureCoords[0][j].y);
+				v.TexCoord = XMFLOAT2(pScene->mMeshes[i]->mTextureCoords[0][j].x, -pScene->mMeshes[i]->mTextureCoords[0][j].y);
 			}
 			else {
 				v.TexCoord = XMFLOAT2(0.0f, 0.0f);
@@ -623,6 +624,7 @@ void Model::DrawNode(NODE* node, XMMATRIX mat)
 		shader->SetMaterial(materialList[meshList[node->meshIndex[i]].materialIndex]);
 		if (textureList[meshList[node->meshIndex[i]].materialIndex] != nullptr) {
 			shader->SetTexture(textureList[meshList[node->meshIndex[i]].materialIndex]);
+			//Manager::Get()->GetDXManager()->SetDepthTexture(0);
 		}
 		context->DrawIndexed(meshList[node->meshIndex[i]].indexNum, meshList[node->meshIndex[i]].indexOffset, 0);
 	}

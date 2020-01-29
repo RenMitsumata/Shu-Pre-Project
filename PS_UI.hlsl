@@ -1,4 +1,5 @@
 
+
 //*****************************************************************************
 // ƒOƒ[ƒoƒ‹•Ï”
 //*****************************************************************************
@@ -12,7 +13,8 @@ struct PS_IN {
 
 float4 main(in PS_IN input) : SV_Target
 {
-	return float4(input.texcoord,0.0f,1.0f);
+	//return float4(input.texcoord,0.0f,1.0f);
+	//return float4(input.pos.xyz,1.0f);
 	//return float4(0.5f, 0.5, 0.0f, 1.0f);
-	//return g_Texture.Sample(g_SamplerState,input.texcoord);
+	return float4(g_Texture.Sample(g_SamplerState,input.texcoord).xyz,1.0f);
 }

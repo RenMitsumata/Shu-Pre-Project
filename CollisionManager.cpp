@@ -1,7 +1,7 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include <iterator>
-
+#include <algorithm>
 
 CollisionManager::CollisionManager()
 {
@@ -22,6 +22,8 @@ void CollisionManager::Uninit()
 
 void CollisionManager::PreUpdate() 
 {
+	collisionList.erase(std::remove_if(collisionList.begin(), collisionList.end(), [](Collision* col) {return col->GetOwner() == nullptr; }), collisionList.end());
+
 	for (Collision* col : collisionList) {
 		col->SetLastPos(col->GetOwner()->GetPos());
 	}

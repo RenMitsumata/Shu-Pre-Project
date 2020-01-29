@@ -135,11 +135,23 @@
     <ClCompile Include="Polygon.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SkyDome.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionCapsule.cpp">
       <Filter>ソース ファイル\Components\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>ソース ファイル\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionCone.cpp">
+      <Filter>ソース ファイル\Components\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyDome.cpp">
+      <Filter>ソース ファイル\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>ソース ファイル\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -227,11 +239,23 @@
     <ClInclude Include="Polygon.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SkyDome.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionCapsule.h">
       <Filter>ヘッダー ファイル\Components\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>ヘッダー ファイル\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionCone.h">
+      <Filter>ヘッダー ファイル\Components\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyDome.h">
+      <Filter>ヘッダー ファイル\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>ヘッダー ファイル\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

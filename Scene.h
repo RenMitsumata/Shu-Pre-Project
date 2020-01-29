@@ -28,6 +28,10 @@ protected:
 	XMFLOAT4X4* p_CameraViewMatrix;
 	XMFLOAT4X4* p_CameraProjectionMatrix;
 	XMFLOAT3* p_CameraPos;
+	XMFLOAT4X4* p_AnotherCamViewMat;
+	XMFLOAT4X4* p_AnotherCamProjMat;
+	XMFLOAT3* p_AnotherCamPos;
+
 	std::list<GameObject*> objectList[5];
 	DIVISION division;
 	CollisionManager colMgr;
@@ -71,9 +75,16 @@ public:
 	virtual void Draw();
 	void SetCameraMatrix(XMFLOAT4X4* p_ViewMatrix, XMFLOAT4X4* p_ProjectionMatrix);
 	void SetCameraPos(XMFLOAT3* pPos) { p_CameraPos = pPos; }
+	void SetAnotherCamMatrix(XMFLOAT4X4* p_ViewMatrix, XMFLOAT4X4* p_ProjectionMatrix);
+	void SetAnotherCamPos(XMFLOAT3* pPos) { p_AnotherCamPos = pPos; }
+
 	XMFLOAT4X4* GetViewMatrix() { return p_CameraViewMatrix; }
 	XMFLOAT4X4* GetProjectionMatrix() { return p_CameraProjectionMatrix; }
 	XMFLOAT3* GetCameraPos() { return p_CameraPos; }
+
+	XMFLOAT4X4* GetAnotherViewMatrix() { return p_AnotherCamViewMat; }
+	XMFLOAT4X4* GetAnotherProjectionMatrix() { return p_AnotherCamProjMat; }
+	XMFLOAT3* GetAnotherCameraPos() { return p_AnotherCamPos; }
 	DIVISION* GetDivision() { return &division; }
 	CollisionManager* GetCollisionManager() { return &colMgr; }
 };
