@@ -5,7 +5,10 @@
 #include "Bullet.h"
 #include "CollisionSphere.h"
 #include "CollisionCapsule.h"
+#include "CollisionCone.h"
 #include "SkyDome.h"
+#include "AudioManager.h"
+
 
 Player::Player()
 {
@@ -33,24 +36,25 @@ void Player::Init()
 	model->SetOwner(this);
 	componentsList.push_back(model);
 
-	/*
-	CollisionSphere* col = ComponentFactory::CreateComponent<CollisionSphere>();
-	col->SetRadius(1.0f);
-	col->SetTag(e_COLTYPE_PLAYER);
-	col->SetOwner(this);
-	componentsList.push_back(col);
-	*/
-
 	CollisionCapsule* col = ComponentFactory::CreateComponent<CollisionCapsule>();
 	col->SetParams(1.2f, 0.2f);
 	col->SetTag(e_COLTYPE_PLAYER);
 	col->SetOwner(this);
 	componentsList.push_back(col);
+
+	CollisionCone* cone = ComponentFactory::CreateComponent<CollisionCone>();
+	cone->SetParams(0.3f, 1.0f, 3.0f);
+	cone->SetDeltaPos(XMFLOAT3(0.0f, 2.0f, 0.0f));
+	cone->SetOwner(this);
+	componentsList.push_back(cone);
+
 	
 	input = Manager::Get()->GetInput();
 	//Camera* camera = Manager::Get()->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA);
 	//camera->SetOwner(this);
 	scene = Manager::Get()->GetScene();
+	audio = Manager::Get()->GetAudio();
+	soundMap["shoot"] = audio->Load("Assets/Sounds/shoot.wav");
 }
 
 
@@ -82,5 +86,6 @@ void Player::Update()
 		bullet->SetRot(rot);
 		
 		bullet->SetVelocity(front * 0.5f);
+		audio->Play(soundMap["shoot"]);
 	}
 }

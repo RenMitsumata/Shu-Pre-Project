@@ -194,8 +194,8 @@ bool CollisionOBB::isCollision(CollisionCapsule * other)
 		}
 		else {
 			float resultRadius = otherRadius;
-			XMVECTOR resultA = XMVector3Normalize(XMVector3Dot(frontVec, nearestVec)) * frontLength;
-			XMVECTOR resultB = XMVector3Normalize(XMVector3Dot(rightVec, nearestVec)) * rightLength;
+			XMVECTOR resultA = XMVector3Normalize(XMVector3Dot(frontVec, nearVec)) * frontLength;
+			XMVECTOR resultB = XMVector3Normalize(XMVector3Dot(rightVec, nearVec)) * rightLength;
 			XMStoreFloat(&boxNearDis, XMVector3Length(resultA + resultB));
 			if (fabs(length) > otherHeight) {
 				float per = (length - otherHeight) / otherRadius;
@@ -283,6 +283,11 @@ bool CollisionOBB::isCollision(CollisionCapsule * other)
 	// ‚­‚®‚è”²‚¯‚½‚ç“–‚½‚Á‚Ä‚È‚¢
 	return false;
 
+}
+
+bool CollisionOBB::isCollision(CollisionCone * other)
+{
+	return false;
 }
 
 void CollisionOBB::SetParams(float f, float r, float u, XMFLOAT3 pos)

@@ -16,13 +16,17 @@ struct VS_OUT {
 };
 
 void main(in VS_IN input, out VS_OUT output) {
+	float4 pos = float4(input.pos, 0.0f, 1.0f);
+
+
 	// positionの処理：
 	// 入力されたpositionを画面上のポジションに変更
-	output.pos = mul(input.pos, projMatrix);
 
+	output.pos = mul(pos, projMatrix);
 
 	// texcoordの処理：
 	// ps側でいじるので、特にいじらない
 	output.texcoord = input.texcoord;
+	
 
 }

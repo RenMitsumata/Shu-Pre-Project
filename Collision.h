@@ -6,6 +6,7 @@
 class CollisionSphere;
 class CollisionOBB;
 class CollisionCapsule;
+class CollisionCone;
 
 enum Collision_Tag {
 	e_COLTYPE_DEFAULT = 0,
@@ -29,11 +30,13 @@ public:
 	virtual void SetLastPos(XMFLOAT3 pos) { lastPos = pos; }
 	virtual XMFLOAT3 GetLastPos() { return lastPos; }
 	virtual XMFLOAT3 GetPos() { return owner->GetPos() + deltaPos; }
+	virtual void SetDeltaPos(XMFLOAT3 delta) { deltaPos = delta; }
 	virtual void Dispatch(Collision* other) = 0;
 	virtual void CollisionAction(Collision* other) = 0;
 	// collisionの派生クラス分、純粋仮想関数を用意
 	virtual bool isCollision(CollisionSphere* other) = 0;
 	virtual bool isCollision(CollisionOBB* other) = 0;
 	virtual bool isCollision(CollisionCapsule* other) = 0;
+	virtual bool isCollision(CollisionCone* other) = 0;
 };
 

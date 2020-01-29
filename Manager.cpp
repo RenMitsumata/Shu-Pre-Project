@@ -8,8 +8,10 @@
 #include "DXManager.h"
 #include "Scene.h"
 #include "Game.h"
+#include "Title.h"
 #include "InputManager.h"
 #include "CollisionManager.h"
+#include "AudioManager.h"
 #include "Manager.h"
 
 
@@ -38,18 +40,29 @@ void Manager::Init(HINSTANCE hInstance, int nCmdShow)
 	input = new InputManager;
 	input->Init();
 	colManager = new CollisionManager;
+	colManager->Init();
+	audio = new AudioManager;
+	audio->Init();
 
-	scene = new Game;
+	scene = new Title;
 	scene->Init();
 	
 }
 
 void Manager::Uninit()
 {
+	if (audio) {
+		audio->Uninit();
+		delete audio;
+	}
+	audio = nullptr;
+
 	if (colManager) {
 		colManager->Uninit();
 		delete colManager;
 	}
+	colManager = nullptr;
+
 	if (scene) {
 		scene->Uninit();
 		delete scene;
@@ -77,9 +90,21 @@ void Manager::Update()
 
 void Manager::Draw()
 {
+	//dxManager->BeginDepth();
+	//scene->Draw();	// W LV OrthoProj
 	dxManager->Begin();
-	scene->Draw();
+	scene->Draw(); // WVP , ↑↑の結果のテクスチャ , ↑↑で使ったfar
 	dxManager->End();
+}
+
+void Manager::ChangeScene(Scene* nextScene)
+{
+	if (scene) {
+		scene->Uninit();
+		delete scene;
+	}
+	scene = nextScene;
+	scene->Init();
 }
 
 // インスタンスゲッター
@@ -123,6 +148,11 @@ InputManager* Manager::GetInput()
 CollisionManager* Manager::GetColManager()
 {
 	return colManager;
+}
+
+AudioManager * Manager::GetAudio()
+{
+	return audio;
 }
 
 

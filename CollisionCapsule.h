@@ -19,6 +19,7 @@ public:
 	bool isCollision(CollisionSphere* other)override;
 	bool isCollision(CollisionOBB* other)override;
 	bool isCollision(CollisionCapsule* other)override;
+	bool isCollision(CollisionCone* other)override;
 	XMFLOAT2 GetParams();
 	void SetParams(float h = 1.0f, float r = 0.5f);
 	void Draw()override;

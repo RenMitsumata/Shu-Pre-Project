@@ -14,8 +14,7 @@ Camera::~Camera()
 
 void Camera::Init()
 {
-	Manager::Get()->GetScene()->SetCameraMatrix(&viewMat, &projMat);
-	Manager::Get()->GetScene()->SetCameraPos(&pos);
+	
 	context = Manager::Get()->GetDXManager()->GetDeviceContext();
 	pos = XMFLOAT3(0.0f,2.5f, -2.5f);
 	offset = XMFLOAT3(1.0f, 0.5f, -1.5f);
@@ -25,7 +24,11 @@ void Camera::Init()
 	XMVECTOR bufv = XMLoadFloat3(&front);
 	bufv = XMVector3Normalize(bufv);
 	XMStoreFloat3(&front, bufv);
+	Manager::Get()->GetScene()->SetCameraMatrix(&viewMat, &projMat);
+	Manager::Get()->GetScene()->SetCameraPos(&pos);
 }
+
+
 
 void Camera::Uninit()
 {

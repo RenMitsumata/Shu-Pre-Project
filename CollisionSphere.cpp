@@ -137,6 +137,11 @@ bool CollisionSphere::isCollision(CollisionCapsule * other)
 
 }
 
+bool CollisionSphere::isCollision(CollisionCone * other)
+{
+	return false;
+}
+
 void CollisionSphere::Dispatch(Collision* other)
 {
 	bool judge = other->isCollision(this);
