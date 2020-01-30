@@ -33,7 +33,10 @@ void CollisionCone::Dispatch(Collision * other)
 
 void CollisionCone::CollisionAction(Collision * other)
 {
-	other->GetOwner()->SetDestroy();
+	//other->GetOwner()->SetDestroy();
+	if (colTag == e_COLTYPE_ENEMY_EYESIGHT) {
+		owner->ColAction(other);
+	}
 }
 
 bool CollisionCone::isCollision(CollisionSphere * other)

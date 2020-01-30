@@ -50,8 +50,10 @@ void Player::Init()
 
 	
 	input = Manager::Get()->GetInput();
-	//Camera* camera = Manager::Get()->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA);
-	//camera->SetOwner(this);
+	Camera* camera = Manager::Get()->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA);
+	camera->SetDeltaPos(XMFLOAT3(0.0f, 2.0f, 0.0f));
+	camera->SetDeltaRot(XMFLOAT3(0.0f, 0.0f, 0.0f));
+	camera->SetOwner(this);
 	scene = Manager::Get()->GetScene();
 	audio = Manager::Get()->GetAudio();
 	soundMap["shoot"] = audio->Load("Assets/Sounds/shoot.wav");

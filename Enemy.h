@@ -6,5 +6,6 @@ public:
 	Enemy();
 	~Enemy();
 	void Init()override;
+	void ColAction(Component* comp)override;
 };
 

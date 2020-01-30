@@ -40,7 +40,7 @@ void Game::Init()
 	
 	Player* player = AddGameObject<Player>(e_LAYER_GAMEOBJECT);
 	Enemy* enemy = AddGameObject<Enemy>(e_LAYER_GAMEOBJECT);
-	enemy->SetPos(XMFLOAT3(5.0f, 1.0f, 5.0f));
-	UI* ui = AddGameObject<UI>(e_LAYER_UI);
-	ui->LoadTexture("Assets/Textures/t_title001.png");
+	enemy->SetPos(XMFLOAT3(5.0f, 0.0f, 5.0f));
+	//UI* ui = AddGameObject<UI>(e_LAYER_UI);
+	//ui->LoadTexture("Assets/Textures/t_title001.png");
 }

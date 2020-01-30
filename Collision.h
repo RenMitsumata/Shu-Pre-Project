@@ -12,7 +12,8 @@ enum Collision_Tag {
 	e_COLTYPE_DEFAULT = 0,
 	e_COLTYPE_MAPOBJECT,
 	e_COLTYPE_PLAYER,
-	e_COLTYPE_ENEMY
+	e_COLTYPE_ENEMY,
+	e_COLTYPE_ENEMY_EYESIGHT
 };
 
 class Collision : public Component
