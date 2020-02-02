@@ -33,14 +33,14 @@ void Game::Init()
 	Field* field = AddGameObject<Field>(e_LAYER_BACKGROUND);
 	for (int i = 0; i < 5; i++) {
 		Wall* wall = AddGameObject<Wall>(e_LAYER_GAMEOBJECT);
-		wall->SetPos(XMFLOAT3(-2.0f, 0.0f, i * 3));
-		wall->SetRot(XMFLOAT3(0.0f, XMConvertToRadians(60.0f), 0.0f));
+		wall->SetPos(XMFLOAT3(0.0f, 1.0f, i * 3));
+		wall->SetRot(XMFLOAT3(0.0f, XMConvertToRadians(60 * i), 0.0f));
 	}
 	
 	
 	Player* player = AddGameObject<Player>(e_LAYER_GAMEOBJECT);
 	Enemy* enemy = AddGameObject<Enemy>(e_LAYER_GAMEOBJECT);
-	enemy->SetPos(XMFLOAT3(5.0f, 0.0f, 5.0f));
-	//UI* ui = AddGameObject<UI>(e_LAYER_UI);
-	//ui->LoadTexture("Assets/Textures/t_title001.png");
+	enemy->SetPos(XMFLOAT3(5.0f, 1.0f, 5.0f));
+	UI* ui = AddGameObject<UI>(e_LAYER_UI);
+	ui->LoadTexture("Assets/Textures/t_title001.png");
 }

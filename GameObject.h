@@ -64,7 +64,6 @@ public:
 	void SetVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
 	void AddVelocity(XMFLOAT3 velocity) { this->velocity += velocity; }
 	bool isJudge(WORD otherNum);
-	virtual void ColAction(Component* comp) {};
 	void SetDestroy() { isDestroy = true; }
 	bool IsDestroy() { return isDestroy; }
 };

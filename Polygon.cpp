@@ -37,6 +37,11 @@ void Polygon::Init()
 		vertex[i].texcoord = XMFLOAT2(i % 2, i / 2);
 	}
 
+	/*vertex[0] = { XMFLOAT2(-0.5f,-0.5f),XMFLOAT2(0.0f,0.0f) };
+	vertex[1] = { XMFLOAT2(0.5f,-0.5f),XMFLOAT2(1.0f,0.0f) };
+	vertex[2] = { XMFLOAT2(-0.5f,0.5f),XMFLOAT2(0.0f,1.0f) };
+	vertex[3] = { XMFLOAT2(0.5f,0.5f),XMFLOAT2(1.0f,1.0f) };*/
+
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;

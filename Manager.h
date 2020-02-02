@@ -24,7 +24,6 @@ class Manager
 {
 private:
 	static Manager* instance;
-	bool isDebug = true;
 	// ˆÈ‰ºAŠÇ—‚µ‚½‚¢ƒNƒ‰ƒX
 	Window* window;
 	DXManager* dxManager;
@@ -43,7 +42,6 @@ public:
 	void Update();
 	void Draw();
 	void ChangeScene(Scene* nextScene);
-	bool GetDebug() { return isDebug; }
 
 	static Manager* Get();
 	static void Delete();

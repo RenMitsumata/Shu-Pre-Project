@@ -139,7 +139,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AudioManager.cpp" />
-    <ClCompile Include="Billboard.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
@@ -152,8 +151,6 @@
     <ClCompile Include="ComponentFactory.cpp" />
     <ClCompile Include="DXManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="EnemyState.cpp" />
-    <ClCompile Include="EnemyStateWander.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -178,7 +175,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioManager.h" />
-    <ClInclude Include="Billboard.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
@@ -191,8 +187,6 @@
     <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="DXManager.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemyState.h" />
-    <ClInclude Include="EnemyStateWander.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />

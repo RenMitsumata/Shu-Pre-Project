@@ -21,7 +21,7 @@ Player::~Player()
 
 void Player::Init()
 {
-	pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	pos = XMFLOAT3(0.0f, 1.0f, 0.0f);
 	siz = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	front = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	
@@ -32,33 +32,26 @@ void Player::Init()
 	componentsList.push_back(dome);
 
 	Model* model = ComponentFactory::CreateComponent<Model>();
-	model->Load("Assets/Models/Remy.fbx");
+	model->Load("Assets/Models/SambaDancing2.fbx");
 	model->SetOwner(this);
 	componentsList.push_back(model);
 
 	CollisionCapsule* col = ComponentFactory::CreateComponent<CollisionCapsule>();
-	col->SetParams(2.0f, 0.4f);
-	col->SetDeltaPos(XMFLOAT3(0.0f, 1.5f, 0.0f));
+	col->SetParams(1.2f, 0.2f);
 	col->SetTag(e_COLTYPE_PLAYER);
 	col->SetOwner(this);
 	componentsList.push_back(col);
 
-	/*
 	CollisionCone* cone = ComponentFactory::CreateComponent<CollisionCone>();
 	cone->SetParams(0.3f, 1.0f, 3.0f);
 	cone->SetDeltaPos(XMFLOAT3(0.0f, 2.0f, 0.0f));
 	cone->SetOwner(this);
 	componentsList.push_back(cone);
-	*/
+
 	
 	input = Manager::Get()->GetInput();
-
-	/*
-	Camera* camera = Manager::Get()->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA);
-	camera->SetDeltaPos(XMFLOAT3(0.0f, 2.0f, 0.0f));
-	camera->SetDeltaRot(XMFLOAT3(0.0f, 0.0f, 0.0f));
-	camera->SetOwner(this);
-	*/
+	//Camera* camera = Manager::Get()->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA);
+	//camera->SetOwner(this);
 	scene = Manager::Get()->GetScene();
 	audio = Manager::Get()->GetAudio();
 	soundMap["shoot"] = audio->Load("Assets/Sounds/shoot.wav");
