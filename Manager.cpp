@@ -85,6 +85,12 @@ void Manager::Uninit()
 void Manager::Update()
 {
 	input->Update();
+	if (input->GetKeyTrigger('T')) {
+		dxManager->ToggleFrameMode();
+	}
+	if (input->GetKeyTrigger('E')) {
+		isDebug = isDebug ^ true;
+	}
 	scene->Update();
 }
 

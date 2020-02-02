@@ -94,9 +94,7 @@ bool CollisionOBB::isCollision(CollisionSphere* other)
 	
 
 
-
-
-
+	
 
 	return resultLength < otherRadius;
 
@@ -137,9 +135,13 @@ bool CollisionOBB::isCollision(CollisionCapsule * other)
 	XMFLOAT3 nearest;
 	XMVECTOR nearestVec;
 	
+	// 押し戻し用のベクトルを用意
+	XMVECTOR pushBack = {};
+
 	float nearestDis;
 	float d1,d2,dv;
 	float boxNearDis;
+	bool isHit = false;
 	bool skip = false;
 
 	// まずはfront方向から
@@ -174,7 +176,23 @@ bool CollisionOBB::isCollision(CollisionCapsule * other)
 			resultRadius *= cosf(XMConvertToRadians(90 * per));
 		}
 		if (nearestDis < (resultRadius + boxNearDis)) {
-			return true;
+			isHit = true;
+			if (colFlag & e_COLFLAG_IMPASSBLE) {
+				// ぶつかった相手を押し戻す
+				XMFLOAT3 oldPos = other->GetLastPos();
+				XMFLOAT3 oldDir = oldPos - GetPos();
+				XMVECTOR oldDirVec = XMLoadFloat3(&oldDir);
+				float dir;
+				XMStoreFloat(&dir, XMVector3Dot(oldDirVec, frontVec));
+				if (dir > 0) {
+					// front方向に押し返す
+					pushBack += (resultRadius + boxNearDis) * frontLength * frontVec;
+				}
+				else {
+					pushBack += (resultRadius + boxNearDis) * frontLength * -frontVec;
+				}
+
+			}
 		}		
 	}
 	skip = false;
@@ -185,41 +203,24 @@ bool CollisionOBB::isCollision(CollisionCapsule * other)
 	XMStoreFloat(&dv, XMVector3Dot(otherUpVec, upVec));
 	// dv=1or-1なら、２軸は平行
 	if (dv*dv == 1.0f) {
-		float length;
-		XMStoreFloat(&length,-XMVector3Dot(distanceVec, upVec));
-		XMVECTOR nearVec = distanceVec + length * otherUpVec;
-		XMStoreFloat(&nearestDis, XMVector3Length(nearVec));
-		if (fabs(length) > otherHeight + otherRadius) {
-			skip = true;
+		if (dv > 0) {
+			dv = 0.999f;
 		}
 		else {
-			float resultRadius = otherRadius;
-			XMVECTOR resultA = XMVector3Normalize(XMVector3Dot(frontVec, nearVec)) * frontLength;
-			XMVECTOR resultB = XMVector3Normalize(XMVector3Dot(rightVec, nearVec)) * rightLength;
-			XMStoreFloat(&boxNearDis, XMVector3Length(resultA + resultB));
-			if (fabs(length) > otherHeight) {
-				float per = (length - otherHeight) / otherRadius;
-				resultRadius *= cosf(XMConvertToRadians(90 * per));
-			}
-			
-			if (nearestDis < (resultRadius + boxNearDis)) {
-				//return true;
-			}
-			
+			dv = -0.999f;
 		}
-		skip = true;
 		
 	}
-	else {
-		s = (d1 * dv - d2) / (dv * dv - 1);
-		t = (d1 - d2 * dv) / (dv * dv - 1);
-		if (fabs(t) > otherHeight + otherRadius) {
-			skip = true;
-		}
-		if (fabs(s) > upLength + otherRadius) {
-			skip = true;
-		}
+	
+	s = (d1 * dv - d2) / (dv * dv - 1);
+	t = (d1 - d2 * dv) / (dv * dv - 1);
+	if (fabs(t) > otherHeight + otherRadius) {
+		skip = true;
 	}
+	if (fabs(s) > upLength + otherRadius) {
+		skip = true;
+	}
+	
 
 	
 
@@ -241,7 +242,23 @@ bool CollisionOBB::isCollision(CollisionCapsule * other)
 			resultRadius *= cosf(XMConvertToRadians(90 * per));
 		}
 		if (nearestDis < (resultRadius + boxNearDis)) {
-			return true;
+			isHit = true;
+			if (colFlag & e_COLFLAG_IMPASSBLE) {
+				//// ぶつかった相手を押し戻す
+				//XMFLOAT3 oldPos = other->GetLastPos();
+				//XMFLOAT3 oldDir = oldPos - GetPos();
+				//XMVECTOR oldDirVec = XMLoadFloat3(&oldDir);
+				//float dir;
+				//XMStoreFloat(&dir, XMVector3Dot(oldDirVec, upVec));
+				//if (dir > 0) {
+				//	// front方向に押し返す
+				//	pushBack += (resultRadius + boxNearDis) * 0.1f * upVec;
+				//}
+				//else {
+				//	pushBack += (resultRadius + boxNearDis) * 0.1f * -upVec;
+				//}
+
+			}
 		}
 	}
 
@@ -277,11 +294,31 @@ bool CollisionOBB::isCollision(CollisionCapsule * other)
 			resultRadius *= cosf(XMConvertToRadians(90 * per));
 		}
 		if (nearestDis < (resultRadius + boxNearDis)) {
-			return true;
+			isHit = true;
+			if (colFlag & e_COLFLAG_IMPASSBLE) {
+				// ぶつかった相手を押し戻す
+				//XMFLOAT3 oldPos = other->GetLastPos();
+				//XMFLOAT3 oldDir = oldPos - GetPos();
+				//XMVECTOR oldDirVec = XMLoadFloat3(&oldDir);
+				//float dir;
+				//XMStoreFloat(&dir, XMVector3Dot(oldDirVec, rightVec));
+				//if (dir > 0) {
+				//	// front方向に押し返す
+				//	pushBack += (resultRadius + boxNearDis) * 0.1f * rightVec;
+				//}
+				//else {
+				//	pushBack += (resultRadius + boxNearDis) * 0.1f * -rightVec;
+				//}
+
+			}
 		}
 	}
-	// くぐり抜けたら当たってない
-	return false;
+
+	XMFLOAT3 pushBackDir;
+	XMStoreFloat3(&pushBackDir, pushBack);
+	other->GetOwner()->AddPos(pushBackDir);
+
+	return isHit;
 
 }
 
@@ -300,6 +337,9 @@ void CollisionOBB::SetParams(float f, float r, float u, XMFLOAT3 pos)
 
 void CollisionOBB::Draw()
 {
+	if (!manager->GetDebug()) {
+		return;
+	}
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
 

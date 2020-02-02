@@ -92,11 +92,13 @@ void Camera::Update()
 		pos.y -= 0.1f;
 	}
 	*/
+	
 	if (owner) {
-		pos = owner->GetPos();
-		rot = owner->GetRot();
+		pos = owner->GetPos() + deltaPos;
+		rot = owner->GetRot() + deltaRot;
 		front = owner->GetFront();
 	}
+	
 	//pos += offset;
 	at = pos + front * focusLength;
 
