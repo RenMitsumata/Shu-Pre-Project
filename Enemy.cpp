@@ -1,5 +1,6 @@
 #define NOMINMAX
-
+#include "EnemyState.h"
+#include "EnemyStateWander.h"
 #include "Enemy.h"
 #include "Model.h"
 #include "CollisionCone.h"
@@ -12,6 +13,7 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
+	delete state;
 }
 
 void Enemy::Init()
@@ -19,7 +21,7 @@ void Enemy::Init()
 	pos = XMFLOAT3(0.0f, 1.0f, 0.0f);
 	siz = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	front = XMFLOAT3(0.0f, 0.0f, 1.0f);
-
+	state = new EnemyStateWander;
 
 	Model* model = ComponentFactory::CreateComponent<Model>();
 	model->Load("Assets/Models/remy.fbx");

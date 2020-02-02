@@ -143,6 +143,9 @@ void CollisionCone::SetParams(float m, float M,float l)
 
 void CollisionCone::Draw()
 {
+	if (!manager->GetDebug()) {
+		return;
+	}
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
 	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);

@@ -157,6 +157,9 @@ void CollisionSphere::CollisionAction(Collision* other)
 
 void CollisionSphere::Draw()
 {
+	if (!manager->GetDebug()) {
+		return;
+	}
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
 

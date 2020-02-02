@@ -49,6 +49,12 @@
     <Filter Include="ヘッダー ファイル\Components\Collisions">
       <UniqueIdentifier>{adc60f14-c7ff-4be2-a5e7-f22a7c7650d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\EnemyState">
+      <UniqueIdentifier>{343497ae-3d1e-457d-b963-24769263b568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\EnemyState">
+      <UniqueIdentifier>{da52d46c-e606-4040-bd99-e5978e182cd7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -156,6 +162,12 @@
     <ClCompile Include="Billboard.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyStateWander.cpp">
+      <Filter>ソース ファイル\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyState.cpp">
+      <Filter>ソース ファイル\EnemyState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -262,6 +274,12 @@
     </ClInclude>
     <ClInclude Include="Billboard.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyState.h">
+      <Filter>ヘッダー ファイル\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateWander.h">
+      <Filter>ヘッダー ファイル\EnemyState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
