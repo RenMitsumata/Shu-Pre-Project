@@ -32,7 +32,7 @@ void CollisionCapsule::Dispatch(Collision * other)
 
 void CollisionCapsule::CollisionAction(Collision * other)
 {
-	other->GetOwner()->SetDestroy();
+	//other->GetOwner()->SetDestroy();
 }
 
 bool CollisionCapsule::isCollision(CollisionSphere * other)
@@ -138,6 +138,10 @@ void CollisionCapsule::SetParams(float h, float r)
 
 void CollisionCapsule::Draw()
 {
+	if (!manager->GetDebug()) {
+		return;
+	}
+
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
 	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
@@ -146,6 +150,7 @@ void CollisionCapsule::Draw()
 	XMFLOAT4X4 MatLoc = owner->GetTransformMatrix();
 	XMMATRIX worldMat = XMLoadFloat4x4(&MatLoc);
 	worldMat = XMMatrixScaling(100.0f, 100.0f, 100.0f) * worldMat;
+	worldMat = XMMatrixTranslation(deltaPos.x, deltaPos.y, deltaPos.z) * worldMat;
 	XMStoreFloat4x4(&MatLoc, worldMat);
 	shader->SetWorldMatrix(&MatLoc);
 	shader->SetViewMatrix(manager->GetScene()->GetViewMatrix());
@@ -166,12 +171,12 @@ void CollisionCapsule::SetOwner(GameObject * owner)
 	
 	unsigned int Cnt = 0;
 
-	vertex[0].Position = XMFLOAT3(0.0f, height + radius, 0.0f);
+	vertex[0].Position = XMFLOAT3(0.0f, height / 2 + radius, 0.0f);
 	Cnt++;
 	for (int i = 1; i <= 3; i++) {
 		for (int j = 0; j < 12; j++) {
 			float posX = radius * sinf(XMConvertToRadians(i * 30)) * cosf(XMConvertToRadians(j * 30));
-			float posY = height + radius * cosf(XMConvertToRadians(i * 30));
+			float posY = height / 2 + radius * cosf(XMConvertToRadians(i * 30));
 			float posZ = radius * sinf(XMConvertToRadians(i * 30)) * sinf(XMConvertToRadians(j * 30));
 			vertex[Cnt].Position = {posX,posY,posZ};
 			Cnt++;
@@ -180,13 +185,13 @@ void CollisionCapsule::SetOwner(GameObject * owner)
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 12; j++) {
 			float posX = radius * cosf(XMConvertToRadians(i * 30)) * cosf(XMConvertToRadians(j * 30));
-			float posY = -height - radius * sinf(XMConvertToRadians(i * 30));
+			float posY = -height / 2 - radius * sinf(XMConvertToRadians(i * 30));
 			float posZ = radius * cosf(XMConvertToRadians(i * 30)) * sinf(XMConvertToRadians(j * 30));
 			vertex[Cnt].Position = { posX,posY,posZ };
 			Cnt++;
 		}
 	}
-	vertex[Cnt].Position = XMFLOAT3(0.0f, -(height + radius), 0.0f);
+	vertex[Cnt].Position = XMFLOAT3(0.0f, -(height / 2 + radius), 0.0f);
 
 	for (int i = 0; i < 74; i++) {
 		vertex[i].Diffuse = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);

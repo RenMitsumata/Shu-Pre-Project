@@ -32,6 +32,7 @@ private:
 	ID3D11DepthStencilState* depthStateEnable;
 	ID3D11DepthStencilState* depthStateDisable;
 	const float BACKBUFFERCOLOR[4] = { 0.0f, 0.0f, 0.5f, 1.0f };
+	bool isFrame = false;
 public:
 	DXManager();
 	~DXManager();
@@ -42,6 +43,7 @@ public:
 	void BeginDepth();
 	void SetDepthTexture(unsigned int slot);
 	void End();
+	void ToggleFrameMode();
 	ID3D11Device* GetDevice() { return device; }
 	ID3D11DeviceContext* GetDeviceContext() { return deviceContext; }
 
