@@ -9,7 +9,11 @@
 *.user
 *.userosscache
 *.sln.docstates
-Assets/*
+*.png
+*.fbx
+*.tga
+*.jpg
+*.jpeg
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
