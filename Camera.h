@@ -19,8 +19,6 @@ private:
 	XMFLOAT3 upDst = { 0.0f,1.0f,0.0f };
 	XMFLOAT3 at = { 0.0f,2.5f,0.0f };
 	XMVECTOR up = XMLoadFloat3(&upDst);
-	XMFLOAT3 deltaPos;
-	XMFLOAT3 deltaRot;
 	float focusLength;
 	bool isMain = false;
 public:
@@ -31,8 +29,6 @@ public:
 	void Update();
 	void Draw();
 	void SetOwner(GameObject* obj) { owner = obj; }
-	void SetDeltaPos(XMFLOAT3 pos) { deltaPos = pos; }
-	void SetDeltaRot(XMFLOAT3 rot) { deltaRot = rot; }
 	bool GetMain() { return isMain; }
 };
 

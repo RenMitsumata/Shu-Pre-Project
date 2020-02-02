@@ -33,10 +33,7 @@ void CollisionCone::Dispatch(Collision * other)
 
 void CollisionCone::CollisionAction(Collision * other)
 {
-	//other->GetOwner()->SetDestroy();
-	if (colTag == e_COLTYPE_ENEMY_EYESIGHT) {
-		owner->ColAction(other);
-	}
+	other->GetOwner()->SetDestroy();
 }
 
 bool CollisionCone::isCollision(CollisionSphere * other)
@@ -143,9 +140,6 @@ void CollisionCone::SetParams(float m, float M,float l)
 
 void CollisionCone::Draw()
 {
-	if (!manager->GetDebug()) {
-		return;
-	}
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
 	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);

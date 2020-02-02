@@ -269,28 +269,6 @@ void DXManager::End()
 	swapChain->Present(1, 0);
 }
 
-void DXManager::ToggleFrameMode()
-{
-	D3D11_RASTERIZER_DESC rd;
-	ZeroMemory(&rd, sizeof(rd));	
-	rd.CullMode = D3D11_CULL_NONE;
-	rd.DepthClipEnable = TRUE;
-	rd.MultisampleEnable = FALSE;
-	
-	if (isFrame) {
-		rd.FillMode = D3D11_FILL_SOLID;
-		isFrame = false;
-	}
-	else {
-		rd.FillMode = D3D11_FILL_WIREFRAME;
-		isFrame = true;
-	}
-	ID3D11RasterizerState *rs;
-	device->CreateRasterizerState(&rd, &rs);
-
-	deviceContext->RSSetState(rs);
-}
-
 /*
 	DirectXMath関係のオペレータのオーバーロード
 */

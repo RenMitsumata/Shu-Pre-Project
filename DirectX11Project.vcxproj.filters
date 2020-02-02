@@ -49,12 +49,6 @@
     <Filter Include="ヘッダー ファイル\Components\Collisions">
       <UniqueIdentifier>{adc60f14-c7ff-4be2-a5e7-f22a7c7650d2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\EnemyState">
-      <UniqueIdentifier>{343497ae-3d1e-457d-b963-24769263b568}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\EnemyState">
-      <UniqueIdentifier>{da52d46c-e606-4040-bd99-e5978e182cd7}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -132,8 +126,14 @@
     <ClCompile Include="Shader3D_GeoIns.cpp">
       <Filter>ソース ファイル\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="Shader2D.cpp">
       <Filter>ソース ファイル\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Polygon.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="CollisionCapsule.cpp">
       <Filter>ソース ファイル\Components\Collisions</Filter>
@@ -151,22 +151,7 @@
       <Filter>ソース ファイル\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>ソース ファイル\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Polygon.cpp">
-      <Filter>ソース ファイル\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Billboard.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyStateWander.cpp">
-      <Filter>ソース ファイル\EnemyState</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyState.cpp">
-      <Filter>ソース ファイル\EnemyState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -245,8 +230,14 @@
     <ClInclude Include="Shader3D_GeoIns.h">
       <Filter>ヘッダー ファイル\Shaders</Filter>
     </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
     <ClInclude Include="Shader2D.h">
       <Filter>ヘッダー ファイル\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="CollisionCapsule.h">
       <Filter>ヘッダー ファイル\Components\Collisions</Filter>
@@ -263,23 +254,8 @@
     <ClInclude Include="Title.h">
       <Filter>ヘッダー ファイル\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Polygon.h">
-      <Filter>ヘッダー ファイル\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
-      <Filter>ヘッダー ファイル\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>ヘッダー ファイル\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Billboard.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyState.h">
-      <Filter>ヘッダー ファイル\EnemyState</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyStateWander.h">
-      <Filter>ヘッダー ファイル\EnemyState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

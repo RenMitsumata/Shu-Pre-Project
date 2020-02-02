@@ -14,6 +14,7 @@ private:
 	ID3D11Buffer* indexBuffer = NULL;
 	Shader2D* shader;
 	Texture* texture;
+	XMMATRIX projMat;
 public:
 	Polygon();
 	virtual ~Polygon();
