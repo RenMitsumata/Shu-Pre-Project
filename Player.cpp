@@ -37,7 +37,7 @@ void Player::Init()
 	componentsList.push_back(model);
 
 	CollisionCapsule* col = ComponentFactory::CreateComponent<CollisionCapsule>();
-	col->SetParams(2.0f, 0.4f);
+	col->SetParams(2.0f, 0.6f);
 	col->SetDeltaPos(XMFLOAT3(0.0f, 1.5f, 0.0f));
 	col->SetTag(e_COLTYPE_PLAYER);
 	col->SetOwner(this);
@@ -81,12 +81,14 @@ void Player::Update()
 	if (input->GetKeyPress(VK_RIGHT)) {
 		pos.x += 0.1f;
 	}
+	/*
 	if (input->GetKeyPress(VK_LSHIFT)) {
 		pos.y += 0.1f;
 	}
 	if (input->GetKeyPress(VK_RSHIFT)) {
 		pos.y -= 0.1f;
 	}
+	*/
 	if (input->GetKeyTrigger(VK_SPACE)) {
 		Bullet* bullet = scene->AddGameObject<Bullet>(e_LAYER_GAMEOBJECT);
 		bullet->SetPos(pos);

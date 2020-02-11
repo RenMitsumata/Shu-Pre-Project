@@ -19,6 +19,8 @@ class Scene;
 class InputManager;
 class CollisionManager;
 class AudioManager;
+class EnemyManager;
+
 
 class Manager
 {
@@ -32,6 +34,7 @@ private:
 	InputManager* input;
 	CollisionManager* colManager;
 	AudioManager* audio;
+	EnemyManager* enemyManager;
 	// コンストラクタ、コピーコンストラクター、オペレータ＝は秘匿
 	Manager();
 	~Manager();
@@ -54,6 +57,7 @@ public:
 	InputManager* GetInput();
 	CollisionManager* GetColManager();
 	AudioManager* GetAudio();
+	EnemyManager* GetEnemyManager();
 };
 
 /* -----（インクルードガード）----- */

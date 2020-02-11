@@ -5,14 +5,21 @@
 #include "Model.h"
 #include "CollisionCone.h"
 #include "Billboard.h"
+#include "EnemyManager.h"
 
 Enemy::Enemy()
 {
+	manager = Manager::Get()->GetEnemyManager();
+	if (!manager) {
+		assert(false);
+	}
+	manager->AddEnemy(this);
 }
 
 
 Enemy::~Enemy()
 {
+	manager->DeleteEnemy(this);
 	delete state;
 }
 
@@ -27,14 +34,6 @@ void Enemy::Init()
 	model->Load("Assets/Models/remy.fbx");
 	model->SetOwner(this);
 	componentsList.push_back(model);
-
-	/*
-	CollisionSphere* col = ComponentFactory::CreateComponent<CollisionSphere>();
-	col->SetRadius(1.0f);
-	col->SetTag(e_COLTYPE_PLAYER);
-	col->SetOwner(this);
-	componentsList.push_back(col);
-	*/
 
 	CollisionCone* cone = ComponentFactory::CreateComponent<CollisionCone>();
 	cone->SetTag(e_COLTYPE_ENEMY_EYESIGHT);
@@ -53,5 +52,12 @@ void Enemy::ColAction(Component* comp)
 	bill->SetDeltaPos(XMFLOAT3(0.0f, 4.0f, 0.0f));
 	bill->SetOwner(this);
 	componentsList.push_back(bill);
+
+	// ‚±‚±‚ÉŒx‰úó‘Ô‚É‚·‚éƒvƒƒOƒ‰ƒ€
+	manager->ChangePhase(e_ENEMYPHASE_ALERT);
+}
+
+void Enemy::ChangeState(EnemyPhase phase)
+{
 }
 

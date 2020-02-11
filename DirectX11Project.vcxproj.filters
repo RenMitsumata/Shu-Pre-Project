@@ -168,6 +168,9 @@
     <ClCompile Include="EnemyState.cpp">
       <Filter>ソース ファイル\EnemyState</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>ソース ファイル\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="EnemyStateWander.h">
       <Filter>ヘッダー ファイル\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>ヘッダー ファイル\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

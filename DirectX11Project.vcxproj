@@ -152,6 +152,7 @@
     <ClCompile Include="ComponentFactory.cpp" />
     <ClCompile Include="DXManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="EnemyStateWander.cpp" />
     <ClCompile Include="field.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="ComponentFactory.h" />
     <ClInclude Include="DXManager.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="EnemyStateWander.h" />
     <ClInclude Include="field.h" />

@@ -6,7 +6,7 @@
 #include "GameObject.h"
 #include "CollisionManager.h"
 
-// ‘O•ûéŒ¾
+
 
 enum Renderer_Layer {
 	e_LAYER_CAMERA = 0,

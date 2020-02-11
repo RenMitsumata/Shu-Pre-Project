@@ -12,6 +12,7 @@
 #include "InputManager.h"
 #include "CollisionManager.h"
 #include "AudioManager.h"
+#include "EnemyManager.h"
 #include "Manager.h"
 
 
@@ -43,6 +44,8 @@ void Manager::Init(HINSTANCE hInstance, int nCmdShow)
 	colManager->Init();
 	audio = new AudioManager;
 	audio->Init();
+	enemyManager = new EnemyManager;
+	enemyManager->Init();
 
 	scene = new Title;
 	scene->Init();
@@ -51,6 +54,11 @@ void Manager::Init(HINSTANCE hInstance, int nCmdShow)
 
 void Manager::Uninit()
 {
+	if (enemyManager) {
+		enemyManager->Uninit();
+		delete enemyManager;
+		enemyManager = nullptr;
+	}
 	if (audio) {
 		audio->Uninit();
 		delete audio;
@@ -85,6 +93,7 @@ void Manager::Uninit()
 void Manager::Update()
 {
 	input->Update();
+	enemyManager->Update();
 	if (input->GetKeyTrigger('T')) {
 		dxManager->ToggleFrameMode();
 	}
@@ -96,10 +105,11 @@ void Manager::Update()
 
 void Manager::Draw()
 {
-	//dxManager->BeginDepth();
-	//scene->Draw();	// W LV OrthoProj
+	dxManager->BeginDepth();
+	scene->Draw();	// W LV OrthoProj
 	dxManager->Begin();
 	scene->Draw(); // WVP , ↑↑の結果のテクスチャ , ↑↑で使ったfar
+	enemyManager->Draw();
 	dxManager->End();
 }
 
@@ -156,9 +166,14 @@ CollisionManager* Manager::GetColManager()
 	return colManager;
 }
 
-AudioManager * Manager::GetAudio()
+AudioManager* Manager::GetAudio()
 {
 	return audio;
+}
+
+EnemyManager* Manager::GetEnemyManager()
+{
+	return enemyManager;
 }
 
 
