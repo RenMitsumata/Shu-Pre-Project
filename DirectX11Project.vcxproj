@@ -161,6 +161,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelNormal.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -175,6 +176,8 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="WayNode.cpp" />
+    <ClCompile Include="WayNodeManager.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +204,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Manager.h" />
+    <ClInclude Include="MapManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelNormal.h" />
     <ClInclude Include="Player.h" />
@@ -215,6 +219,8 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Wall.h" />
+    <ClInclude Include="WayNode.h" />
+    <ClInclude Include="WayNodeManager.h" />
     <ClInclude Include="window.h" />
   </ItemGroup>
   <ItemGroup>

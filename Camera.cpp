@@ -1,7 +1,13 @@
-#include "InputManager.h"
+#define NOMINMAX
 #include "Camera.h"
 
 
+//#include "Model.h"
+
+#include "InputManager.h"
+#include "SkyDome.h"
+
+using namespace DirectX;
 
 Camera::Camera() :owner(nullptr)
 {
@@ -26,6 +32,13 @@ void Camera::Init()
 	XMStoreFloat3(&front, bufv);
 	Manager::Get()->GetScene()->SetCameraMatrix(&viewMat, &projMat);
 	Manager::Get()->GetScene()->SetCameraPos(&pos);
+
+	SkyDome* dome = ComponentFactory::CreateComponent<SkyDome>();
+	dome->Set(1.0f);
+	dome->SetOwner(this);
+	componentsList.push_back(dome);
+
+
 }
 
 
@@ -36,7 +49,7 @@ void Camera::Uninit()
 
 void Camera::Update()
 {
-	if (input->GetKeyPress('W')) {
+	/*if (input->GetKeyPress('W')) {
 		pos.z += 0.1f;
 		at.z += 0.1f;
 	}
@@ -51,8 +64,8 @@ void Camera::Update()
 	if (input->GetKeyPress('D')) {
 		pos.x += 0.1f;
 		at.x += 0.1f;
-	}
-	if (input->GetKeyPress('H')) {
+	}*/
+	/*if (input->GetKeyPress('H')) {
 		XMVECTOR frontVec = XMLoadFloat3(&front);
 		XMVECTOR RotateInfo = XMQuaternionRotationAxis(up, -0.05f);
 		frontVec = XMVector3Rotate(frontVec, RotateInfo);
@@ -80,7 +93,7 @@ void Camera::Update()
 		frontVec = XMVector3Rotate(frontVec, RotateInfo);
 		up = XMVector3Rotate(up, RotateInfo);
 		XMStoreFloat3(&front, frontVec);
-	}
+	}*/
 
 
 
@@ -93,10 +106,26 @@ void Camera::Update()
 	}
 	*/
 	
+
 	if (owner) {
-		pos = owner->GetPos() + deltaPos;
+		// ポジション。プレイヤーの真後ろ
+		XMFLOAT3 ownerRot = owner->GetRot();
+		XMFLOAT3 defaultDir = XMFLOAT3(0.0f, 0.0f, -1.0f);
+		XMMATRIX rotMtx = XMMatrixIdentity();
+		rotMtx = XMMatrixRotationRollPitchYaw(ownerRot.x, ownerRot.y, ownerRot.z);
+		XMVECTOR defaultVec = XMLoadFloat3(&defaultDir);
+		XMVECTOR deltaPosVec = XMLoadFloat3(&deltaPos);
+		defaultVec = XMVector3TransformNormal(defaultVec, rotMtx);
+		deltaPosVec = XMVector3TransformNormal(deltaPosVec, rotMtx);
+		XMFLOAT3 calcPos;
+		XMStoreFloat3(&calcPos, deltaPosVec);
+
+
+		pos = owner->GetPos() + calcPos;
+		// 回転。一人称用にデルタ回転も
 		rot = owner->GetRot() + deltaRot;
-		front = owner->GetFront();
+		// 正面。at用。
+		XMStoreFloat3(&front, XMVector3Normalize(defaultVec));
 	}
 	
 	//pos += offset;
@@ -136,6 +165,8 @@ void Camera::Draw()
 
 	// プロジェクションマトリクス設定
 	XMStoreFloat4x4(&projMat, XMMatrixPerspectiveFovLH(1.0f, dxViewport.Width / dxViewport.Height, 1.0f, 1000.0f));
-
+	for (Component* comp : componentsList) {
+		comp->Draw();
+	}
 }
 

@@ -43,7 +43,7 @@ void EnemyManager::AddEnemy(Enemy* enemy)
 
 void EnemyManager::DeleteEnemy(Enemy* enemy)
 {
-	enemyList.remove(enemy);
+	//enemyList.remove(enemy);
 }
 
 void EnemyManager::ChangePhase(EnemyPhase phase)

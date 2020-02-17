@@ -94,3 +94,8 @@ void Polygon::SetSize(float width, float height, XMFLOAT2 screenPos)
 	ibData.SysMemSlicePitch = 0;
 	device->CreateBuffer(&indexBufferDesc, &ibData, &indexBuffer);
 }
+
+void Polygon::ChangeColor()
+{
+	shader->ChangeColor();
+}

@@ -97,6 +97,15 @@ void Shader2D::Init(const char * VS_Filename, const char * PS_Filename)
 	device->CreateBuffer(&hBufferDesc, NULL, &constantBuffer);
 	context->VSSetConstantBuffers(0, 1, &constantBuffer);
 
+	hBufferDesc.ByteWidth = sizeof(XMFLOAT4);
+
+	device->CreateBuffer(&hBufferDesc, NULL, &colorBuffer);
+	context->UpdateSubresource(colorBuffer, 0, NULL, &color, 0, 0);
+	context->PSSetConstantBuffers(0, 1, &colorBuffer);
+
+
+
+
 	// プロジェクション行列初期化
 	projection = XMMatrixOrthographicOffCenterLH(0.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.0f, 0.0f, 1.0f);
 	context->UpdateSubresource(constantBuffer, 0, NULL, &XMMatrixTranspose(projection), 0, 0);
@@ -154,6 +163,7 @@ void Shader2D::Set()
 	context->IASetInputLayout(vertexLayout);
 
 	// プロジェクション行列初期化（ウィンドウいっぱい、後から変えない設定）
+	context->PSSetConstantBuffers(0, 1, &colorBuffer);
 
 
 	// 定数バッファ設定(定数バッファの形が異なる場合、引数を変える)
@@ -171,4 +181,11 @@ void Shader2D::SetProjMatrix(XMMATRIX mat)
 {
 	projection = mat;
 	context->UpdateSubresource(constantBuffer, 0, NULL, &XMMatrixTranspose(projection), 0, 0);
+}
+
+void Shader2D::ChangeColor()
+{
+	time++;
+	color = XMFLOAT4(sinf(XMConvertToRadians(time)), cosf(XMConvertToRadians(time)), sinf(XMConvertToRadians(time + 180)), 1.0f);
+	context->UpdateSubresource(colorBuffer, 0, NULL, &color, 0, 0);
 }

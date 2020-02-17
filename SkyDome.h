@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "Shader3D.h"
 
 class Texture;
 

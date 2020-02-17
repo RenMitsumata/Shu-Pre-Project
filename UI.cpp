@@ -25,8 +25,13 @@ void UI::Init()
 
 void UI::SetTextureAndSize(const char * filename, float width, float height, XMFLOAT2 pos)
 {
-	class Polygon* polygon = ComponentFactory::CreateComponent<class Polygon>();
+	polygon = ComponentFactory::CreateComponent<class Polygon>();
 	polygon->SetTexture(filename);
 	polygon->SetSize(width,height,pos);
 	componentsList.push_back(polygon);
+}
+
+void UI::ChangeColor()
+{
+	polygon->ChangeColor();
 }

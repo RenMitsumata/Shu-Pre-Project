@@ -19,6 +19,9 @@ private:
 	ID3D11SamplerState*		samplerState = NULL;
 	ID3D11Buffer*			constantBuffer;
 	XMMATRIX				projection;
+	XMFLOAT4				color = {1.0f,1.0f,1.0f,1.0f};
+	ID3D11Buffer*			colorBuffer;
+	unsigned int			time = 0;
 public:
 	Shader2D();
 	~Shader2D();
@@ -27,5 +30,6 @@ public:
 	void Set();
 	void SetTexture(Texture* texture);
 	void SetProjMatrix(XMMATRIX mat);
+	void ChangeColor();
 };
 

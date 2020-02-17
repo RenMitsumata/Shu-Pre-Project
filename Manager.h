@@ -21,7 +21,6 @@ class CollisionManager;
 class AudioManager;
 class EnemyManager;
 
-
 class Manager
 {
 private:

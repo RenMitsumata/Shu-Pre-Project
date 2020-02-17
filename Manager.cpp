@@ -13,6 +13,7 @@
 #include "CollisionManager.h"
 #include "AudioManager.h"
 #include "EnemyManager.h"
+
 #include "Manager.h"
 
 
@@ -46,7 +47,6 @@ void Manager::Init(HINSTANCE hInstance, int nCmdShow)
 	audio->Init();
 	enemyManager = new EnemyManager;
 	enemyManager->Init();
-
 	scene = new Title;
 	scene->Init();
 	

@@ -57,7 +57,7 @@ void Enemy::ColAction(Component* comp)
 	manager->ChangePhase(e_ENEMYPHASE_ALERT);
 }
 
-void Enemy::ChangeState(EnemyPhase phase)
-{
-}
+//void Enemy::ChangeState(EnemyPhase phase)
+//{
+//}
 

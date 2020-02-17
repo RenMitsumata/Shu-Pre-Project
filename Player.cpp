@@ -6,7 +6,6 @@
 #include "CollisionSphere.h"
 #include "CollisionCapsule.h"
 #include "CollisionCone.h"
-#include "SkyDome.h"
 #include "AudioManager.h"
 
 
@@ -22,14 +21,12 @@ Player::~Player()
 void Player::Init()
 {
 	pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	rot = XMFLOAT3(0.0f, XMConvertToRadians(180.0f), 0.0f);
 	siz = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	front = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	
 	
-	SkyDome* dome = ComponentFactory::CreateComponent<SkyDome>();
-	dome->Set(100.0f);
-	dome->SetOwner(this);
-	componentsList.push_back(dome);
+	
 
 	Model* model = ComponentFactory::CreateComponent<Model>();
 	model->Load("Assets/Models/Remy.fbx");
@@ -53,12 +50,12 @@ void Player::Init()
 	
 	input = Manager::Get()->GetInput();
 
-	/*
-	Camera* camera = Manager::Get()->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA);
-	camera->SetDeltaPos(XMFLOAT3(0.0f, 2.0f, 0.0f));
+	
+	Camera* camera = Manager::Get()->GetScene()->AddGameObject<Camera>(e_LAYER_CAMERA);
+	camera->SetDeltaPos(XMFLOAT3(0.5f, 3.5f, 2.5f));
 	camera->SetDeltaRot(XMFLOAT3(0.0f, 0.0f, 0.0f));
 	camera->SetOwner(this);
-	*/
+	
 	scene = Manager::Get()->GetScene();
 	audio = Manager::Get()->GetAudio();
 	soundMap["shoot"] = audio->Load("Assets/Sounds/shoot.wav");
@@ -69,18 +66,35 @@ void Player::Update()
 {
 	
 
-	if (input->GetKeyPress(VK_UP)) {
-		pos.z += 0.1f;
+	if (input->GetKeyPress('W')) {
+		//pos.z += 0.1f;
+		AddPos(front * -0.1f);
 	}
-	if (input->GetKeyPress(VK_DOWN)) {
-		pos.z -= 0.1f;
+	if (input->GetKeyPress('S')) {
+		//pos.z -= 0.1f;
+		AddPos(front * 0.1f);
 	}
-	if (input->GetKeyPress(VK_LEFT)) {
+	if (input->GetKeyPress('A')) {
 		pos.x -= 0.1f;
 	}
-	if (input->GetKeyPress(VK_RIGHT)) {
+	if (input->GetKeyPress('D')) {
 		pos.x += 0.1f;
 	}
+
+	if (input->GetKeyPress(VK_LEFT)) {
+		rot.y -= 0.01f;
+		SetRot(rot);
+	}
+	if (input->GetKeyPress(VK_RIGHT)) {
+		rot.y += 0.01f;
+		SetRot(rot);
+	}
+
+
+
+
+
+
 	/*
 	if (input->GetKeyPress(VK_LSHIFT)) {
 		pos.y += 0.1f;

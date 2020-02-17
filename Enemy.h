@@ -3,7 +3,7 @@
 
 class EnemyState;
 class EnemyManager;
-enum EnemyPhase;
+//enum EnemyPhase;
 
 class Enemy : public GameObject
 {
@@ -15,6 +15,6 @@ public:
 	~Enemy();
 	void Init()override;
 	void ColAction(Component* comp)override;
-	void ChangeState(EnemyPhase phase);
+	//void ChangeState(EnemyPhase phase);
 };
 

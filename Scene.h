@@ -6,6 +6,8 @@
 #include "GameObject.h"
 #include "CollisionManager.h"
 
+class WayNodeManager;
+class MapManager;
 
 
 enum Renderer_Layer {
@@ -35,6 +37,9 @@ protected:
 	std::list<GameObject*> objectList[5];
 	DIVISION division;
 	CollisionManager colMgr;
+	WayNodeManager* nodeMgr = nullptr;
+	MapManager* mapMgr = nullptr;
+
 public:
 	
 
@@ -87,5 +92,7 @@ public:
 	XMFLOAT3* GetAnotherCameraPos() { return p_AnotherCamPos; }
 	DIVISION* GetDivision() { return &division; }
 	CollisionManager* GetCollisionManager() { return &colMgr; }
+	WayNodeManager* GetNodeManager() { return nodeMgr; }
+	MapManager* GetMapManager() { return mapMgr; }
 };
 

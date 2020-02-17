@@ -21,5 +21,6 @@ public:
 	void Draw()override;
 	void SetTexture(const char* filename);
 	void SetSize(float width, float height, XMFLOAT2 screenPos);
+	void ChangeColor();
 };
 
