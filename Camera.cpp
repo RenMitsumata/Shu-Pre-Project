@@ -49,51 +49,51 @@ void Camera::Uninit()
 
 void Camera::Update()
 {
-	/*if (input->GetKeyPress('W')) {
-		pos.z += 0.1f;
-		at.z += 0.1f;
-	}
-	if (input->GetKeyPress('S')) {
-		pos.z -= 0.1f;
-		at.z -= 0.1f;
-	}
-	if (input->GetKeyPress('A')) {
-		pos.x -= 0.1f;
-		at.x -= 0.1f;
-	}
-	if (input->GetKeyPress('D')) {
-		pos.x += 0.1f;
-		at.x += 0.1f;
-	}*/
-	/*if (input->GetKeyPress('H')) {
-		XMVECTOR frontVec = XMLoadFloat3(&front);
-		XMVECTOR RotateInfo = XMQuaternionRotationAxis(up, -0.05f);
-		frontVec = XMVector3Rotate(frontVec, RotateInfo);
-		XMStoreFloat3(&front, frontVec);
-	}
+	//if (input->GetKeyPress('F')) {
+	//	pos.z += 0.1f;
+	//	at.z += 0.1f;
+	//}
+	//if (input->GetKeyPress('V')) {
+	//	pos.z -= 0.1f;
+	//	at.z -= 0.1f;
+	//}
+	//if (input->GetKeyPress('C')) {
+	//	pos.x -= 0.1f;
+	//	at.x -= 0.1f;
+	//}
+	//if (input->GetKeyPress('B')) {
+	//	pos.x += 0.1f;
+	//	at.x += 0.1f;
+	//}
+	//if (input->GetKeyPress('H')) {
+	//	XMVECTOR frontVec = XMLoadFloat3(&front);
+	//	XMVECTOR RotateInfo = XMQuaternionRotationAxis(up, -0.05f);
+	//	frontVec = XMVector3Rotate(frontVec, RotateInfo);
+	//	XMStoreFloat3(&front, frontVec);
+	//}
 
-	if (input->GetKeyPress('K')) {
-		XMVECTOR frontVec = XMLoadFloat3(&front);
-		XMVECTOR RotateInfo = XMQuaternionRotationAxis(up,0.05f);
-		frontVec = XMVector3Rotate(frontVec, RotateInfo);
-		XMStoreFloat3(&front, frontVec);
-	}
-	if (input->GetKeyPress('U')) {
-		XMVECTOR frontVec = XMLoadFloat3(&front);
-		XMVECTOR right = XMVector3Cross(frontVec, up);
-		XMVECTOR RotateInfo = XMQuaternionRotationAxis(right, 0.05f);
-		frontVec = XMVector3Rotate(frontVec, RotateInfo);
-		up = XMVector3Rotate(up, RotateInfo);
-		XMStoreFloat3(&front, frontVec);
-	}
-	if (input->GetKeyPress('J')) {
-		XMVECTOR frontVec = XMLoadFloat3(&front);
-		XMVECTOR right = XMVector3Cross(frontVec, up);
-		XMVECTOR RotateInfo = XMQuaternionRotationAxis(right, -0.05f);
-		frontVec = XMVector3Rotate(frontVec, RotateInfo);
-		up = XMVector3Rotate(up, RotateInfo);
-		XMStoreFloat3(&front, frontVec);
-	}*/
+	//if (input->GetKeyPress('K')) {
+	//	XMVECTOR frontVec = XMLoadFloat3(&front);
+	//	XMVECTOR RotateInfo = XMQuaternionRotationAxis(up,0.05f);
+	//	frontVec = XMVector3Rotate(frontVec, RotateInfo);
+	//	XMStoreFloat3(&front, frontVec);
+	//}
+	//if (input->GetKeyPress('U')) {
+	//	XMVECTOR frontVec = XMLoadFloat3(&front);
+	//	XMVECTOR right = XMVector3Cross(frontVec, up);
+	//	XMVECTOR RotateInfo = XMQuaternionRotationAxis(right, 0.05f);
+	//	frontVec = XMVector3Rotate(frontVec, RotateInfo);
+	//	up = XMVector3Rotate(up, RotateInfo);
+	//	XMStoreFloat3(&front, frontVec);
+	//}
+	//if (input->GetKeyPress('J')) {
+	//	XMVECTOR frontVec = XMLoadFloat3(&front);
+	//	XMVECTOR right = XMVector3Cross(frontVec, up);
+	//	XMVECTOR RotateInfo = XMQuaternionRotationAxis(right, -0.05f);
+	//	frontVec = XMVector3Rotate(frontVec, RotateInfo);
+	//	up = XMVector3Rotate(up, RotateInfo);
+	//	XMStoreFloat3(&front, frontVec);
+	//}
 
 
 

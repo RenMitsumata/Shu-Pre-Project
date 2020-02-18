@@ -104,13 +104,13 @@ void Game::Loading()
 {
 	mapMgr = new MapManager;
 	mapMgr->Init();
+	//Camera* camera = AddGameObject<Camera>(e_LAYER_CAMERA);
 	mapMgr->ReadMap("Assets/Maps/stage001.txt");
 
 	Field* field = AddGameObject<Field>(e_LAYER_BACKGROUND);
 
-	Player* player = AddGameObject<Player>(e_LAYER_GAMEOBJECT);
-	Enemy* enemy = AddGameObject<Enemy>(e_LAYER_GAMEOBJECT);
-	enemy->SetPos(XMFLOAT3(5.0f, 0.0f, 5.0f));
+	//Enemy* enemy = AddGameObject<Enemy>(e_LAYER_GAMEOBJECT);
+	//enemy->SetPos(XMFLOAT3(5.0f, 0.0f, 5.0f));
 	//UI* ui = AddGameObject<UI>(e_LAYER_UI);
 	//ui->LoadTexture("Assets/Textures/t_title001.png");
 	Sleep(1000);

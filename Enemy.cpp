@@ -6,6 +6,7 @@
 #include "CollisionCone.h"
 #include "Billboard.h"
 #include "EnemyManager.h"
+#include <typeinfo>
 
 Enemy::Enemy()
 {
@@ -29,33 +30,53 @@ void Enemy::Init()
 	siz = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	front = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	state = new EnemyStateWander;
+	state->Init(this);
 
 	Model* model = ComponentFactory::CreateComponent<Model>();
-	model->Load("Assets/Models/remy.fbx");
+	model->Load("Assets/Models/human2.fbx");
 	model->SetOwner(this);
 	componentsList.push_back(model);
 
 	CollisionCone* cone = ComponentFactory::CreateComponent<CollisionCone>();
 	cone->SetTag(e_COLTYPE_ENEMY_EYESIGHT);
 	cone->SetParams(0.3f, 1.0f, 3.0f);
-	cone->SetDeltaPos(XMFLOAT3(0.0f, 3.0f, 0.0f));
+	cone->SetDeltaPos(XMFLOAT3(0.0f, 2.0f, 0.0f));
 	cone->SetOwner(this);
 	componentsList.push_back(cone);
 
 
 }
 
+void Enemy::Update()
+{
+	// エネミーステートのアップデート？
+	state->Update(this);
+}
+
 void Enemy::ColAction(Component* comp)
 {
 	Billboard* bill = ComponentFactory::CreateComponent<Billboard>();
 	bill->SetTexture("Assets/Textures/found.png");
-	bill->SetDeltaPos(XMFLOAT3(0.0f, 4.0f, 0.0f));
+	bill->SetDeltaPos(XMFLOAT3(0.0f, 2.5f, 0.0f));
 	bill->SetOwner(this);
 	componentsList.push_back(bill);
 
 	// ここに警戒状態にするプログラム
 	manager->ChangePhase(e_ENEMYPHASE_ALERT);
 }
+
+void Enemy::SetWanderNode(unsigned short* nodeArray, unsigned short num)
+{
+	std::string type = typeid(*state).name();
+	if (type == "class EnemyStateWander") {
+		dynamic_cast<EnemyStateWander*>(state)->SetNode(nodeArray, num);
+	}
+}
+
+
+
+
+
 
 //void Enemy::ChangeState(EnemyPhase phase)
 //{

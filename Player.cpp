@@ -29,13 +29,13 @@ void Player::Init()
 	
 
 	Model* model = ComponentFactory::CreateComponent<Model>();
-	model->Load("Assets/Models/Remy.fbx");
+	model->Load("Assets/Models/human2.fbx");
 	model->SetOwner(this);
 	componentsList.push_back(model);
 
 	CollisionCapsule* col = ComponentFactory::CreateComponent<CollisionCapsule>();
-	col->SetParams(2.0f, 0.6f);
-	col->SetDeltaPos(XMFLOAT3(0.0f, 1.5f, 0.0f));
+	col->SetParams(1.5f, 0.6f);
+	col->SetDeltaPos(XMFLOAT3(0.0f, 1.0f, 0.0f));
 	col->SetTag(e_COLTYPE_PLAYER);
 	col->SetOwner(this);
 	componentsList.push_back(col);
@@ -52,7 +52,7 @@ void Player::Init()
 
 	
 	Camera* camera = Manager::Get()->GetScene()->AddGameObject<Camera>(e_LAYER_CAMERA);
-	camera->SetDeltaPos(XMFLOAT3(0.5f, 3.5f, 2.5f));
+	camera->SetDeltaPos(XMFLOAT3(-1.0f, 2.0f, 2.5f));
 	camera->SetDeltaRot(XMFLOAT3(0.0f, 0.0f, 0.0f));
 	camera->SetOwner(this);
 	
@@ -68,11 +68,11 @@ void Player::Update()
 
 	if (input->GetKeyPress('W')) {
 		//pos.z += 0.1f;
-		AddPos(front * -0.1f);
+		AddPos(front * 0.1f);
 	}
 	if (input->GetKeyPress('S')) {
 		//pos.z -= 0.1f;
-		AddPos(front * 0.1f);
+		AddPos(front * -0.1f);
 	}
 	if (input->GetKeyPress('A')) {
 		pos.x -= 0.1f;
@@ -82,12 +82,11 @@ void Player::Update()
 	}
 
 	if (input->GetKeyPress(VK_LEFT)) {
-		rot.y -= 0.01f;
-		SetRot(rot);
+		AddRot(XMFLOAT3(0.0f,-0.01f,0.0f));
 	}
+
 	if (input->GetKeyPress(VK_RIGHT)) {
-		rot.y += 0.01f;
-		SetRot(rot);
+		AddRot(XMFLOAT3(0.0f, 0.01f, 0.0f));
 	}
 
 

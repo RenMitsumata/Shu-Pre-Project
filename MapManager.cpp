@@ -6,6 +6,8 @@
 #include "Wall.h"
 #include "WayNode.h"
 #include "WayNodeManager.h"
+#include "Enemy.h"
+#include "Player.h"
 
 MapManager::MapManager()
 {
@@ -270,6 +272,95 @@ void MapManager::ReadMap(const char* filename)
 			delete[] neighborArray;
 		} //if(NODE)
 			
+		if (idName == "ENEMY") {
+			// 生成に必要なメンバ
+			XMFLOAT3 pos;
+			unsigned short* nodeArray;
+			float posMem[3];
+			char locBuffer[64];
+			unsigned char locCnt = 0;
+
+			// 次の:まで読み飛ばす
+			while (currentData != ':') {
+				currentPoint++;
+				currentData = buffer[currentPoint];
+			}
+
+
+			// ポジションを取得
+
+			for (int i = 0; i < 3; i++) {
+
+				currentPoint++;
+				currentData = buffer[currentPoint];
+				locCnt = 0;
+				while (currentData != ',' && currentData != ';') {
+					locBuffer[locCnt] = currentData;
+					locCnt++;
+					currentPoint++;
+					currentData = buffer[currentPoint];
+				}
+
+				posMem[i] = atof(locBuffer);
+				ZeroMemory(locBuffer, 64);
+			}
+			pos = { posMem[0],posMem[1],posMem[2] };
+
+			// 次の:まで読み飛ばす
+			while (currentData != ':') {
+				currentPoint++;
+				currentData = buffer[currentPoint];
+			}
+
+			// 隣のノード情報登録及び距離計算
+			unsigned char nodeCnt = 1;
+			locCnt = 0;
+			currentPoint++;
+			currentData = buffer[currentPoint];
+			while (currentData != ';') {
+				if (currentData == ',') {
+					nodeCnt++;
+				}
+				locBuffer[locCnt] = currentData;
+				locCnt++;
+				currentPoint++;
+				currentData = buffer[currentPoint];
+			}
+
+			nodeArray = new unsigned short[nodeCnt];
+			char* pBuf = locBuffer;
+			char nodeID[6];
+			unsigned char itr = 0;
+
+
+
+			while (*pBuf != '\0') {
+				unsigned char nodeIDPos = 0;
+				ZeroMemory(nodeID, sizeof(char) * 6);
+				while (*pBuf != ',' && nodeIDPos < 6) {
+					nodeID[nodeIDPos] = *pBuf;
+					nodeIDPos++;
+					pBuf++;
+				}
+				nodeArray[itr] = atoi(nodeID);
+				pBuf++;
+				itr++;
+			}
+
+			Enemy* enemy = scene->AddGameObject<Enemy>(e_LAYER_GAMEOBJECT);
+			enemy->SetPos(pos);
+			enemy->SetWanderNode(nodeArray, nodeCnt);
+
+			delete[] nodeArray;
+
+
+
+		}// if(ENEMY)
+
+		if (idName == "PLAYER") {
+			Player* player = scene->AddGameObject<Player>(e_LAYER_GAMEOBJECT);
+		}
+
 
 	} // while(currentPoint < fileSize) 
 
