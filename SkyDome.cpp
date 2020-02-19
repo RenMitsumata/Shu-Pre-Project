@@ -1,6 +1,5 @@
 #include "Manager.h"
 #include "DXManager.h"
-#include "Shader3D.h"
 #include "SkyDome.h"
 #include "GameObject.h"
 #include "Texture.h"

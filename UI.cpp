@@ -1,3 +1,4 @@
+
 #include "UI.h"
 #include "Polygon.h"
 
@@ -6,7 +7,6 @@
 #include "Component.h"
 
 #include "Texture.h"
-#include "window.h"
 
 
 UI::UI()
@@ -23,10 +23,15 @@ void UI::Init()
 	
 }
 
-void UI::LoadTexture(const char* filename)
+void UI::SetTextureAndSize(const char * filename, float width, float height, XMFLOAT2 pos)
 {
-	class Polygon* polygon = ComponentFactory::CreateComponent<class Polygon>();
+	polygon = ComponentFactory::CreateComponent<class Polygon>();
 	polygon->SetTexture(filename);
-	polygon->SetSize(100.0f, 100.0f, XMFLOAT2(100.0f, 100.0f));
+	polygon->SetSize(width,height,pos);
 	componentsList.push_back(polygon);
+}
+
+void UI::ChangeColor()
+{
+	polygon->ChangeColor();
 }

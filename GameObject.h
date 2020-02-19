@@ -49,14 +49,23 @@ public:
 		this->rot = rot;
 		
 		XMMATRIX mat = XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z);
-		XMVECTOR frontVec = XMLoadFloat3(&front);
-		frontVec = XMVector3TransformNormal(frontVec, mat);
+		XMFLOAT3 stdDir = { 0.0f,0.0f,1.0f };
+		XMVECTOR stdDirVec = XMLoadFloat3(&stdDir);
+		XMVECTOR frontVec = XMVector3TransformNormal(stdDirVec, mat);
 		frontVec = XMVector3Normalize(frontVec);
 		XMStoreFloat3(&front, frontVec);
 	}
 	void SetSiz(XMFLOAT3 siz) { this->siz = siz; }
 	void AddPos(XMFLOAT3 pos) { this->pos += pos; }
-	void AddRot(XMFLOAT3 rot) { this->rot += rot; }
+	void AddRot(XMFLOAT3 rot)
+	{ 
+		this->rot += rot; 
+		XMMATRIX mat = XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z);
+		XMVECTOR frontVec = XMLoadFloat3(&front);
+		frontVec = XMVector3TransformNormal(frontVec, mat);
+		frontVec = XMVector3Normalize(frontVec);
+		XMStoreFloat3(&front, frontVec);
+	}
 	void AddSiz(XMFLOAT3 siz) { this->siz += siz; }
 	XMFLOAT3 GetFront() { return front; }
 	XMFLOAT3 GetUp() { return up; }

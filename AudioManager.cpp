@@ -129,6 +129,7 @@ unsigned int AudioManager::Load(const char * filename)
 			}
 			soundSources[j] = new unsigned char[sizeof(soundData)];
 			memcpy(soundSources[j], soundData, sizeof(soundData));
+			voices[j]->SubmitSourceBuffer(&buffer);
 			break;
 		}
 	}

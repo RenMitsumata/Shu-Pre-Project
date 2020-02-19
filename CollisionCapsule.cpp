@@ -3,7 +3,7 @@
 #include "Shader3D.h"
 #include "CollisionCapsule.h"
 #include "CollisionCone.h"
-
+#include "CollisionOBB.h"
 
 CollisionCapsule::CollisionCapsule()
 {
@@ -22,7 +22,7 @@ CollisionCapsule::~CollisionCapsule()
 	delete shader;
 }
 
-void CollisionCapsule::Dispatch(Collision * other)
+void CollisionCapsule::Dispatch(Collision* other)
 {
 	bool judge = other->isCollision(this);
 	if (judge) {
@@ -30,9 +30,12 @@ void CollisionCapsule::Dispatch(Collision * other)
 	}
 }
 
-void CollisionCapsule::CollisionAction(Collision * other)
+void CollisionCapsule::CollisionAction(Collision* other)
 {
-	//other->GetOwner()->SetDestroy();
+	
+	if (other->GetTag() == e_COLTYPE_ENEMY_EYESIGHT) {
+		other->GetOwner()->ColAction(other);
+	}
 }
 
 bool CollisionCapsule::isCollision(CollisionSphere * other)
@@ -238,7 +241,7 @@ void CollisionCapsule::SetOwner(GameObject * owner)
 	for (int i = 0; i < 6; i++) {
 		for (int j = 0; j < 12; j++) {
 			indexList[Cnt] = i * 12 + (j + 1);
-			indexList[Cnt + 1] = i * 12 + (j + 2);
+			indexList[Cnt + 1] = i * 12 + ((j + 2) % 13);
 			Cnt += 2;
 		}	
 	}

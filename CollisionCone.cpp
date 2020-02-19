@@ -23,7 +23,7 @@ CollisionCone::~CollisionCone()
 	delete shader;
 }
 
-void CollisionCone::Dispatch(Collision * other)
+void CollisionCone::Dispatch(Collision* other)
 {
 	bool judge = other->isCollision(this);
 	if (judge) {
@@ -49,24 +49,22 @@ bool CollisionCone::isCollision(CollisionOBB * other)
 	return false;
 }
 
-bool CollisionCone::isCollision(CollisionCapsule * other)
+bool CollisionCone::isCollision(CollisionCapsule* other)
 {
-	XMFLOAT2 otherParam = other->GetParams();
-	float otherHeight = otherParam.x;
-	float otherRadius = otherParam.y;
-	
+	// おかしい！！
+
 	// カプセルとの最接近頂点を求める
-	XMFLOAT3 front = owner->GetFront();
+	XMFLOAT3 front = GetOwner()->GetFront();
 	XMVECTOR frontVec = XMLoadFloat3(&front);
 	frontVec = XMVector3Normalize(frontVec);
 	XMStoreFloat3(&front, frontVec);
 
-	XMFLOAT3 otherUp = other->GetOwner()->GetUp();
+	XMFLOAT3 otherUp = GetOwner()->GetUp();
 	XMVECTOR otherUpVec = XMVector3Normalize(XMLoadFloat3(&otherUp));
 	XMStoreFloat3(&otherUp, otherUpVec);
-	
 
-	XMFLOAT3 distance = other->GetPos() - GetPos();
+
+	XMFLOAT3 distance = GetPos() - other->GetPos();
 	XMVECTOR distanceVec = XMLoadFloat3(&distance);
 
 	XMFLOAT3 pointOther;
@@ -77,6 +75,12 @@ bool CollisionCone::isCollision(CollisionCapsule * other)
 	float nearestDis;
 	float d1, d2, dv;
 	float boxNearDis;
+	float length = this->length;
+	float otherMinRadius = this->minRadius;
+	float otherMaxRadius = this->maxRadius;
+	float height = other->GetParams().x;
+	float radius = other->GetParams().y;
+
 	bool skip = false;
 
 	XMStoreFloat(&d1, XMVector3Dot(otherUpVec, distanceVec));
@@ -85,41 +89,41 @@ bool CollisionCone::isCollision(CollisionCapsule * other)
 	float s = (d1 * dv - d2) / (dv * dv - 1);
 	float t = (d1 - d2 * dv) / (dv * dv - 1);
 
-	if (fabs(t) > otherHeight + otherRadius) {
+	if (fabs(t) > height + radius) {
 		skip = true;
 	}
-	if (s > length + otherRadius || s < otherRadius) {
+	if (s > length + radius || s < radius) {
 		skip = true;
 	}
 
 	if (!skip) {
-		pointOther = other->GetPos() + t * otherUp;
-		point = GetPos() + s * front;
+		pointOther = GetPos() + t * otherUp;
+		point = other->GetPos() + s * front;
 		nearest = pointOther - point;
 		nearestVec = XMLoadFloat3(&nearest);
 		XMStoreFloat(&nearestDis, XMVector3Length(nearestVec));
-		float coneRadius = maxRadius;
-		float capsuleRadius = otherRadius;
+		float coneRadius = otherMaxRadius;
+		float capsuleRadius = radius;
 
-		if (fabs(t) > otherHeight) {
-			float per = (t - otherHeight) / otherRadius;
+		if (fabs(t) > height) {
+			float per = (t - height) / radius;
 			capsuleRadius *= cosf(XMConvertToRadians(90 * per));
 		}
 		if (s < 0) {
-			coneRadius = minRadius;
+			coneRadius = otherMinRadius;
 		}
 		else if (0 < s && s < length) {
-			coneRadius = (s / length) * (maxRadius - minRadius) + minRadius;
+			coneRadius = (s / length) * (otherMaxRadius - otherMinRadius) + otherMinRadius;
 		}
 		else {
-			coneRadius = maxRadius;
+			coneRadius = otherMaxRadius;
 		}
 
 		if (nearestDis < (coneRadius + capsuleRadius)) {
 			return true;
 		}
 	}
-	
+
 	return false;
 
 }

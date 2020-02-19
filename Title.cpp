@@ -17,7 +17,7 @@ Title::~Title()
 void Title::Init()
 {
 	UI* ui = AddGameObject<UI>(e_LAYER_UI);
-	ui->LoadTexture("Assets/Textures/t_title001.png");
+	ui->SetTextureAndSize("Assets/Textures/t_title002.png");
 	input = Manager::Get()->GetInput();
 }
 
