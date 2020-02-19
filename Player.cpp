@@ -75,18 +75,26 @@ void Player::Update()
 		AddPos(front * -0.1f);
 	}
 	if (input->GetKeyPress('A')) {
-		pos.x -= 0.1f;
+		XMVECTOR upVec = XMLoadFloat3(&up);
+		XMVECTOR frontVec = XMLoadFloat3(&front);
+		XMFLOAT3 right;
+		XMStoreFloat3(&right, XMVector3Cross(upVec, frontVec));
+		AddPos(right * -0.1f);
 	}
 	if (input->GetKeyPress('D')) {
-		pos.x += 0.1f;
+		XMVECTOR upVec = XMLoadFloat3(&up);
+		XMVECTOR frontVec = XMLoadFloat3(&front);
+		XMFLOAT3 right;
+		XMStoreFloat3(&right, XMVector3Cross(upVec, frontVec));
+		AddPos(right * 0.1f);
 	}
 
 	if (input->GetKeyPress(VK_LEFT)) {
-		AddRot(XMFLOAT3(0.0f,-0.01f,0.0f));
+		AddRot(XMFLOAT3(0.0f,-0.05f,0.0f));
 	}
 
 	if (input->GetKeyPress(VK_RIGHT)) {
-		AddRot(XMFLOAT3(0.0f, 0.01f, 0.0f));
+		AddRot(XMFLOAT3(0.0f, 0.05f, 0.0f));
 	}
 
 

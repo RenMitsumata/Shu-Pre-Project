@@ -13,6 +13,7 @@
 #include <thread>
 #include "MapManager.h"
 #include "WayNodeManager.h"
+#include "Floor.h"
 
 
 Game::Game()
@@ -107,7 +108,8 @@ void Game::Loading()
 	//Camera* camera = AddGameObject<Camera>(e_LAYER_CAMERA);
 	mapMgr->ReadMap("Assets/Maps/stage001.txt");
 
-	Field* field = AddGameObject<Field>(e_LAYER_BACKGROUND);
+	//Field* field = AddGameObject<Field>(e_LAYER_BACKGROUND);
+	//Floor* floor = AddGameObject<Floor>(e_LAYER_BACKGROUND);
 
 	//Enemy* enemy = AddGameObject<Enemy>(e_LAYER_GAMEOBJECT);
 	//enemy->SetPos(XMFLOAT3(5.0f, 0.0f, 5.0f));

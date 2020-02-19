@@ -8,6 +8,7 @@
 #include "WayNodeManager.h"
 #include "Enemy.h"
 #include "Player.h"
+#include "Floor.h"
 
 MapManager::MapManager()
 {
@@ -361,6 +362,43 @@ void MapManager::ReadMap(const char* filename)
 			Player* player = scene->AddGameObject<Player>(e_LAYER_GAMEOBJECT);
 		}
 
+		if (idName == "FLOOR") {
+			// 生成に必要なメンバ
+			XMFLOAT3 pos;
+			float posMem[3];
+			char locBuffer[64];
+			unsigned char locCnt = 0;
+
+			// 次の:まで読み飛ばす
+			while (currentData != ':') {
+				currentPoint++;
+				currentData = buffer[currentPoint];
+			}
+
+
+			// ポジションを取得
+
+			for (int i = 0; i < 3; i++) {
+
+				currentPoint++;
+				currentData = buffer[currentPoint];
+				locCnt = 0;
+				while (currentData != ',' && currentData != ';') {
+					locBuffer[locCnt] = currentData;
+					locCnt++;
+					currentPoint++;
+					currentData = buffer[currentPoint];
+				}
+
+				posMem[i] = atof(locBuffer);
+				ZeroMemory(locBuffer, 64);
+			}
+			pos = { posMem[0],posMem[1],posMem[2] };
+
+			Floor* floor = scene->AddGameObject<Floor>(e_LAYER_BACKGROUND);
+			floor->SetPos(pos);
+
+		}
 
 	} // while(currentPoint < fileSize) 
 
