@@ -78,6 +78,7 @@ public:
 	virtual void Uninit();
 	virtual void Update();
 	virtual void Draw();
+	virtual void DrawDeferred();
 	void SetCameraMatrix(XMFLOAT4X4* p_ViewMatrix, XMFLOAT4X4* p_ProjectionMatrix);
 	void SetCameraPos(XMFLOAT3* pPos) { p_CameraPos = pPos; }
 	void SetAnotherCamMatrix(XMFLOAT4X4* p_ViewMatrix, XMFLOAT4X4* p_ProjectionMatrix);

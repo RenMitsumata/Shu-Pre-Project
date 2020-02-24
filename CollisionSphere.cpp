@@ -4,6 +4,7 @@
 #include "CollisionOBB.h"
 #include "CollisionCapsule.h"
 #include "Manager.h"
+#include "ImpactSound.h"
 
 CollisionSphere::CollisionSphere() : radius(1.0f)
 {
@@ -152,7 +153,10 @@ void CollisionSphere::Dispatch(Collision* other)
 
 void CollisionSphere::CollisionAction(Collision* other)
 {
-	other->GetOwner()->SetDestroy();
+	//other->GetOwner()->SetDestroy();
+	/*if (colTag == e_COLTYPE_BULLET) {
+		Manager::Get()->GetScene()->AddGameObject<ImpactSound>(e_LAYER_UI);
+	}*/
 }
 
 void CollisionSphere::Draw()

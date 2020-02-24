@@ -13,14 +13,16 @@ private:
 	ID3D11Buffer* vertexBuffer = NULL;
 	ID3D11Buffer* indexBuffer = NULL;
 	Shader2D* shader;
-	Texture* texture;
+	Texture* texture = nullptr;
 public:
 	Polygon();
 	virtual ~Polygon();
 	void Init()override;
 	void Draw()override;
 	void SetTexture(const char* filename);
+	void SetDeferredTexture(ID3D11ShaderResourceView* srv);
 	void SetSize(float width, float height, XMFLOAT2 screenPos);
+	void SetSize(float width, float height, XMFLOAT3 screenPos);
 	void ChangeColor();
 };
 

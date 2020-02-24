@@ -46,18 +46,24 @@ void Polygon::Draw()
 	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//dxManager->SetDepthTexture(0);
-
-	shader->SetTexture(texture);
+	if (texture != nullptr) {
+		shader->SetTexture(texture);
+	}
 	//shader->SetProjMatrix(projMat);
 	shader->Set();
 
 	context->DrawIndexed(6, 0, 0);
 }
 
-void Polygon::SetTexture(const char * filename)
+void Polygon::SetTexture(const char* filename)
 {
 	texture = ComponentFactory::CreateComponent<Texture>();
 	texture->Load(filename);
+}
+
+void Polygon::SetDeferredTexture(ID3D11ShaderResourceView* srv)
+{
+	shader->SetTexture(srv);
 }
 
 void Polygon::SetSize(float width, float height, XMFLOAT2 screenPos)
@@ -93,6 +99,13 @@ void Polygon::SetSize(float width, float height, XMFLOAT2 screenPos)
 	ibData.SysMemPitch = 0;
 	ibData.SysMemSlicePitch = 0;
 	device->CreateBuffer(&indexBufferDesc, &ibData, &indexBuffer);
+}
+
+void Polygon::SetSize(float width, float height, XMFLOAT3 screenPos)
+{
+	XMFLOAT2 scrPos = { screenPos.x,screenPos.y };
+	SetSize(width, height, scrPos);
+	shader->SetDepth(screenPos.z);
 }
 
 void Polygon::ChangeColor()

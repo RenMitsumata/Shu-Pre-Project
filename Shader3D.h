@@ -120,7 +120,7 @@ private:
 public:
 	Shader3D();
 	~Shader3D();
-	void Init(const char* VS_Filename = "vertexShader3D.cso", const char* PS_Filename = "pixelShader3D.cso");
+	void Init(const char* VS_Filename = "VS_Deferred.cso", const char* PS_Filename = "PS_Deferred.cso");
 	void Uninit();
 
 	// シェーダ定数バッファ設定

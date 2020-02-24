@@ -1,25 +1,25 @@
-
 #include "Manager.h"
 #include "DXManager.h"
 #include "Component.h"
 #include "Texture.h"
-#include "Shader2D.h"
-#include "window.h"
+#include "Shader3D.h"
 #include <Windows.h>
 #include <stdio.h>
 #include <io.h>
+#include "Shader3D_Deferred.h"
 
 
-Shader2D::Shader2D()
+
+Shader3D_Deferred::Shader3D_Deferred()
 {
 }
 
 
-Shader2D::~Shader2D()
+Shader3D_Deferred::~Shader3D_Deferred()
 {
 }
 
-void Shader2D::Init(const char * VS_Filename, const char * PS_Filename)
+void Shader3D_Deferred::Init(const char * VS_Filename, const char * PS_Filename)
 {
 	// 初期化に必要なデバイス取得
 	device = Manager::Get()->GetDXManager()->GetDevice();
@@ -29,8 +29,6 @@ void Shader2D::Init(const char * VS_Filename, const char * PS_Filename)
 		MessageBox(NULL, "DirectXDeviceの取得に失敗しました", "シェーダ初期化失敗", MB_ICONHAND);
 		exit(-1);
 	}
-
-
 
 	// 頂点シェーダ生成
 	{
@@ -50,8 +48,10 @@ void Shader2D::Init(const char * VS_Filename, const char * PS_Filename)
 		// 入力レイアウト生成
 		D3D11_INPUT_ELEMENT_DESC layout[] =
 		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 4 * 2, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 4 * 6, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 4 * 10, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 		};
 		UINT numElements = ARRAYSIZE(layout);
 
@@ -83,11 +83,10 @@ void Shader2D::Init(const char * VS_Filename, const char * PS_Filename)
 	}
 
 
-
-
 	// 定数バッファ生成
+
 	D3D11_BUFFER_DESC hBufferDesc;
-	hBufferDesc.ByteWidth = sizeof(CONSTANT_UI);
+	hBufferDesc.ByteWidth = sizeof(CONSTANTS_DEFERRED);
 	hBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	hBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	hBufferDesc.CPUAccessFlags = 0;
@@ -96,30 +95,6 @@ void Shader2D::Init(const char * VS_Filename, const char * PS_Filename)
 
 	device->CreateBuffer(&hBufferDesc, NULL, &constantBuffer);
 	context->VSSetConstantBuffers(0, 1, &constantBuffer);
-
-	hBufferDesc.ByteWidth = sizeof(XMFLOAT4);
-
-	device->CreateBuffer(&hBufferDesc, NULL, &colorBuffer);
-	context->UpdateSubresource(colorBuffer, 0, NULL, &color, 0, 0);
-	context->PSSetConstantBuffers(0, 1, &colorBuffer);
-
-
-
-
-	// プロジェクション行列初期化
-	constantValue.projMat = XMMatrixOrthographicOffCenterLH(0.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.0f, 0.0f, 1.0f);
-	constantValue.projMat = XMMatrixTranspose(constantValue.projMat);
-	context->UpdateSubresource(constantBuffer, 0, NULL, &constantValue, 0, 0);
-
-
-	// 入力レイアウト設定
-	context->IASetInputLayout(vertexLayout);
-
-	// シェーダ設定
-	context->VSSetShader(vertexShader, NULL, 0);
-	context->PSSetShader(pixelShader, NULL, 0);
-
-
 
 	// サンプラーステート設定
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -136,20 +111,18 @@ void Shader2D::Init(const char * VS_Filename, const char * PS_Filename)
 
 
 	device->CreateSamplerState(&samplerDesc, &samplerState);
-
-	context->PSSetSamplers(0, 1, &samplerState);
-
 }
 
-void Shader2D::Uninit()
+void Shader3D_Deferred::Uninit()
 {
+	if (samplerState) { samplerState->Release(); }
 	if (constantBuffer) { constantBuffer->Release(); }
 	if (vertexLayout) { vertexLayout->Release(); }
 	if (pixelShader) { pixelShader->Release(); }
 	if (vertexShader) { vertexShader->Release(); }
 }
 
-void Shader2D::Set()
+void Shader3D_Deferred::Set()
 {
 	if (device == nullptr || context == nullptr) {
 		MessageBox(NULL, "シェーダが初期化されていません", "デバイス取得失敗", MB_ICONHAND);
@@ -159,47 +132,50 @@ void Shader2D::Set()
 	context->VSSetShader(vertexShader, NULL, 0);
 	context->PSSetShader(pixelShader, NULL, 0);
 
-	
+
 	// 入力レイアウト設定
 	context->IASetInputLayout(vertexLayout);
 
-	// プロジェクション行列初期化（ウィンドウいっぱい、後から変えない設定）
-	context->UpdateSubresource(constantBuffer, 0, NULL, &constantValue, 0, 0);
 
-	context->PSSetConstantBuffers(0, 1, &colorBuffer);
-
+	// 定数バッファ更新
+	context->UpdateSubresource(constantBuffer, 0, NULL, &constantsValue, 0, 0);
 
 	// 定数バッファ設定(定数バッファの形が異なる場合、引数を変える)
 	context->VSSetConstantBuffers(0, 1, &constantBuffer);
-	
 }
 
-void Shader2D::SetTexture(Texture* texture)
+void Shader3D_Deferred::SetWorldMatrix(XMFLOAT4X4 * worldMtx)
 {
-	ID3D11ShaderResourceView* srv[1] = { texture->GetShaderResourceView() };
-	context->PSSetShaderResources(0, 1, srv);
+	if (device == nullptr || context == nullptr) {
+		MessageBox(NULL, "シェーダが初期化されていません", "デバイス取得失敗", MB_ICONHAND);
+		exit(-1);
+	}
+	XMMATRIX matrix;
+	matrix = XMLoadFloat4x4(worldMtx);
+	matrix = XMMatrixTranspose(matrix);
+	constantsValue.worldMtx = matrix;
 }
 
-void Shader2D::SetTexture(ID3D11ShaderResourceView * srv)
+void Shader3D_Deferred::SetViewMatrix(XMFLOAT4X4 * viewMtx)
 {
-	ID3D11ShaderResourceView* defSrv[1] = { srv };
-	context->PSSetShaderResources(0, 1, defSrv);
+	if (device == nullptr || context == nullptr) {
+		MessageBox(NULL, "シェーダが初期化されていません", "デバイス取得失敗", MB_ICONHAND);
+		exit(-1);
+	}
+	XMMATRIX matrix;
+	matrix = XMLoadFloat4x4(viewMtx);
+	matrix = XMMatrixTranspose(matrix);
+	constantsValue.viewMtx = matrix;
 }
 
-void Shader2D::SetProjMatrix(XMMATRIX mat)
+void Shader3D_Deferred::SetProjMatrix(XMFLOAT4X4 * projMtx)
 {
-	constantValue.projMat = XMMatrixTranspose(mat);
-
-}
-
-void Shader2D::SetDepth(float depth)
-{
-	constantValue.depth = depth;
-}
-
-void Shader2D::ChangeColor()
-{
-	time++;
-	color = XMFLOAT4(sinf(XMConvertToRadians(time)), cosf(XMConvertToRadians(time)), sinf(XMConvertToRadians(time + 180)), 1.0f);
-	context->UpdateSubresource(colorBuffer, 0, NULL, &color, 0, 0);
+	if (device == nullptr || context == nullptr) {
+		MessageBox(NULL, "シェーダが初期化されていません", "デバイス取得失敗", MB_ICONHAND);
+		exit(-1);
+	}
+	XMMATRIX matrix;
+	matrix = XMLoadFloat4x4(projMtx);
+	matrix = XMMatrixTranspose(matrix);
+	constantsValue.projMtx = matrix;
 }

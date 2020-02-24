@@ -34,6 +34,7 @@ void CollisionOBB::Dispatch(Collision* other)
 
 void CollisionOBB::CollisionAction(Collision* other)
 {
+	// CAUTION‚É‚·‚é
 }
 
 bool CollisionOBB::isCollision(CollisionSphere* other)

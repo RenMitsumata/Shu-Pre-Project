@@ -12,8 +12,11 @@ private:
 		e_SCENE
 	};
 	Phase phase = e_LOADING;
-	UI* loadingPolygon;
-
+	ID3D11DeviceContext* context = nullptr;
+	DXManager* dxManager = nullptr;
+	UI* loadingPolygon = nullptr;
+	UI* deferredPolygon = nullptr;
+	UI* albedoPolygon = nullptr;
 	void Loading();
 public:
 	Game();
@@ -22,5 +25,6 @@ public:
 	void Uninit()override;
 	void Update()override;
 	void Draw()override;
+	void DrawDeferred()override;
 };
 

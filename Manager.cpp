@@ -105,10 +105,14 @@ void Manager::Update()
 
 void Manager::Draw()
 {
-	dxManager->BeginDepth();
-	scene->Draw();	// W LV OrthoProj
-	dxManager->Begin();
+	//dxManager->BeginDepth();
+	//scene->Draw();	// W LV OrthoProj
+	dxManager->BeginDeferred();
 	scene->Draw(); // WVP , ↑↑の結果のテクスチャ , ↑↑で使ったfar
+	dxManager->Begin();
+	scene->DrawDeferred();
+
+
 	enemyManager->Draw();
 	dxManager->End();
 }

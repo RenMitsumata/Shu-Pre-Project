@@ -56,7 +56,7 @@ struct LIGHT
 /*
  *   constant buffers
  */
-cbuffer ConstantBuffer : register(b0)
+cbuffer ConstantBuf : register(b0)
 {
 	matrix World;
 	matrix View;

@@ -6,4 +6,4 @@
 ===========================================*/
 
 #define CLASS_NAME ("DirectX11Project")
-#define WINDOW_CAPTION ("å≈ëÃÇÃç|ÇÃéïé‘")
+#define WINDOW_CAPTION ("Sneak and Run")

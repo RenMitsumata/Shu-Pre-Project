@@ -54,7 +54,7 @@ void EnemyManager::ChangePhase(EnemyPhase phase)
 			delete ui;
 		}
 		ui = new UI;
-		ui->SetTextureAndSize("Assets/Textures/alert.png", 100.0f, 50.0f, XMFLOAT2(WINDOW_WIDTH / 2 - 50.0f, 10.0f));
+		ui->SetTextureAndSize("Assets/Textures/alert.png", XMFLOAT3(WINDOW_WIDTH / 2 - 50.0f, 10.0f,0.0f), 100.0f, 50.0f);
 		// 全てのエネミーを警戒状態に
 		break;
 	}

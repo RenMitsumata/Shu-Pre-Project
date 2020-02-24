@@ -1,0 +1,57 @@
+
+// マテリアルバッファ
+cbuffer MaterialBuffer : register(b0)
+{
+	float4		Ambient;
+	float4		Diffuse;
+	float4		Specular;
+	float4		Emission;
+	float		Shininess;
+	float3		Dummy;//16bit境界用
+}
+
+
+
+struct PS_IN {
+	float4 position	: SV_POSITION;
+	float4 posW		: POSITION1;
+	float4 normalW	: NORMAL0;
+	float4 color	: COLOR0;
+	float2 texcoord : TEXCOORD0;
+};
+
+struct PS_OUT {
+	float4 outDiffuse  : SV_Target0;
+	float4 outPosition : SV_Target1;
+	float4 outNormal   : SV_Target2;
+	float4 outDepth    : SV_Target3;
+};
+
+//*****************************************************************************
+// グローバル変数
+//*****************************************************************************
+Texture2D		g_Texture : register(t0);
+SamplerState	g_SamplerState : register(s0);
+
+//=============================================================================
+// ピクセルシェーダ
+//=============================================================================
+void main(in PS_IN input, out PS_OUT output)
+{
+	// outDiffuse : 色データを返す
+	output.outDiffuse = input.color * Diffuse;
+	output.outDiffuse *= g_Texture.Sample(g_SamplerState, input.texcoord);
+
+	// outPosition : ワールド座標を返す
+	output.outPosition = float4(input.posW.xyz, 1.0f);
+
+	// outNormal : ワールド法線を返す
+	float3 normal = input.normalW.xyz;
+	normal = (normal + 1.0f) * 0.5f;
+	output.outNormal = float4(normal, 1.0f);
+
+	// outDepth : デプスマップを返す（後回し）
+	float depth = input.posW.z / input.posW.w;
+	output.outDepth = float4(depth, depth, depth, 1.0f);
+}
+

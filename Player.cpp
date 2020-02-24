@@ -112,7 +112,7 @@ void Player::Update()
 	*/
 	if (input->GetKeyTrigger(VK_SPACE)) {
 		Bullet* bullet = scene->AddGameObject<Bullet>(e_LAYER_GAMEOBJECT);
-		bullet->SetPos(pos);
+		bullet->SetPos(pos + XMFLOAT3(0.0f,2.0f,0.0f));
 		bullet->SetRot(rot);
 		
 		bullet->SetVelocity(front * 0.5f);

@@ -170,6 +170,7 @@ void Shader3D::Init(const char * VS_Filename, const char * PS_Filename)
 
 void Shader3D::Uninit()
 {
+	if (samplerState) { samplerState->Release(); }
 	if (lightBuffer) { lightBuffer->Release(); }
 	if (materialBuffer) { materialBuffer->Release(); }
 	if (constantBuffer) { constantBuffer->Release(); }

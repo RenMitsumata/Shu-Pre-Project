@@ -3,6 +3,8 @@
 cbuffer MaterialBuffer : register(b0)
 {
 	matrix projMatrix;
+	float depth;
+	float3 dummy;
 }
 
 struct VS_IN {
@@ -16,7 +18,7 @@ struct VS_OUT {
 };
 
 void main(in VS_IN input, out VS_OUT output) {
-	float4 pos = float4(input.pos, 0.0f, 1.0f);
+	float4 pos = float4(input.pos, depth, 1.0f);
 
 
 	// position‚Ìˆ—F

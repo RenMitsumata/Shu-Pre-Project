@@ -1,5 +1,7 @@
 #define NOMINMAX
 #include "Game.h"
+#include "Manager.h"
+#include "DXManager.h"
 #include "GameObject.h"
 #include "Player.h"
 #include "Field.h"
@@ -10,11 +12,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include <algorithm>
-#include <thread>
 #include "MapManager.h"
 #include "WayNodeManager.h"
 #include "Floor.h"
+#include "Title.h"
+#include "InputManager.h"
 
+InputManager* input;
 
 Game::Game()
 {
@@ -29,21 +33,33 @@ void Game::Init()
 {
 	loadingPolygon = new UI;
 	loadingPolygon->SetTextureAndSize("Assets/Textures/t_loading001.png");
+	deferredPolygon = new UI[4];
+	for (int i = 0; i < 4; i++) {
+		deferredPolygon[i].SetTextureAndSize(nullptr, XMFLOAT3((1024.0f - 240.0f), 67.5f * (2 * i),0.0f), 240.0f, 135.0f);
+	}
+	albedoPolygon = new UI;
+	albedoPolygon->SetTextureAndSize(nullptr , XMFLOAT3(0.0f,0.0f,0.5f));
 
+	input = Manager::Get()->GetInput();
 	srand(time(NULL));
+	dxManager = Manager::Get()->GetDXManager();
+	context = dxManager->GetDeviceContext();
 
 	nodeMgr = new WayNodeManager;
 	mapMgr = new MapManager;
 
-	auto func = [this]{Loading(); };
+	Loading();
+
+	/*auto func = [this]{Loading(); };
 	std::thread loadingThread(func);
-	loadingThread.detach();
+	loadingThread.detach();*/
 
 	
 }
 
 void Game::Uninit()
 {
+	
 	for (int i = 0; i < 5; i++) {
 		for (GameObject* obj : objectList[i]) {
 			obj->Uninit();
@@ -58,11 +74,25 @@ void Game::Uninit()
 		nodeMgr->Uninit();
 		delete nodeMgr;
 	}
+	if (albedoPolygon) {
+		albedoPolygon->Uninit();
+		delete albedoPolygon;
+	}
+	if (deferredPolygon) {
+		delete[] deferredPolygon;
+	}
+
+	if (loadingPolygon) {
+		delete loadingPolygon;
+	}
 
 }
 
 void Game::Update()
 {
+	if (input->GetKeyTrigger(VK_BACK)) {
+		Manager::Get()->ChangeScene(new Title);
+	}
 	if (phase == e_LOADING) {
 		loadingPolygon->ChangeColor();
 		return;
@@ -93,12 +123,35 @@ void Game::Draw()
 			for (GameObject* obj : objectList[i]) {
 				obj->Draw();
 			}
-		}
+		}		
 	}
 	
 	if (phase == e_LOADING && loadingPolygon) {
 		loadingPolygon->Draw();
 	}
+}
+
+void Game::DrawDeferred()
+{
+	ID3D11ShaderResourceView* srv[1];
+	srv[0] = dxManager->GetSRV(0);
+	if (srv[0] == nullptr) {
+		return;
+	}
+	albedoPolygon->SetDeferredTexture(srv[0]);
+	albedoPolygon->Draw();
+
+	//if (phase != e_LOADING) {
+		for (int i = 0; i < 4; i++) {
+			ID3D11ShaderResourceView* srv[1];
+			srv[0] = dxManager->GetSRV(i);
+			deferredPolygon[i].SetDeferredTexture(srv[0]);
+			deferredPolygon[i].Draw();
+		}
+	//}
+	
+		
+	
 }
 
 void Game::Loading()
