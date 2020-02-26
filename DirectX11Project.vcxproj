@@ -214,7 +214,6 @@
     <ClInclude Include="ModelNormal.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Polygon.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader2D.h" />
     <ClInclude Include="Shader3D.h" />

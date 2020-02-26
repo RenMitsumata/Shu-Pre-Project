@@ -155,9 +155,6 @@
     <ClCompile Include="Polygon.cpp">
       <Filter>ソース ファイル\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Billboard.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyStateWander.cpp">
       <Filter>ソース ファイル\EnemyState</Filter>
     </ClCompile>
@@ -167,23 +164,26 @@
     <ClCompile Include="EnemyManager.cpp">
       <Filter>ソース ファイル\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="WayNode.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="MapManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="WayNodeManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Floor.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Shader3D_Deferred.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Billboard.cpp">
+      <Filter>ソース ファイル\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Floor.cpp">
+      <Filter>ソース ファイル\GameObjects</Filter>
+    </ClCompile>
     <ClCompile Include="ImpactSound.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="MapManager.cpp">
+      <Filter>ソース ファイル\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="WayNodeManager.cpp">
+      <Filter>ソース ファイル\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="WayNode.cpp">
+      <Filter>ソース ファイル\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -289,9 +289,6 @@
     <ClInclude Include="UI.h">
       <Filter>ヘッダー ファイル\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Billboard.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="EnemyState.h">
       <Filter>ヘッダー ファイル\EnemyState</Filter>
     </ClInclude>
@@ -301,26 +298,26 @@
     <ClInclude Include="EnemyManager.h">
       <Filter>ヘッダー ファイル\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="WayNode.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="MapManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="WayNodeManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Floor.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Shader3D_Deferred.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Floor.h">
+      <Filter>ヘッダー ファイル\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Billboard.h">
+      <Filter>ヘッダー ファイル\Components</Filter>
     </ClInclude>
     <ClInclude Include="ImpactSound.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="MapManager.h">
+      <Filter>ヘッダー ファイル\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="WayNodeManager.h">
+      <Filter>ヘッダー ファイル\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="WayNode.h">
+      <Filter>ヘッダー ファイル\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
