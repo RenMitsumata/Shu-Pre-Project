@@ -4,11 +4,13 @@ struct CONSTANTS_DEFERRED {
 	XMMATRIX worldMtx;
 	XMMATRIX viewMtx;
 	XMMATRIX projMtx;
+	XMFLOAT2 nearAndFar;
 };
 
 class Shader3D_Deferred
 {
 private:
+	Manager* manager;
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;
 	ID3D11VertexShader* vertexShader;

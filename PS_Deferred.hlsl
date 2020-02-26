@@ -15,6 +15,7 @@ cbuffer MaterialBuffer : register(b0)
 struct PS_IN {
 	float4 position	: SV_POSITION;
 	float4 posW		: POSITION1;
+	float4 posWV	: POSITION2;
 	float4 normalW	: NORMAL0;
 	float4 color	: COLOR0;
 	float2 texcoord : TEXCOORD0;
@@ -51,7 +52,9 @@ void main(in PS_IN input, out PS_OUT output)
 	output.outNormal = float4(normal, 1.0f);
 
 	// outDepth : デプスマップを返す（後回し）
-	float depth = input.posW.z / input.posW.w;
-	output.outDepth = float4(depth, depth, depth, 1.0f);
+	//float depth = input.posWV.z / input.posWV.w;
+	float depth = input.posWV.z / 30.0f;
+	output.outDepth = float4(depth, 0.0f, 0.0f, 1.0f);
+	//output.outDepth = float4(depth, depth, depth, 1.0f);
 }
 

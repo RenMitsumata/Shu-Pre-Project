@@ -7,6 +7,9 @@
 #include <Windows.h>
 #include <stdio.h>
 #include <io.h>
+#include "Scene.h"
+#include "Camera.h"
+#include <typeinfo>
 
 
 Shader3D::Shader3D()
@@ -21,6 +24,7 @@ Shader3D::~Shader3D()
 void Shader3D::Init(const char * VS_Filename, const char * PS_Filename)
 {
 	// 初期化に必要なデバイス取得
+	manager = Manager::Get();
 	device = Manager::Get()->GetDXManager()->GetDevice();
 	context = Manager::Get()->GetDXManager()->GetDeviceContext();
 
@@ -197,6 +201,7 @@ void Shader3D::Set()
 
 
 	// 定数バッファ更新
+	constantValue.nearAndFar = manager->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA)->GetNearAndFar();
 	context->UpdateSubresource(constantBuffer, 0, NULL, &constantValue, 0, 0);
 
 	// 定数バッファ設定(定数バッファの形が異なる場合、引数を変える)

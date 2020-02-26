@@ -164,7 +164,7 @@ void Camera::Draw()
 	XMStoreFloat4x4(&viewMat,XMMatrixLookAtLH(XMLoadFloat3(&pos), XMLoadFloat3(&at), up));
 
 	// プロジェクションマトリクス設定
-	XMStoreFloat4x4(&projMat, XMMatrixPerspectiveFovLH(1.0f, dxViewport.Width / dxViewport.Height, 1.0f, 1000.0f));
+	XMStoreFloat4x4(&projMat, XMMatrixPerspectiveFovLH(1.0f, dxViewport.Width / dxViewport.Height, nearDis, farDis));
 	for (Component* comp : componentsList) {
 		comp->Draw();
 	}

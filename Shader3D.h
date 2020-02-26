@@ -2,7 +2,6 @@
 
 
 
-
 // í∏ì_ç\ë¢ëÃ
 struct VERTEX_3D
 {
@@ -89,16 +88,19 @@ struct SHADER_CONSTANTS {
 	XMMATRIX worldMatrix;
 	XMMATRIX viewMatrix;
 	XMMATRIX projMatrix;
+	XMFLOAT2 nearAndFar;
 };
 
 
 
 
 class Texture;
+class Manager;
 
 class Shader3D
 {
 private:
+	Manager*				manager;
 	ID3D11Device*			device;
 	ID3D11DeviceContext*	context;
 	ID3D11VertexShader*     vertexShader;

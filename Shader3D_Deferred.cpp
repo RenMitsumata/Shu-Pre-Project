@@ -7,8 +7,9 @@
 #include <stdio.h>
 #include <io.h>
 #include "Shader3D_Deferred.h"
-
-
+#include "Scene.h"
+#include "Camera.h"
+#include <typeinfo>
 
 Shader3D_Deferred::Shader3D_Deferred()
 {
@@ -22,6 +23,7 @@ Shader3D_Deferred::~Shader3D_Deferred()
 void Shader3D_Deferred::Init(const char * VS_Filename, const char * PS_Filename)
 {
 	// 初期化に必要なデバイス取得
+	manager = Manager::Get();
 	device = Manager::Get()->GetDXManager()->GetDevice();
 	context = Manager::Get()->GetDXManager()->GetDeviceContext();
 
@@ -138,6 +140,7 @@ void Shader3D_Deferred::Set()
 
 
 	// 定数バッファ更新
+	constantsValue.nearAndFar = manager->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA)->GetNearAndFar();
 	context->UpdateSubresource(constantBuffer, 0, NULL, &constantsValue, 0, 0);
 
 	// 定数バッファ設定(定数バッファの形が異なる場合、引数を変える)

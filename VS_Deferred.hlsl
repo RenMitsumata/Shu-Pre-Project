@@ -2,6 +2,8 @@ struct CONSTANT {
 	matrix world;
 	matrix view;
 	matrix proj;
+	float2 nearAndFar;
+	float2 dummy;
 };
 
 cbuffer constantBuffer : register(b0) {
@@ -20,6 +22,7 @@ struct VS_IN {
 struct VS_OUT {
 	float4 position	: SV_POSITION;
 	float4 posW		: POSITION1;
+	float4 posWV	: POSITION2;
 	float4 normalW	: NORMAL0;
 	float4 color	: COLOR0;
 	float2 texcoord : TEXCOORD0;
@@ -40,6 +43,11 @@ void main(in VS_IN input, out VS_OUT output)
 
 	// posW : ワールド変換済み座標
 	output.posW = mul(input.position, constant.world);
+
+	// posWV : ワールドビュー変換済み座標
+	output.posWV = mul(input.position, constant.world);
+	output.posWV = mul(output.posWV, constant.view);
+	output.posWV.w = constant.nearAndFar.y - constant.nearAndFar.x;
 
 	// normalW : ワールド変換済み法線
 	input.normal.w = 0.0f;
