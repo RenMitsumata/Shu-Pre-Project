@@ -43,6 +43,25 @@ void main(in PS_IN input, out PS_OUT output)
 	output.outDiffuse = input.color * Diffuse;
 	output.outDiffuse *= g_Texture.Sample(g_SamplerState, input.texcoord);
 
+	
+		////ブルーム処理
+		//float4 diffuse;
+		//for(int y = -10; y < 11; y++){
+		//	for(int x = -10; x < 11; x++){
+		//		float2 texcoord = input.texcoord + float2(x*2/960.0f,y*2/540.0f);	// ガウスフィルター(1ピクセルとなりはUVでどれくらい？)
+		//		float4 color = g_Texture.Sample(g_SamplerState,texcoord);
+		//		float light = color.r * 0.299f + color.g * 0.587f + color.b * 0.114f;	// 輝度
+		//		if(light > 1.0f && (x != 0 || y != 0)){
+		//			diffuse += color / (x * x + y * y);
+		//		}
+		//	}
+		//}
+		//output.outDiffuse = g_Texture.Sample(g_SamplerState,input.texcoord);
+		//output.outDiffuse += diffuse * 0.5f;
+		//output.outDiffuse.a = 1.0f;
+	
+	
+
 	// outPosition : ワールド座標を返す
 	output.outPosition = float4(input.posW.xyz, 1.0f);
 
