@@ -30,7 +30,7 @@ void Title::Init()
 
 void Title::Update()
 {
-	if (input->GetKeyTrigger(VK_SPACE)) {
+	if (input->GetKeyTrigger(VK_SPACE) || input->GetPadTrigger(XINPUT_GAMEPAD_A)) {
 		Manager::Get()->ChangeScene(new Game);
 	}
 }

@@ -37,6 +37,7 @@ public:
 	void Update();
 	void Draw();
 	void SetOwner(GameObject* obj) { owner = obj; }
+	void AddDeltaRot(XMFLOAT3 rot);
 	void SetDeltaPos(XMFLOAT3 pos) { deltaPos = pos; }
 	void SetDeltaRot(XMFLOAT3 rot) { deltaRot = rot; }
 	XMFLOAT2 GetNearAndFar() { return XMFLOAT2(nearDis, farDis); }

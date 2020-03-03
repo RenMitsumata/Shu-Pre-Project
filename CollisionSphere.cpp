@@ -153,8 +153,8 @@ void CollisionSphere::Dispatch(Collision* other)
 
 void CollisionSphere::CollisionAction(Collision* other)
 {
-	//other->GetOwner()->SetDestroy();
-	/*if (colTag == e_COLTYPE_BULLET) {
+	/*other->GetOwner()->SetDestroy();
+	if (colTag == e_COLTYPE_BULLET) {
 		Manager::Get()->GetScene()->AddGameObject<ImpactSound>(e_LAYER_UI);
 	}*/
 }
