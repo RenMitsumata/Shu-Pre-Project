@@ -16,5 +16,6 @@ public:
 	void PreUpdate();
 	void Update();
 	void AddCollision(Collision* col);
+	void Delete(Collision* col);
 };
 

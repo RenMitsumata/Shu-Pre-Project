@@ -56,21 +56,33 @@ bool InputManager::GetKeyTrigger(BYTE KeyCode)
 
 bool InputManager::GetPadTrigger(WORD id)
 {
+	if (!isConnected) {
+		return false;
+	}
 	return !(lastCS.Gamepad.wButtons & id) && (controllerState.Gamepad.wButtons & id);
 }
 
 bool InputManager::GetPadPress(WORD id)
 {
+	if (!isConnected) {
+		return false;
+	}
 	return controllerState.Gamepad.wButtons & id;
 }
 
 bool InputManager::GetPadRelease(WORD id)
 {
+	if (!isConnected) {
+		return false;
+	}
 	return (lastCS.Gamepad.wButtons & id) && !(controllerState.Gamepad.wButtons & id);
 }
 
 bool InputManager::GetLeftStickOperate()
 {
+	if (!isConnected) {
+		return false;
+	}
 	return !((controllerState.Gamepad.sThumbLX <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
 			controllerState.Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
 			(controllerState.Gamepad.sThumbLY <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
@@ -79,6 +91,9 @@ bool InputManager::GetLeftStickOperate()
 
 bool InputManager::GetRightStickOperate()
 {
+	if (!isConnected) {
+		return false;
+	}
 	return !((controllerState.Gamepad.sThumbRX <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
 		controllerState.Gamepad.sThumbRX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
 		(controllerState.Gamepad.sThumbRY <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
@@ -95,12 +110,18 @@ float InputManager::GetLeftStickRad()
 
 float InputManager::GetRightStickX()
 {
+	if (!isConnected) {
+		return 0.0f;
+	}
 	SHORT rx = controllerState.Gamepad.sThumbRX;
 	return rx / 32768.0f;
 }
 
 float InputManager::GetRightStickY()
 {
+	if (!isConnected) {
+		return 0.0f;
+	}
 	SHORT ry = controllerState.Gamepad.sThumbRY;
 	return ry / 32768.0f;
 }

@@ -38,7 +38,8 @@ void Camera::Init()
 	dome->SetOwner(this);
 	componentsList.push_back(dome);
 
-
+	front.y = -0.5f;
+	
 }
 
 
@@ -132,7 +133,6 @@ void Camera::Update()
 	pos += deltaPos;
 	//pos += offset;
 	at = pos + front * focusLength;
-
 }
 
 void Camera::Draw()
@@ -198,8 +198,9 @@ void Camera::AddDeltaRot(XMFLOAT3 rot)
 	}*/
 
 	pos.x = owner->GetPos().x - front.x * focusLength;
+	pos.y += -2.0f;
 	pos.z = owner->GetPos().z - front.z * focusLength;
 	pos += deltaPos;
-
+	at = pos + front * focusLength;
 }
 

@@ -20,6 +20,7 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
+	delete[] nodeArray;
 	manager->DeleteEnemy(this);
 	delete state;
 }
@@ -71,6 +72,8 @@ void Enemy::SetWanderNode(unsigned short* nodeArray, unsigned short num)
 	if (type == "class EnemyStateWander") {
 		dynamic_cast<EnemyStateWander*>(state)->SetNode(nodeArray, num);
 	}
+	this->nodeArray = new unsigned short[num];
+	memcpy(this->nodeArray, nodeArray, sizeof(unsigned short) * num);
 }
 
 

@@ -206,8 +206,7 @@ float4 main(in PS_IN input) : SV_TARGET{
 	*/
 
 	//return outTexture.Sample(samplerState, input.texcoord);
-
-	return float4(outTexture.Sample(samplerState, parallax_uv).rgb * light,1.0f) + specularColor;
+	return float4(outTexture.Sample(samplerState, parallax_uv).rgb * light,1.0f) + float4(specularColor.xyz,0.0f);
 
 	
 

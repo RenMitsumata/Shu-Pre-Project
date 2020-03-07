@@ -52,7 +52,7 @@ void Player::Init()
 
 	
 	camera = Manager::Get()->GetScene()->AddGameObject<Camera>(e_LAYER_CAMERA);
-	camera->SetDeltaPos(XMFLOAT3(-1.0f, 1.0f, 2.5f));
+	camera->SetDeltaPos(XMFLOAT3(-1.0f, 2.0f, 2.5f));
 	camera->SetDeltaRot(XMFLOAT3(0.0f, 0.0f, 0.0f));
 	camera->SetOwner(this);
 	
@@ -94,6 +94,7 @@ void Player::Update()
 	if (input->GetRightStickOperate()) {
 		XMFLOAT3 rotation = XMFLOAT3(input->GetRightStickX() * 0.05f, input->GetRightStickY() * 0.05f, 0.0f);
 		camera->AddDeltaRot(rotation);
+		AddRot(XMFLOAT3(0.0f, rotation.x, 0.0f));
 	}
 
 	//if (input->GetKeyPress('W')) {
@@ -140,12 +141,12 @@ void Player::Update()
 		pos.y -= 0.1f;
 	}
 	*/
-	if (input->GetKeyTrigger(VK_SPACE)) {
+	if (input->GetKeyTrigger(VK_SPACE) || input->GetPadTrigger(XINPUT_GAMEPAD_Y)) {
 		Bullet* bullet = scene->AddGameObject<Bullet>(e_LAYER_GAMEOBJECT);
 		bullet->SetPos(pos + XMFLOAT3(0.0f,2.0f,0.0f));
 		bullet->SetRot(rot);
 		
-		bullet->SetVelocity(front * 0.5f);
-		audio->Play(soundMap["shoot"]);
+		bullet->SetVelocity(front * 0.1f);
+		//audio->Play(soundMap["shoot"]);
 	}
 }

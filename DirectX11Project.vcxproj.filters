@@ -161,9 +161,6 @@
     <ClCompile Include="EnemyManager.cpp">
       <Filter>ソース ファイル\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Shader3D_Deferred.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Billboard.cpp">
       <Filter>ソース ファイル\Components</Filter>
     </ClCompile>
@@ -192,6 +189,24 @@
       <Filter>ソース ファイル\Shaders\Cpps</Filter>
     </ClCompile>
     <ClCompile Include="Shader3D_Normal.cpp">
+      <Filter>ソース ファイル\Shaders\Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredObject.cpp">
+      <Filter>ソース ファイル\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredPolygon.cpp">
+      <Filter>ソース ファイル\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStateAlert.cpp">
+      <Filter>ソース ファイル\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>ソース ファイル\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader3D_Deferred.cpp">
+      <Filter>ソース ファイル\Shaders\Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader2D_PostEffect.cpp">
       <Filter>ソース ファイル\Shaders\Cpps</Filter>
     </ClCompile>
   </ItemGroup>
@@ -307,9 +322,6 @@
     <ClInclude Include="EnemyManager.h">
       <Filter>ヘッダー ファイル\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Shader3D_Deferred.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Floor.h">
       <Filter>ヘッダー ファイル\GameObjects</Filter>
     </ClInclude>
@@ -328,14 +340,26 @@
     <ClInclude Include="WayNode.h">
       <Filter>ヘッダー ファイル\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="DeferredObject.h">
+      <Filter>ヘッダー ファイル\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredPolygon.h">
+      <Filter>ヘッダー ファイル\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateAlert.h">
+      <Filter>ヘッダー ファイル\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>ヘッダー ファイル\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader2D_PostEffect.h">
+      <Filter>ヘッダー ファイル\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader3D_Deferred.h">
+      <Filter>ヘッダー ファイル\Shaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VS_Deferred.hlsl">
-      <Filter>ソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="PS_Deferred.hlsl">
-      <Filter>ソース ファイル</Filter>
-    </FxCompile>
     <FxCompile Include="pixelShader3D.hlsl">
       <Filter>ソース ファイル\Shaders\PixelShaders</Filter>
     </FxCompile>
@@ -364,6 +388,18 @@
       <Filter>ソース ファイル\Shaders\VertexShaders</Filter>
     </FxCompile>
     <FxCompile Include="VS_WireFrame.hlsl">
+      <Filter>ソース ファイル\Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Deferred.hlsl">
+      <Filter>ソース ファイル\Shaders\PixelShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_PostEffect.hlsl">
+      <Filter>ソース ファイル\Shaders\PixelShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_Deferred.hlsl">
+      <Filter>ソース ファイル\Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_PostEffect.hlsl">
       <Filter>ソース ファイル\Shaders\VertexShaders</Filter>
     </FxCompile>
   </ItemGroup>

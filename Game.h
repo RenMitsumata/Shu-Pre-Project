@@ -3,6 +3,7 @@
 
 
 class UI;
+class DeferredObject;
 
 class Game : public Scene
 {

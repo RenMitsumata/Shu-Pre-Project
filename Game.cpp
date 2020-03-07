@@ -17,6 +17,7 @@
 #include "Floor.h"
 #include "Title.h"
 #include "InputManager.h"
+#include "DeferredObject.h"
 
 InputManager* input;
 
@@ -106,7 +107,18 @@ void Game::Update()
 	colMgr.Update();
 	for (int i = 0; i < 5; i++) {
 
-		objectList[i].erase(std::remove_if(objectList[i].begin(), objectList[i].end(), [](GameObject* obj) {return obj->IsDestroy(); }), objectList[i].end());
+		objectList[i].erase(std::remove_if(objectList[i].begin(), objectList[i].end(), [](GameObject* obj) 
+		{
+			bool isDelete = obj->IsDestroy(); 
+			if (isDelete) {
+				obj->Uninit();
+				delete obj;
+				obj = nullptr;
+				return true;
+			}
+			else return false;
+		}),
+			objectList[i].end());
 
 	}
 	if (phase != e_LOADING && loadingPolygon) {
@@ -142,12 +154,12 @@ void Game::DrawDeferred()
 	albedoPolygon->Draw();
 
 	//if (phase != e_LOADING) {
-		for (int i = 0; i < 4; i++) {
+		/*for (int i = 0; i < 4; i++) {
 			ID3D11ShaderResourceView* srv[1];
 			srv[0] = dxManager->GetSRV(i);
 			deferredPolygon[i].SetDeferredTexture(srv[0]);
 			deferredPolygon[i].Draw();
-		}
+		}*/
 	//}
 	
 		

@@ -28,10 +28,6 @@ void WayNode::Uninit()
 	if (neighborInfo) {
 		delete[] neighborInfo;
 	}
-	if (model) {
-		model->Uninit();
-		delete model;
-	}
 }
 
 void WayNode::SetNeighbor(unsigned short* pArray, unsigned short arraySize)

@@ -15,6 +15,14 @@ GameObject::GameObject() :
 
 GameObject::~GameObject()
 {
+	//for (Component* comp : componentsList) {
+	//	comp->Uninit();
+	//	delete comp;
+	//}
+	//componentsList.clear();
+	/*   子ゲームオブジェクトはすべてシーンが管理しているので、*/
+	/*   親からは消さない（リストだけクリア）                  */
+	//childrensList.clear();
 }
 
 void GameObject::Init()
@@ -26,12 +34,17 @@ void GameObject::Uninit()
 {
 	for (Component* comp : componentsList) {
 		comp->Uninit();
+		comp->SetOwner(nullptr);
 		delete comp;
+		comp = nullptr;
 	}
-	componentsList.clear();
+	bool isEmpty = componentsList.empty();
+	if (isEmpty) {
+		int a = 0;
+	}
 	/*   子ゲームオブジェクトはすべてシーンが管理しているので、*/
 	/*   親からは消さない（リストだけクリア）                  */
-	childrensList.clear();
+	//childrensList.clear();
 }
 
 void GameObject::Update()
