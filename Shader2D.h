@@ -5,6 +5,10 @@ struct VERTEX_2D {
 	XMFLOAT2 texcoord;
 };
 
+struct CONSTANT_UI {
+	XMMATRIX projMat;
+	float depth = 1.0f;
+};
 
 class Texture;
 
@@ -18,7 +22,7 @@ private:
 	ID3D11InputLayout*      vertexLayout;
 	ID3D11SamplerState*		samplerState = NULL;
 	ID3D11Buffer*			constantBuffer;
-	XMMATRIX				projection;
+	CONSTANT_UI				constantValue;
 	XMFLOAT4				color = {1.0f,1.0f,1.0f,1.0f};
 	ID3D11Buffer*			colorBuffer;
 	unsigned int			time = 0;
@@ -29,7 +33,9 @@ public:
 	void Uninit();
 	void Set();
 	void SetTexture(Texture* texture);
+	void SetTexture(ID3D11ShaderResourceView* srv);
 	void SetProjMatrix(XMMATRIX mat);
+	void SetDepth(float depth);
 	void ChangeColor();
 };
 

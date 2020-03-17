@@ -24,6 +24,7 @@ void Bullet::Init()
 	CollisionSphere* col = new CollisionSphere;
 	col->Init();
 	col->SetRadius(1.0f);
+	col->SetTag(e_COLTYPE_BULLET);
 	col->SetOwner(this);
 	componentsList.push_back(col);
 

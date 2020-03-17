@@ -195,6 +195,90 @@ void DXManager::Init()
 	}
 	int a = 0;
 
+
+	// デファードレンダリング関係の初期化
+
+
+	// デプスバッファ(デファードレンダリング)
+	{
+		//ステンシル用テクスチャー作成
+		ID3D11Texture2D* depthTexture = NULL;
+		D3D11_TEXTURE2D_DESC td;
+		ZeroMemory(&td, sizeof(td));
+		td.Width = sd.BufferDesc.Width;
+		td.Height = sd.BufferDesc.Height;
+		td.MipLevels = 1;
+		td.ArraySize = 1;
+		td.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		td.SampleDesc = sd.SampleDesc;
+		td.Usage = D3D11_USAGE_DEFAULT;
+		td.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		td.CPUAccessFlags = 0;
+		td.MiscFlags = 0;
+		device->CreateTexture2D(&td, NULL, &depthTexture);
+
+		//ステンシルターゲット作成
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvd;
+		ZeroMemory(&dsvd, sizeof(dsvd));
+		dsvd.Format = td.Format;
+		dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		dsvd.Flags = 0;
+		HRESULT hr = device->CreateDepthStencilView(depthTexture, &dsvd, &depthStencilView);
+		if (FAILED(hr))
+		{
+			assert(false);
+		}
+
+		deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+
+
+	}
+
+	// Gバッファ(複数作る)　もちろん、メンバ変数も作る
+	deferredDSV = new ID3D11RenderTargetView*[4];
+	deferredDSRV = new ID3D11ShaderResourceView*[4];
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		//ステンシル用テクスチャー作成
+		ID3D11Texture2D* texture = NULL;
+		D3D11_TEXTURE2D_DESC td;
+		ZeroMemory(&td, sizeof(td));
+		td.Width = sd.BufferDesc.Width;		// 本当は2の累乗が良い
+		td.Height = sd.BufferDesc.Height;	// 　　　　〃
+		td.MipLevels = 1;
+		td.ArraySize = 1;
+		td.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;	// 本当は利用目的で変える（例）色ならR8G8B8A8_UNORM(※NORM->-1 ～ 1、UNORM->0 ～ 1)
+		td.SampleDesc = sd.SampleDesc;
+		td.Usage = D3D11_USAGE_DEFAULT;
+		td.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		td.CPUAccessFlags = 0;
+		td.MiscFlags = 0;
+		device->CreateTexture2D(&td, NULL, &texture);
+		//texture->Release();
+
+		// レンダーターゲットビュー
+		D3D11_RENDER_TARGET_VIEW_DESC rtvd;
+		ZeroMemory(&rtvd, sizeof(rtvd));
+		rtvd.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		rtvd.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+		device->CreateRenderTargetView(texture, &rtvd, &deferredDSV[i]);
+
+		// シェーダーリソースビュー
+		D3D11_SHADER_RESOURCE_VIEW_DESC SRVdesc = {};
+		SRVdesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		SRVdesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		SRVdesc.Texture2D.MipLevels = 1;
+		device->CreateShaderResourceView(texture, &SRVdesc, &deferredDSRV[i]);
+
+		//deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+
+
+	}
+
+
+
 }
 
 void DXManager::Uninit()
@@ -257,6 +341,15 @@ void DXManager::BeginDepth()
 	deviceContext->ClearDepthStencilView(lightDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
+void DXManager::BeginDeferred()
+{
+	deviceContext->OMSetRenderTargets(4, deferredDSV, depthStencilView);
+	for (int i = 0; i < 4; i++) {
+		deviceContext->ClearRenderTargetView(deferredDSV[i], BACKBUFFERCOLOR);
+	}
+	deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
 void DXManager::SetDepthTexture(unsigned int slot)
 {
 	ID3D11ShaderResourceView* srv[1] = { lightDepthShaderResourceView };
@@ -289,6 +382,14 @@ void DXManager::ToggleFrameMode()
 	device->CreateRasterizerState(&rd, &rs);
 
 	deviceContext->RSSetState(rs);
+}
+
+ID3D11ShaderResourceView* DXManager::GetSRV(unsigned int slot)
+{
+	if (slot >= 4) {
+		return nullptr;
+	}
+	else return deferredDSRV[slot];
 }
 
 /*

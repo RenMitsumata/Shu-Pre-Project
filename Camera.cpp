@@ -26,7 +26,7 @@ void Camera::Init()
 	offset = XMFLOAT3(1.0f, 0.5f, -1.5f);
 	focusLength = 5;
 	input = Manager::Get()->GetInput();
-	front = XMFLOAT3(at.x - pos.x, at.y - pos.y, at.z - pos.z);
+	front = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	XMVECTOR bufv = XMLoadFloat3(&front);
 	bufv = XMVector3Normalize(bufv);
 	XMStoreFloat3(&front, bufv);
@@ -38,7 +38,8 @@ void Camera::Init()
 	dome->SetOwner(this);
 	componentsList.push_back(dome);
 
-
+	front.y = -0.5f;
+	
 }
 
 
@@ -65,35 +66,35 @@ void Camera::Update()
 	//	pos.x += 0.1f;
 	//	at.x += 0.1f;
 	//}
-	//if (input->GetKeyPress('H')) {
-	//	XMVECTOR frontVec = XMLoadFloat3(&front);
-	//	XMVECTOR RotateInfo = XMQuaternionRotationAxis(up, -0.05f);
-	//	frontVec = XMVector3Rotate(frontVec, RotateInfo);
-	//	XMStoreFloat3(&front, frontVec);
-	//}
+	if (input->GetKeyPress('H')) {
+		XMVECTOR frontVec = XMLoadFloat3(&front);
+		XMVECTOR RotateInfo = XMQuaternionRotationAxis(up, -0.05f);
+		frontVec = XMVector3Rotate(frontVec, RotateInfo);
+		XMStoreFloat3(&front, frontVec);
+	}
 
-	//if (input->GetKeyPress('K')) {
-	//	XMVECTOR frontVec = XMLoadFloat3(&front);
-	//	XMVECTOR RotateInfo = XMQuaternionRotationAxis(up,0.05f);
-	//	frontVec = XMVector3Rotate(frontVec, RotateInfo);
-	//	XMStoreFloat3(&front, frontVec);
-	//}
-	//if (input->GetKeyPress('U')) {
-	//	XMVECTOR frontVec = XMLoadFloat3(&front);
-	//	XMVECTOR right = XMVector3Cross(frontVec, up);
-	//	XMVECTOR RotateInfo = XMQuaternionRotationAxis(right, 0.05f);
-	//	frontVec = XMVector3Rotate(frontVec, RotateInfo);
-	//	up = XMVector3Rotate(up, RotateInfo);
-	//	XMStoreFloat3(&front, frontVec);
-	//}
-	//if (input->GetKeyPress('J')) {
-	//	XMVECTOR frontVec = XMLoadFloat3(&front);
-	//	XMVECTOR right = XMVector3Cross(frontVec, up);
-	//	XMVECTOR RotateInfo = XMQuaternionRotationAxis(right, -0.05f);
-	//	frontVec = XMVector3Rotate(frontVec, RotateInfo);
-	//	up = XMVector3Rotate(up, RotateInfo);
-	//	XMStoreFloat3(&front, frontVec);
-	//}
+	if (input->GetKeyPress('K')) {
+		XMVECTOR frontVec = XMLoadFloat3(&front);
+		XMVECTOR RotateInfo = XMQuaternionRotationAxis(up,0.05f);
+		frontVec = XMVector3Rotate(frontVec, RotateInfo);
+		XMStoreFloat3(&front, frontVec);
+	}
+	if (input->GetKeyPress('U')) {
+		XMVECTOR frontVec = XMLoadFloat3(&front);
+		XMVECTOR right = XMVector3Cross(frontVec, up);
+		XMVECTOR RotateInfo = XMQuaternionRotationAxis(right, 0.05f);
+		frontVec = XMVector3Rotate(frontVec, RotateInfo);
+		up = XMVector3Rotate(up, RotateInfo);
+		XMStoreFloat3(&front, frontVec);
+	}
+	if (input->GetKeyPress('J')) {
+		XMVECTOR frontVec = XMLoadFloat3(&front);
+		XMVECTOR right = XMVector3Cross(frontVec, up);
+		XMVECTOR RotateInfo = XMQuaternionRotationAxis(right, -0.05f);
+		frontVec = XMVector3Rotate(frontVec, RotateInfo);
+		up = XMVector3Rotate(up, RotateInfo);
+		XMStoreFloat3(&front, frontVec);
+	}
 
 
 
@@ -123,14 +124,15 @@ void Camera::Update()
 
 		pos = owner->GetPos() + calcPos;
 		// 回転。一人称用にデルタ回転も
-		rot = owner->GetRot() + deltaRot;
+		// rot = owner->GetRot() + deltaRot;
 		// 正面。at用。
-		XMStoreFloat3(&front, XMVector3Normalize(defaultVec));
+		//XMStoreFloat3(&front, XMVector3Normalize(defaultVec));
 	}
-	
+	pos.x = owner->GetPos().x - front.x * focusLength;
+	pos.z = owner->GetPos().z - front.z * focusLength;
+	pos += deltaPos;
 	//pos += offset;
 	at = pos + front * focusLength;
-
 }
 
 void Camera::Draw()
@@ -164,9 +166,41 @@ void Camera::Draw()
 	XMStoreFloat4x4(&viewMat,XMMatrixLookAtLH(XMLoadFloat3(&pos), XMLoadFloat3(&at), up));
 
 	// プロジェクションマトリクス設定
-	XMStoreFloat4x4(&projMat, XMMatrixPerspectiveFovLH(1.0f, dxViewport.Width / dxViewport.Height, 1.0f, 1000.0f));
+	XMStoreFloat4x4(&projMat, XMMatrixPerspectiveFovLH(1.0f, dxViewport.Width / dxViewport.Height, nearDis, farDis));
 	for (Component* comp : componentsList) {
 		comp->Draw();
 	}
+}
+
+void Camera::AddDeltaRot(XMFLOAT3 rot)
+{
+	XMFLOAT3 worldUp = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	XMFLOAT3 worldRight = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	XMVECTOR upVec = XMLoadFloat3(&worldUp);
+	XMVECTOR rightVec = XMLoadFloat3(&worldRight);
+
+
+	if (fabsf(rot.x) > 0.01f) {
+		XMVECTOR frontVec = XMLoadFloat3(&front);
+		XMVECTOR RotateInfo = XMQuaternionRotationAxis(upVec, rot.x);
+		frontVec = XMVector3Rotate(frontVec, RotateInfo);
+		XMStoreFloat3(&front, frontVec);
+	}
+
+	
+	/*if (fabsf(rot.y) > 0.01f) {
+		XMVECTOR frontVec = XMLoadFloat3(&front);
+		XMVECTOR right = XMVector3Cross(frontVec, up);
+		XMVECTOR RotateInfo = XMQuaternionRotationAxis(rightVec,-rot.y);
+		frontVec = XMVector3Rotate(frontVec, RotateInfo);
+		up = XMVector3Rotate(up, RotateInfo);
+		XMStoreFloat3(&front, frontVec);
+	}*/
+
+	pos.x = owner->GetPos().x - front.x * focusLength;
+	pos.y += -2.0f;
+	pos.z = owner->GetPos().z - front.z * focusLength;
+	pos += deltaPos;
+	at = pos + front * focusLength;
 }
 

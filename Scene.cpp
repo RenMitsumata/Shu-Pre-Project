@@ -52,6 +52,10 @@ void Scene::Draw()
 	}
 }
 
+void Scene::DrawDeferred()
+{
+}
+
 void Scene::SetCameraMatrix(XMFLOAT4X4* p_ViewMatrix, XMFLOAT4X4* p_ProjectionMatrix)
 {
 	p_CameraViewMatrix = p_ViewMatrix;

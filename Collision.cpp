@@ -14,4 +14,5 @@ Collision::Collision()
 
 Collision::~Collision()
 {
+	int a = 0;
 }

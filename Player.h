@@ -6,6 +6,7 @@
 
 class InputManager;
 class AudioManager;
+class Camera;
 
 class Player : public GameObject
 {
@@ -13,6 +14,7 @@ private:
 	InputManager* input;
 	AudioManager* audio;
 	Scene* scene;
+	Camera* camera;
 	std::map<const char*, unsigned int> soundMap;
 public:
 	Player();

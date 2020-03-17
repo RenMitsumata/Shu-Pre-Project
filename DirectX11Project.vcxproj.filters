@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="ソース ファイル\Shaders">
       <UniqueIdentifier>{bd0a95ed-f54e-4b23-964d-ede7b66a5311}</UniqueIdentifier>
     </Filter>
@@ -55,13 +51,19 @@
     <Filter Include="ヘッダー ファイル\EnemyState">
       <UniqueIdentifier>{da52d46c-e606-4040-bd99-e5978e182cd7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Shaders\PixelShaders">
+      <UniqueIdentifier>{8f0e2eb8-b7bc-4888-8dac-a3368aa178b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Shaders\VertexShaders">
+      <UniqueIdentifier>{72f2a4d4-bb40-43db-9416-efa1c45f0aad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Shaders\Cpps">
+      <UniqueIdentifier>{cd0d49db-4d4e-4cfc-8d04-9038ecf79703}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader3D.cpp">
-      <Filter>ソース ファイル\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>ソース ファイル\GameObjects</Filter>
@@ -102,9 +104,6 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>ソース ファイル\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Shader3D_Normal.cpp">
-      <Filter>ソース ファイル\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="ModelNormal.cpp">
       <Filter>ソース ファイル\Components</Filter>
     </ClCompile>
@@ -128,12 +127,6 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>ソース ファイル\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader3D_GeoIns.cpp">
-      <Filter>ソース ファイル\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader2D.cpp">
-      <Filter>ソース ファイル\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="CollisionCapsule.cpp">
       <Filter>ソース ファイル\Components\Collisions</Filter>
@@ -159,9 +152,6 @@
     <ClCompile Include="Polygon.cpp">
       <Filter>ソース ファイル\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Billboard.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyStateWander.cpp">
       <Filter>ソース ファイル\EnemyState</Filter>
     </ClCompile>
@@ -171,17 +161,53 @@
     <ClCompile Include="EnemyManager.cpp">
       <Filter>ソース ファイル\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="WayNode.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="MapManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="WayNodeManager.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Billboard.cpp">
+      <Filter>ソース ファイル\Components</Filter>
     </ClCompile>
     <ClCompile Include="Floor.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ImpactSound.cpp">
+      <Filter>ソース ファイル\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="MapManager.cpp">
+      <Filter>ソース ファイル\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="WayNodeManager.cpp">
+      <Filter>ソース ファイル\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="WayNode.cpp">
+      <Filter>ソース ファイル\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader2D.cpp">
+      <Filter>ソース ファイル\Shaders\Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader3D.cpp">
+      <Filter>ソース ファイル\Shaders\Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader3D_GeoIns.cpp">
+      <Filter>ソース ファイル\Shaders\Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader3D_Normal.cpp">
+      <Filter>ソース ファイル\Shaders\Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredObject.cpp">
+      <Filter>ソース ファイル\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredPolygon.cpp">
+      <Filter>ソース ファイル\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStateAlert.cpp">
+      <Filter>ソース ファイル\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>ソース ファイル\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader3D_Deferred.cpp">
+      <Filter>ソース ファイル\Shaders\Cpps</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader2D_PostEffect.cpp">
+      <Filter>ソース ファイル\Shaders\Cpps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -287,9 +313,6 @@
     <ClInclude Include="UI.h">
       <Filter>ヘッダー ファイル\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Billboard.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="EnemyState.h">
       <Filter>ヘッダー ファイル\EnemyState</Filter>
     </ClInclude>
@@ -299,49 +322,85 @@
     <ClInclude Include="EnemyManager.h">
       <Filter>ヘッダー ファイル\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="WayNode.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Floor.h">
+      <Filter>ヘッダー ファイル\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Billboard.h">
+      <Filter>ヘッダー ファイル\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ImpactSound.h">
+      <Filter>ヘッダー ファイル\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="MapManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Managers</Filter>
     </ClInclude>
     <ClInclude Include="WayNodeManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Floor.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="WayNode.h">
+      <Filter>ヘッダー ファイル\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredObject.h">
+      <Filter>ヘッダー ファイル\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredPolygon.h">
+      <Filter>ヘッダー ファイル\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyStateAlert.h">
+      <Filter>ヘッダー ファイル\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>ヘッダー ファイル\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader2D_PostEffect.h">
+      <Filter>ヘッダー ファイル\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader3D_Deferred.h">
+      <Filter>ヘッダー ファイル\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="vertexShader3D.hlsl">
-      <Filter>ソース ファイル\Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="pixelShader3D.hlsl">
-      <Filter>ソース ファイル\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="PS_Normal.hlsl">
-      <Filter>ソース ファイル\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="VS_Normal.hlsl">
-      <Filter>ソース ファイル\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="VS_GeometryInstance.hlsl">
-      <Filter>ソース ファイル\Shaders</Filter>
+      <Filter>ソース ファイル\Shaders\PixelShaders</Filter>
     </FxCompile>
     <FxCompile Include="PS_GeometryInstance.hlsl">
-      <Filter>ソース ファイル\Shaders</Filter>
+      <Filter>ソース ファイル\Shaders\PixelShaders</Filter>
     </FxCompile>
-    <FxCompile Include="VS_UI.hlsl">
-      <Filter>ソース ファイル\Shaders</Filter>
+    <FxCompile Include="PS_Normal.hlsl">
+      <Filter>ソース ファイル\Shaders\PixelShaders</Filter>
     </FxCompile>
     <FxCompile Include="PS_UI.hlsl">
-      <Filter>ソース ファイル\Shaders</Filter>
+      <Filter>ソース ファイル\Shaders\PixelShaders</Filter>
     </FxCompile>
     <FxCompile Include="PS_WireFrame.hlsl">
-      <Filter>ソース ファイル\Shaders</Filter>
+      <Filter>ソース ファイル\Shaders\PixelShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="vertexShader3D.hlsl">
+      <Filter>ソース ファイル\Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_GeometryInstance.hlsl">
+      <Filter>ソース ファイル\Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_Normal.hlsl">
+      <Filter>ソース ファイル\Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_UI.hlsl">
+      <Filter>ソース ファイル\Shaders\VertexShaders</Filter>
     </FxCompile>
     <FxCompile Include="VS_WireFrame.hlsl">
-      <Filter>ソース ファイル\Shaders</Filter>
+      <Filter>ソース ファイル\Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_Deferred.hlsl">
+      <Filter>ソース ファイル\Shaders\PixelShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PS_PostEffect.hlsl">
+      <Filter>ソース ファイル\Shaders\PixelShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_Deferred.hlsl">
+      <Filter>ソース ファイル\Shaders\VertexShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VS_PostEffect.hlsl">
+      <Filter>ソース ファイル\Shaders\VertexShaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

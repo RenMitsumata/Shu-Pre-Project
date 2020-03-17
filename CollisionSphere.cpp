@@ -4,6 +4,7 @@
 #include "CollisionOBB.h"
 #include "CollisionCapsule.h"
 #include "Manager.h"
+#include "ImpactSound.h"
 
 CollisionSphere::CollisionSphere() : radius(1.0f)
 {
@@ -18,6 +19,16 @@ CollisionSphere::CollisionSphere() : radius(1.0f)
 
 CollisionSphere::~CollisionSphere()
 {
+	if (indexBuffer) {
+		indexBuffer->Release();
+	}
+	if (vertexBuffer) {
+		vertexBuffer->Release();
+	}
+	if (shader) {
+		shader->Uninit();
+	}
+	manager->GetScene()->GetCollisionManager()->Delete(this);
 }
 
 bool CollisionSphere::isCollision(CollisionSphere* other)
@@ -152,7 +163,15 @@ void CollisionSphere::Dispatch(Collision* other)
 
 void CollisionSphere::CollisionAction(Collision* other)
 {
-	other->GetOwner()->SetDestroy();
+	//other->GetOwner()->SetDestroy();
+	if (colTag == e_COLTYPE_BULLET) {
+		owner->SetDestroy();
+		Manager::Get()->GetScene()->AddGameObject<ImpactSound>(e_LAYER_UI);
+	}
+	else if (colTag == e_COLTYPE_SOUND) {
+		owner->SetDestroy();
+	}
+	// “G‚Ì’®Šo”ÍˆÍ‚¾‚Á‚½‚çH‚É‚·‚é
 }
 
 void CollisionSphere::Draw()

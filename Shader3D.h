@@ -2,7 +2,6 @@
 
 
 
-
 // 頂点構造体
 struct VERTEX_3D
 {
@@ -89,16 +88,19 @@ struct SHADER_CONSTANTS {
 	XMMATRIX worldMatrix;
 	XMMATRIX viewMatrix;
 	XMMATRIX projMatrix;
+	XMFLOAT2 nearAndFar;
 };
 
 
 
 
 class Texture;
+class Manager;
 
 class Shader3D
 {
 private:
+	Manager*				manager;
 	ID3D11Device*			device;
 	ID3D11DeviceContext*	context;
 	ID3D11VertexShader*     vertexShader;
@@ -120,7 +122,7 @@ private:
 public:
 	Shader3D();
 	~Shader3D();
-	void Init(const char* VS_Filename = "vertexShader3D.cso", const char* PS_Filename = "pixelShader3D.cso");
+	void Init(const char* VS_Filename = "VS_Deferred.cso", const char* PS_Filename = "PS_Deferred.cso");
 	void Uninit();
 
 	// シェーダ定数バッファ設定

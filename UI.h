@@ -18,7 +18,8 @@ public:
 	UI();
 	~UI();
 	void Init()override;
-	void SetTextureAndSize(const char* filename, float width = WINDOW_WIDTH, float height = WINDOW_HEIGHT, XMFLOAT2 pos = XMFLOAT2(0.0f, 0.0f));
+	void SetTextureAndSize(const char* filename, XMFLOAT3 pos = XMFLOAT3(0.0f, 0.0f, 0.0f), float width = WINDOW_WIDTH, float height = WINDOW_HEIGHT);
 	void ChangeColor();
+	void SetDeferredTexture(ID3D11ShaderResourceView* srv);
 };
 

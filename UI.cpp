@@ -23,15 +23,22 @@ void UI::Init()
 	
 }
 
-void UI::SetTextureAndSize(const char * filename, float width, float height, XMFLOAT2 pos)
+void UI::SetTextureAndSize(const char * filename, XMFLOAT3 pos, float width, float height)
 {
 	polygon = ComponentFactory::CreateComponent<class Polygon>();
-	polygon->SetTexture(filename);
-	polygon->SetSize(width,height,pos);
+	if (filename != nullptr) {
+		polygon->SetTexture(filename);
+	}
+	polygon->SetSize(width, height, pos);
 	componentsList.push_back(polygon);
 }
 
 void UI::ChangeColor()
 {
 	polygon->ChangeColor();
+}
+
+void UI::SetDeferredTexture(ID3D11ShaderResourceView* srv)
+{
+	polygon->SetDeferredTexture(srv);
 }

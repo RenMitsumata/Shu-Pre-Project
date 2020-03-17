@@ -87,7 +87,7 @@ void Shader2D::Init(const char * VS_Filename, const char * PS_Filename)
 
 	// 定数バッファ生成
 	D3D11_BUFFER_DESC hBufferDesc;
-	hBufferDesc.ByteWidth = sizeof(XMMATRIX);
+	hBufferDesc.ByteWidth = sizeof(CONSTANT_UI);
 	hBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	hBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	hBufferDesc.CPUAccessFlags = 0;
@@ -107,8 +107,9 @@ void Shader2D::Init(const char * VS_Filename, const char * PS_Filename)
 
 
 	// プロジェクション行列初期化
-	projection = XMMatrixOrthographicOffCenterLH(0.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.0f, 0.0f, 1.0f);
-	context->UpdateSubresource(constantBuffer, 0, NULL, &XMMatrixTranspose(projection), 0, 0);
+	constantValue.projMat = XMMatrixOrthographicOffCenterLH(0.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 0.0f, 0.0f, 1.0f);
+	constantValue.projMat = XMMatrixTranspose(constantValue.projMat);
+	context->UpdateSubresource(constantBuffer, 0, NULL, &constantValue, 0, 0);
 
 
 	// 入力レイアウト設定
@@ -163,6 +164,8 @@ void Shader2D::Set()
 	context->IASetInputLayout(vertexLayout);
 
 	// プロジェクション行列初期化（ウィンドウいっぱい、後から変えない設定）
+	context->UpdateSubresource(constantBuffer, 0, NULL, &constantValue, 0, 0);
+
 	context->PSSetConstantBuffers(0, 1, &colorBuffer);
 
 
@@ -171,16 +174,27 @@ void Shader2D::Set()
 	
 }
 
-void Shader2D::SetTexture(Texture * texture)
+void Shader2D::SetTexture(Texture* texture)
 {
 	ID3D11ShaderResourceView* srv[1] = { texture->GetShaderResourceView() };
 	context->PSSetShaderResources(0, 1, srv);
 }
 
+void Shader2D::SetTexture(ID3D11ShaderResourceView * srv)
+{
+	ID3D11ShaderResourceView* defSrv[1] = { srv };
+	context->PSSetShaderResources(0, 1, defSrv);
+}
+
 void Shader2D::SetProjMatrix(XMMATRIX mat)
 {
-	projection = mat;
-	context->UpdateSubresource(constantBuffer, 0, NULL, &XMMatrixTranspose(projection), 0, 0);
+	constantValue.projMat = XMMatrixTranspose(mat);
+
+}
+
+void Shader2D::SetDepth(float depth)
+{
+	constantValue.depth = depth;
 }
 
 void Shader2D::ChangeColor()

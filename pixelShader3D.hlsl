@@ -45,7 +45,7 @@ float4 main(in PS_IN input) : SV_Target
 
 	//outDiffuse *= input.color *Diffuse;
 	outDiffuse = outDiffuse * Diffuse;
-
+	//outDiffuse.a = 1.0f;
 	return outDiffuse;
 
 	//return float4(1.0f, 1.0f, 1.0f, 1.0f);

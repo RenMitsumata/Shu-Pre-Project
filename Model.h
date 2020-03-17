@@ -87,7 +87,7 @@ private:
 	NODE* rootNode;
 
 	// アニメーション関連
-	std::vector<DEFORM_VERTEX>* pDeformVertexs;
+	std::vector<DEFORM_VERTEX>* pDeformVertexs = nullptr;
 	std::unordered_map<std::string, BONE> Bones;
 	ANIM_DATA* animData;
 	unsigned int animNum;

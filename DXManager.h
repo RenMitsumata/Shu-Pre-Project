@@ -28,6 +28,10 @@ private:
 	// レンダーターゲット切り替え用
 	ID3D11DepthStencilView* lightDepthStencilView;
 	ID3D11ShaderResourceView* lightDepthShaderResourceView;
+	// デファードレンダリング用
+	ID3D11RenderTargetView** deferredDSV;
+	ID3D11ShaderResourceView** deferredDSRV;
+
 
 	ID3D11DepthStencilState* depthStateEnable;
 	ID3D11DepthStencilState* depthStateDisable;
@@ -41,11 +45,13 @@ public:
 	void SetDepthEnable(bool enable);
 	void Begin();
 	void BeginDepth();
+	void BeginDeferred();
 	void SetDepthTexture(unsigned int slot);
 	void End();
 	void ToggleFrameMode();
 	ID3D11Device* GetDevice() { return device; }
 	ID3D11DeviceContext* GetDeviceContext() { return deviceContext; }
+	ID3D11ShaderResourceView* GetSRV(unsigned int slot);
 
 };
 

@@ -10,6 +10,8 @@ class Enemy : public GameObject
 private:
 	EnemyState* state = nullptr;
 	EnemyManager* manager;
+	unsigned short* nodeArray;
+	unsigned short nodeNum;
 public:
 	Enemy();
 	~Enemy();
