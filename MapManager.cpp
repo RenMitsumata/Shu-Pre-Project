@@ -367,6 +367,10 @@ void MapManager::ReadMap(const char* filename)
 			XMFLOAT3 pos;
 			float posMem[3];
 			char locBuffer[64];
+			// ƒm[ƒh‚É•K—v‚Èƒƒ“ƒo
+			unsigned short id;
+			unsigned short neighbor[16];
+
 			unsigned char locCnt = 0;
 
 			// Ÿ‚Ì:‚Ü‚Å“Ç‚İ”ò‚Î‚·
@@ -397,6 +401,73 @@ void MapManager::ReadMap(const char* filename)
 
 			Floor* floor = scene->AddGameObject<Floor>(e_LAYER_BACKGROUND);
 			floor->SetPos(pos);
+
+			// Ÿ‚Ì:‚Ü‚Å“Ç‚İ”ò‚Î‚·
+			while (currentData != ':') {
+				currentPoint++;
+				currentData = buffer[currentPoint];
+			}
+
+			// ƒm[ƒh‚ğ¶¬
+			currentPoint++;
+			currentData = buffer[currentPoint];
+			locCnt = 0;
+			while (currentData != ';') {
+				locBuffer[locCnt] = currentData;
+				locCnt++;
+				currentPoint++;
+				currentData = buffer[currentPoint];
+			}
+			id = atof(locBuffer);
+			ZeroMemory(locBuffer, 64);
+			// Ÿ‚Ì:‚Ü‚Å“Ç‚İ”ò‚Î‚·
+			while (currentData != ':') {
+				currentPoint++;
+				currentData = buffer[currentPoint];
+			}
+
+			// —×‚Ìƒm[ƒhî•ñ“o˜^‹y‚Ñ‹——£ŒvZ
+			unsigned char neighborCnt = 1;
+			locCnt = 0;
+			currentPoint++;
+			currentData = buffer[currentPoint];
+			while (currentData != ';') {
+				if (currentData == ',') {
+					neighborCnt++;
+				}
+				locBuffer[locCnt] = currentData;
+				locCnt++;
+				currentPoint++;
+				currentData = buffer[currentPoint];
+			}
+
+			unsigned short* neighborArray = new unsigned short[neighborCnt];
+			char* pBuf = locBuffer;
+			char neighborID[6];
+			unsigned char itr = 0;
+
+
+
+			while (*pBuf != '\0') {
+				unsigned char neighborIDPos = 0;
+				ZeroMemory(neighborID, sizeof(char) * 6);
+				while (*pBuf != ',' && neighborIDPos < 6) {
+					neighborID[neighborIDPos] = *pBuf;
+					neighborIDPos++;
+					pBuf++;
+				}
+				neighborArray[itr] = atoi(neighborID);
+				pBuf++;
+				itr++;
+			}
+
+			WayNode* node = scene->AddGameObject<WayNode>(e_LAYER_GAMEOBJECT);
+
+			node->SetPos(pos);
+			node->SetID(id);
+			node->SetNeighbor(neighborArray, neighborCnt);
+			nodeMgr->AddList(node);
+			delete[] neighborArray;
 
 		}
 

@@ -171,6 +171,7 @@ void CollisionSphere::CollisionAction(Collision* other)
 	else if (colTag == e_COLTYPE_SOUND) {
 		owner->SetDestroy();
 	}
+	// “G‚Ì’®Šo”ÍˆÍ‚¾‚Á‚½‚çH‚É‚·‚é
 }
 
 void CollisionSphere::Draw()
