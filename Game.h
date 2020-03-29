@@ -7,18 +7,21 @@ class DeferredObject;
 
 class Game : public Scene
 {
-private:
+public:
 	enum Phase {
 		e_LOADING,
-		e_SCENE
+		e_SCENE,
+		e_CHOOSEITEM
 	};
+private:	
 	Phase phase = e_LOADING;
 	ID3D11DeviceContext* context = nullptr;
 	DXManager* dxManager = nullptr;
 	UI* loadingPolygon = nullptr;
 	UI* deferredPolygon = nullptr;
 	UI* albedoPolygon = nullptr;
-	void Loading();
+	UI* equip = nullptr;
+
 public:
 	Game();
 	~Game();
@@ -27,5 +30,7 @@ public:
 	void Update()override;
 	void Draw()override;
 	void DrawDeferred()override;
+	void SetPhase(Phase phase);
+	void SetMapManager(MapManager* mapMgr);
 };
 

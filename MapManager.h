@@ -1,6 +1,7 @@
 #pragma once
 
 // マップを外部ファイルから呼び出す
+#include <mutex>
 
 class MapManager
 {
@@ -9,6 +10,6 @@ public:
 	~MapManager();
 	void Init();
 	void Uninit();
-	void ReadMap(const char* filename);
+	void ReadMap(const char* filename, std::mutex& mut);
 };
 

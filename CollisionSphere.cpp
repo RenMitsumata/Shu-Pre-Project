@@ -169,9 +169,10 @@ void CollisionSphere::CollisionAction(Collision* other)
 		Manager::Get()->GetScene()->AddGameObject<ImpactSound>(e_LAYER_UI);
 	}
 	else if (colTag == e_COLTYPE_SOUND) {
+		// 敵の聴覚範囲だったら？にする
 		owner->SetDestroy();
 	}
-	// 敵の聴覚範囲だったら？にする
+	
 }
 
 void CollisionSphere::Draw()
