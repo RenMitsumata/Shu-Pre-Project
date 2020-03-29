@@ -241,7 +241,7 @@ void CollisionCapsule::SetOwner(GameObject * owner)
 	for (int i = 0; i < 6; i++) {
 		for (int j = 0; j < 12; j++) {
 			indexList[Cnt] = i * 12 + (j + 1);
-			indexList[Cnt + 1] = i * 12 + ((j + 2) % 13);
+			indexList[Cnt + 1] = i * 12 + ((j + 1) % 12) + 1;
 			Cnt += 2;
 		}	
 	}
