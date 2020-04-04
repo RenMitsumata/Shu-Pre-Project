@@ -44,5 +44,11 @@ public:
 	float GetLeftStickRad();	// 左スティックの真上方向を０とした、角度を返す。
 	float GetRightStickX();		// 最大値との割合で値を返す(-1～1)
 	float GetRightStickY();		// 最大値との割合で値を返す(-1～1)
+	bool GetPadLTTrigger();		// ゲームパッドの左トリガーボタンが押された瞬間だけtrueを返す
+	bool GetPadLTPress();		// ゲームパッドの左トリガーボタンが押されている時trueを返す
+	bool GetPadLTRelease();		// ゲームパッドの左トリガーボタンが離された瞬間だけtrueを返す
+	bool GetPadRTTrigger();		// ゲームパッドの右トリガーボタンが押された瞬間だけtrueを返す
+	bool GetPadRTPress();		// ゲームパッドの右トリガーボタンが押されている時trueを返す
+	bool GetPadRTRelease();		// ゲームパッドの右トリガーボタンが離された瞬間だけtrueを返す
 };
 

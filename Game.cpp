@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <algorithm>
+#include <mutex>
+#include <thread>
 #include "MapManager.h"
 #include "WayNodeManager.h"
 #include "Floor.h"
@@ -20,6 +22,8 @@
 #include "DeferredObject.h"
 
 InputManager* input;
+void Loading(Game* game);
+std::mutex _mut;
 
 Game::Game()
 {
@@ -41,6 +45,9 @@ void Game::Init()
 	albedoPolygon = new UI;
 	albedoPolygon->SetTextureAndSize(nullptr , XMFLOAT3(0.0f,0.0f,0.5f));
 
+	equip = new UI;
+	equip->SetTextureAndSize("Assets/Textures/gunA.png", XMFLOAT3(50.0f, 400.0f, 0.3f), 240.0f, 160.0f);
+
 	input = Manager::Get()->GetInput();
 	srand(time(NULL));
 	dxManager = Manager::Get()->GetDXManager();
@@ -49,11 +56,12 @@ void Game::Init()
 	nodeMgr = new WayNodeManager;
 	mapMgr = new MapManager;
 
-	Loading();
+	//Loading();
 
-	/*auto func = [this]{Loading(); };
+
+	auto func = [this]{Loading(this); };
 	std::thread loadingThread(func);
-	loadingThread.detach();*/
+	loadingThread.detach();
 
 	
 }
@@ -80,11 +88,18 @@ void Game::Uninit()
 		delete albedoPolygon;
 	}
 	if (deferredPolygon) {
+		deferredPolygon->Uninit();
 		delete[] deferredPolygon;
 	}
 
 	if (loadingPolygon) {
+		loadingPolygon->Uninit();
 		delete loadingPolygon;
+	}
+
+	if (equip) {
+		equip->Uninit();
+		delete equip;
 	}
 
 }
@@ -95,10 +110,27 @@ void Game::Update()
 		Manager::Get()->ChangeScene(new Title);
 	}
 	if (phase == e_LOADING) {
+		_mut.lock();
 		loadingPolygon->ChangeColor();
+		_mut.unlock();
 		return;
 	}
+
+	if (input->GetPadLTTrigger()) {
+		phase = e_CHOOSEITEM;
+	}
+
+	if (input->GetPadLTRelease()) {
+		phase = e_SCENE;
+	}
+
+	if (phase == e_CHOOSEITEM) {
+		return;
+	}
+
+
 	colMgr.PreUpdate();
+
 	for (int i = 0; i < 5; i++) {
 		for (GameObject* obj : objectList[i]) {
 			obj->Update();
@@ -121,6 +153,10 @@ void Game::Update()
 			objectList[i].end());
 
 	}
+
+	
+
+
 	if (phase != e_LOADING && loadingPolygon) {
 		loadingPolygon->Uninit();
 		delete loadingPolygon;
@@ -139,7 +175,13 @@ void Game::Draw()
 	}
 	
 	if (phase == e_LOADING && loadingPolygon) {
+		//_mut.lock();
 		loadingPolygon->Draw();
+		//_mut.unlock();
+	}
+
+	if (phase == e_CHOOSEITEM) {
+		equip->Draw();
 	}
 }
 
@@ -166,12 +208,22 @@ void Game::DrawDeferred()
 	
 }
 
-void Game::Loading()
+void Game::SetPhase(Phase phase)
 {
-	mapMgr = new MapManager;
+	this->phase = phase;
+}
+
+void Game::SetMapManager(MapManager * mapMgr)
+{
+	this->mapMgr = mapMgr;
+}
+
+void Loading(Game* game)
+{
+	MapManager* mapMgr = new MapManager;
 	mapMgr->Init();
 	//Camera* camera = AddGameObject<Camera>(e_LAYER_CAMERA);
-	mapMgr->ReadMap("Assets/Maps/stage001.txt");
+	mapMgr->ReadMap("Assets/Maps/stage001.txt",_mut);
 
 	//Field* field = AddGameObject<Field>(e_LAYER_BACKGROUND);
 	//Floor* floor = AddGameObject<Floor>(e_LAYER_BACKGROUND);
@@ -181,5 +233,6 @@ void Game::Loading()
 	//UI* ui = AddGameObject<UI>(e_LAYER_UI);
 	//ui->LoadTexture("Assets/Textures/t_title001.png");
 	Sleep(1000);
-	phase = e_SCENE;
+	game->SetMapManager(mapMgr);
+	game->SetPhase(Game::e_SCENE);
 }

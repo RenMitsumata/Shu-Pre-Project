@@ -11,6 +11,7 @@ cbuffer MatrixBuffer : register(b0)
 	matrix World;
 	matrix View;
 	matrix Projection;
+	float2 nearAndFar;
 }
 
 
@@ -64,9 +65,11 @@ struct VS_IN {
 // 出力構造体(※ps側の引数と一致させること！)→入力構造体と一致させなくてよい
 struct VS_OUT {
 	float4 position	: SV_POSITION;
+	float3 posW		: POSITION1;
 	float4 normal	: NORMAL0;
 	float4 color	: COLOR0;
 	float2 texcoord : TEXCOORD0;
+	float2 nearAndFar : TEXCOORD1;
 };
 
 //=============================================================================
@@ -85,6 +88,8 @@ void main(in VS_IN input,out VS_OUT output)
 	// 入力されたpositionを画面上のポジションに変更
 	output.position = mul(input.position, wvp);
 	
+	output.posW = mul(input.position, World);
+	output.nearAndFar = nearAndFar;
 
 	// normalの処理：
 	// そのまま流す

@@ -26,7 +26,10 @@ void Camera::Init()
 	offset = XMFLOAT3(1.0f, 0.5f, -1.5f);
 	focusLength = 5;
 	input = Manager::Get()->GetInput();
-	front = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	//front = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	front = XMFLOAT3(0.0f, -1.0f, 0.0f);
+	XMFLOAT3 upDir = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	up = XMLoadFloat3(&upDir);
 	XMVECTOR bufv = XMLoadFloat3(&front);
 	bufv = XMVector3Normalize(bufv);
 	XMStoreFloat3(&front, bufv);
@@ -38,7 +41,7 @@ void Camera::Init()
 	dome->SetOwner(this);
 	componentsList.push_back(dome);
 
-	front.y = -0.5f;
+	//front.y = -1.0f;
 	
 }
 
@@ -66,7 +69,7 @@ void Camera::Update()
 	//	pos.x += 0.1f;
 	//	at.x += 0.1f;
 	//}
-	if (input->GetKeyPress('H')) {
+	/*if (input->GetKeyPress('H')) {
 		XMVECTOR frontVec = XMLoadFloat3(&front);
 		XMVECTOR RotateInfo = XMQuaternionRotationAxis(up, -0.05f);
 		frontVec = XMVector3Rotate(frontVec, RotateInfo);
@@ -94,7 +97,7 @@ void Camera::Update()
 		frontVec = XMVector3Rotate(frontVec, RotateInfo);
 		up = XMVector3Rotate(up, RotateInfo);
 		XMStoreFloat3(&front, frontVec);
-	}
+	}*/
 
 
 
@@ -127,9 +130,21 @@ void Camera::Update()
 		// rot = owner->GetRot() + deltaRot;
 		// 正面。at用。
 		//XMStoreFloat3(&front, XMVector3Normalize(defaultVec));
+		
+		// ownerの深度を計算
+		pos.x = owner->GetPos().x - front.x * focusLength;
+		pos.z = owner->GetPos().z - front.z * focusLength;
+
+		const XMFLOAT3 myPos = pos;
+		const XMFLOAT3 ownerPos = owner->GetPos();
+		// owner->カメラのベクトル
+		XMVECTOR toOwner = XMLoadFloat3(&ownerPos) - XMLoadFloat3(&myPos);
+		float lengthToOwner;
+		XMStoreFloat(&lengthToOwner,XMVector3Length(toOwner));
+		playerDepth = (lengthToOwner - nearDis) / (farDis - nearDis);
+
 	}
-	pos.x = owner->GetPos().x - front.x * focusLength;
-	pos.z = owner->GetPos().z - front.z * focusLength;
+	
 	pos += deltaPos;
 	//pos += offset;
 	at = pos + front * focusLength;
@@ -198,7 +213,7 @@ void Camera::AddDeltaRot(XMFLOAT3 rot)
 	}*/
 
 	pos.x = owner->GetPos().x - front.x * focusLength;
-	pos.y += -2.0f;
+	pos.y += -deltaPos.y;
 	pos.z = owner->GetPos().z - front.z * focusLength;
 	pos += deltaPos;
 	at = pos + front * focusLength;

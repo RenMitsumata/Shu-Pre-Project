@@ -10,6 +10,10 @@ cbuffer MaterialBuffer : register(b0)
 	float3		Dummy;//16bit境界用
 }
 
+cbuffer playerDepth : register(b5)
+{
+	float4 pDepth;
+}
 
 
 struct PS_IN {
@@ -44,21 +48,6 @@ void main(in PS_IN input, out PS_OUT output)
 	output.outDiffuse *= g_Texture.Sample(g_SamplerState, input.texcoord);
 
 	
-		////ブルーム処理
-		//float4 diffuse;
-		//for(int y = -10; y < 11; y++){
-		//	for(int x = -10; x < 11; x++){
-		//		float2 texcoord = input.texcoord + float2(x*2/960.0f,y*2/540.0f);	// ガウスフィルター(1ピクセルとなりはUVでどれくらい？)
-		//		float4 color = g_Texture.Sample(g_SamplerState,texcoord);
-		//		float light = color.r * 0.299f + color.g * 0.587f + color.b * 0.114f;	// 輝度
-		//		if(light > 1.0f && (x != 0 || y != 0)){
-		//			diffuse += color / (x * x + y * y);
-		//		}
-		//	}
-		//}
-		//output.outDiffuse = g_Texture.Sample(g_SamplerState,input.texcoord);
-		//output.outDiffuse += diffuse * 0.5f;
-		//output.outDiffuse.a = 1.0f;
 	
 	
 
@@ -71,9 +60,34 @@ void main(in PS_IN input, out PS_OUT output)
 	output.outNormal = float4(normal, 1.0f);
 
 	// outDepth : デプスマップを返す（後回し）
-	//float depth = input.posWV.z / input.posWV.w;
-	float depth = input.posWV.z / 30.0f;
+	float depth = input.posWV.z / input.posWV.w;
+	//float depth = input.posWV.z / 30.0f;
 	output.outDepth = float4(depth, 0.0f, 0.0f, 1.0f);
 	//output.outDepth = float4(depth, depth, depth, 1.0f);
+
+	// 自分のデプスがプレイヤーのデプスより低ければ、薄くする
+	if (depth < 0.09f) {
+		output.outDiffuse.a *= 0.85f;
+	}
+
+
+
 }
 
+
+
+////ブルーム処理
+	//float4 diffuse;
+	//for(int y = -10; y < 11; y++){
+	//	for(int x = -10; x < 11; x++){
+	//		float2 texcoord = input.texcoord + float2(x*2/960.0f,y*2/540.0f);	// ガウスフィルター(1ピクセルとなりはUVでどれくらい？)
+	//		float4 color = g_Texture.Sample(g_SamplerState,texcoord);
+	//		float light = color.r * 0.299f + color.g * 0.587f + color.b * 0.114f;	// 輝度
+	//		if(light > 1.0f && (x != 0 || y != 0)){
+	//			diffuse += color / (x * x + y * y);
+	//		}
+	//	}
+	//}
+	//output.outDiffuse = g_Texture.Sample(g_SamplerState,input.texcoord);
+	//output.outDiffuse += diffuse * 0.5f;
+	//output.outDiffuse.a = 1.0f;

@@ -5,6 +5,7 @@
 #include "CollisionCapsule.h"
 #include "Manager.h"
 #include "ImpactSound.h"
+#include "EnemyManager.h"
 
 CollisionSphere::CollisionSphere() : radius(1.0f)
 {
@@ -169,9 +170,12 @@ void CollisionSphere::CollisionAction(Collision* other)
 		Manager::Get()->GetScene()->AddGameObject<ImpactSound>(e_LAYER_UI);
 	}
 	else if (colTag == e_COLTYPE_SOUND) {
+		// 敵の聴覚範囲だったら？にする
+		EnemyManager* eMgr = Manager::Get()->GetEnemyManager();
+		eMgr->ChangePhase(e_ENEMYPHASE_CAUTION);
 		owner->SetDestroy();
 	}
-	// 敵の聴覚範囲だったら？にする
+	
 }
 
 void CollisionSphere::Draw()

@@ -27,7 +27,7 @@ void MapManager::Uninit()
 {
 }
 
-void MapManager::ReadMap(const char* filename)
+void MapManager::ReadMap(const char* filename, std::mutex& mut)
 {
 	Scene* scene = Manager::Get()->GetScene();
 	WayNodeManager* nodeMgr = scene->GetNodeManager();
@@ -164,10 +164,14 @@ void MapManager::ReadMap(const char* filename)
 				ZeroMemory(locBuffer, 64);
 			}
 			siz = { posMem[0] * 0.01f,posMem[1] * 0.01f,posMem[2] * 0.01f };
+
+			mut.lock();
 			Wall* wall = scene->AddGameObject<Wall>(e_LAYER_GAMEOBJECT);
 			wall->SetPos(pos);
 			wall->SetRot(rot);
 			wall->SetSiz(siz);
+			mut.unlock();
+
 		} // if(WALL)
 			
 		if (idName == "NODE"){
@@ -348,9 +352,12 @@ void MapManager::ReadMap(const char* filename)
 				itr++;
 			}
 
+
+			mut.lock();
 			Enemy* enemy = scene->AddGameObject<Enemy>(e_LAYER_GAMEOBJECT);
 			enemy->SetPos(pos);
 			enemy->SetWanderNode(nodeArray, nodeCnt);
+			mut.unlock();
 
 			delete[] nodeArray;
 
@@ -359,7 +366,9 @@ void MapManager::ReadMap(const char* filename)
 		}// if(ENEMY)
 
 		if (idName == "PLAYER") {
+			mut.lock();
 			Player* player = scene->AddGameObject<Player>(e_LAYER_GAMEOBJECT);
+			mut.unlock();
 		}
 
 		if (idName == "FLOOR") {
@@ -399,8 +408,10 @@ void MapManager::ReadMap(const char* filename)
 			}
 			pos = { posMem[0],posMem[1],posMem[2] };
 
+			mut.lock();
 			Floor* floor = scene->AddGameObject<Floor>(e_LAYER_BACKGROUND);
 			floor->SetPos(pos);
+			mut.unlock();
 
 			// ŽŸ‚Ì:‚Ü‚Å“Ç‚Ý”ò‚Î‚·
 			while (currentData != ':') {
@@ -461,6 +472,7 @@ void MapManager::ReadMap(const char* filename)
 				itr++;
 			}
 
+			mut.lock();
 			WayNode* node = scene->AddGameObject<WayNode>(e_LAYER_GAMEOBJECT);
 
 			node->SetPos(pos);
@@ -469,6 +481,7 @@ void MapManager::ReadMap(const char* filename)
 			nodeMgr->AddList(node);
 			delete[] neighborArray;
 
+			mut.unlock();
 		}
 
 	} // while(currentPoint < fileSize) 

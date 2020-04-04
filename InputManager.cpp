@@ -1,6 +1,10 @@
 #include "InputManager.h"
 #include "DXManager.h"
 
+// ゲームパッドのトリガーボタンをtrueかfalseで返すときに判定に使う値(0～255のうち、この値以上なら押していると判定するため)
+#define GAMEPAD_LEFTTRIGGER_DEADLINE (85)
+#define GAMEPAD_RIGHTTRIGGER_DEADLINE (85)
+
 InputManager::InputManager()
 {
 }
@@ -41,6 +45,7 @@ void InputManager::Update()
 		lastCS = controllerState;
 		XInputGetState(0, &controllerState);
 		// 切断時の処理も入れる？
+		
 	}
 }
 
@@ -124,4 +129,52 @@ float InputManager::GetRightStickY()
 	}
 	SHORT ry = controllerState.Gamepad.sThumbRY;
 	return ry / 32768.0f;
+}
+
+bool InputManager::GetPadLTTrigger()
+{
+	BYTE value = controllerState.Gamepad.bLeftTrigger;
+	BYTE lastValue = lastCS.Gamepad.bLeftTrigger;
+	bool isPush = value > GAMEPAD_LEFTTRIGGER_DEADLINE;
+	bool isLastPush = lastValue > GAMEPAD_LEFTTRIGGER_DEADLINE;
+	return isPush & (isPush ^ isLastPush);
+}
+
+bool InputManager::GetPadLTPress()
+{
+	BYTE value = controllerState.Gamepad.bLeftTrigger;
+	return (value > GAMEPAD_LEFTTRIGGER_DEADLINE);
+}
+
+bool InputManager::GetPadLTRelease()
+{
+	BYTE value = controllerState.Gamepad.bLeftTrigger;
+	BYTE lastValue = lastCS.Gamepad.bLeftTrigger;
+	bool isPush = value > GAMEPAD_LEFTTRIGGER_DEADLINE;
+	bool isLastPush = lastValue > GAMEPAD_LEFTTRIGGER_DEADLINE;
+	return (!isPush) & (isPush ^ isLastPush);
+}
+
+bool InputManager::GetPadRTTrigger()
+{
+	BYTE value = controllerState.Gamepad.bRightTrigger;
+	BYTE lastValue = lastCS.Gamepad.bRightTrigger;
+	bool isPush = value > GAMEPAD_RIGHTTRIGGER_DEADLINE;
+	bool isLastPush = lastValue > GAMEPAD_RIGHTTRIGGER_DEADLINE;
+	return isPush & (isPush ^ isLastPush);
+}
+
+bool InputManager::GetPadRTPress()
+{
+	BYTE value = controllerState.Gamepad.bRightTrigger;
+	return (value > GAMEPAD_RIGHTTRIGGER_DEADLINE);
+}
+
+bool InputManager::GetPadRTRelease()
+{
+	BYTE value = controllerState.Gamepad.bRightTrigger;
+	BYTE lastValue = lastCS.Gamepad.bRightTrigger;
+	bool isPush = value > GAMEPAD_RIGHTTRIGGER_DEADLINE;
+	bool isLastPush = lastValue > GAMEPAD_RIGHTTRIGGER_DEADLINE;
+	return (!isPush) & (isPush ^ isLastPush);
 }

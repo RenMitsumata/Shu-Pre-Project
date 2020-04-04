@@ -52,7 +52,7 @@ void Player::Init()
 
 	
 	camera = Manager::Get()->GetScene()->AddGameObject<Camera>(e_LAYER_CAMERA);
-	camera->SetDeltaPos(XMFLOAT3(-1.0f, 2.0f, 2.5f));
+	camera->SetDeltaPos(XMFLOAT3(0.0f, 6.0f, 0.0f));
 	camera->SetDeltaRot(XMFLOAT3(0.0f, 0.0f, 0.0f));
 	camera->SetOwner(this);
 	
@@ -66,8 +66,8 @@ void Player::Update()
 {
 	if (input->GetLeftStickOperate()) {
 		// カメラの正面、上方向を取得
-		XMFLOAT3 camFront = camera->GetFront();
-		XMFLOAT3 camUp = camera->GetUp();
+		XMFLOAT3 camFront = XMFLOAT3(0.0f, 0.0f, 1.0f);//camera->GetFront();
+		XMFLOAT3 camUp = XMFLOAT3(0.0f, 1.0f, 0.0f);//camera->GetUp();
 
 		// 左スティックの角度を取得
 		float rad = input->GetLeftStickRad();
@@ -127,12 +127,7 @@ void Player::Update()
 	if (input->GetKeyPress(VK_RIGHT)) {
 		AddRot(XMFLOAT3(0.0f, 0.05f, 0.0f));
 	}
-
-
-
-
-
-
+	   	  
 	/*
 	if (input->GetKeyPress(VK_LSHIFT)) {
 		pos.y += 0.1f;
@@ -141,7 +136,7 @@ void Player::Update()
 		pos.y -= 0.1f;
 	}
 	*/
-	if (input->GetKeyTrigger(VK_SPACE) || input->GetPadTrigger(XINPUT_GAMEPAD_Y)) {
+	if (input->GetKeyTrigger(VK_SPACE) || input->GetPadRTTrigger()) {
 		Bullet* bullet = scene->AddGameObject<Bullet>(e_LAYER_GAMEOBJECT);
 		bullet->SetPos(pos + XMFLOAT3(0.0f,2.0f,0.0f));
 		bullet->SetRot(rot);
@@ -149,4 +144,7 @@ void Player::Update()
 		bullet->SetVelocity(front * 0.1f);
 		//audio->Play(soundMap["shoot"]);
 	}
+
+	
+
 }
