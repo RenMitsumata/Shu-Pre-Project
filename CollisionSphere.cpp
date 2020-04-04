@@ -5,6 +5,7 @@
 #include "CollisionCapsule.h"
 #include "Manager.h"
 #include "ImpactSound.h"
+#include "EnemyManager.h"
 
 CollisionSphere::CollisionSphere() : radius(1.0f)
 {
@@ -170,6 +171,8 @@ void CollisionSphere::CollisionAction(Collision* other)
 	}
 	else if (colTag == e_COLTYPE_SOUND) {
 		// “G‚Ì’®Šo”ÍˆÍ‚¾‚Á‚½‚çH‚É‚·‚é
+		EnemyManager* eMgr = Manager::Get()->GetEnemyManager();
+		eMgr->ChangePhase(e_ENEMYPHASE_CAUTION);
 		owner->SetDestroy();
 	}
 	

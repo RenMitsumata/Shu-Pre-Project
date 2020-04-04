@@ -98,6 +98,10 @@ void Shader3D_Deferred::Init(const char * VS_Filename, const char * PS_Filename)
 	device->CreateBuffer(&hBufferDesc, NULL, &constantBuffer);
 	context->VSSetConstantBuffers(0, 1, &constantBuffer);
 
+	hBufferDesc.ByteWidth = sizeof(float);
+	device->CreateBuffer(&hBufferDesc, NULL, &playerDepthBuffer);
+	context->PSSetConstantBuffers(5, 1, &playerDepthBuffer);
+
 	// サンプラーステート設定
 	D3D11_SAMPLER_DESC samplerDesc;
 	ZeroMemory(&samplerDesc, sizeof(samplerDesc));
@@ -140,11 +144,15 @@ void Shader3D_Deferred::Set()
 
 
 	// 定数バッファ更新
-	constantsValue.nearAndFar = manager->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA)->GetNearAndFar();
+	Camera* camera = manager->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA);
+	constantsValue.nearAndFar = camera->GetNearAndFar();
+	float depth = camera->GetPlayerDepth();
 	context->UpdateSubresource(constantBuffer, 0, NULL, &constantsValue, 0, 0);
+	context->UpdateSubresource(playerDepthBuffer, 0, NULL, &depth, 0, 0);
 
 	// 定数バッファ設定(定数バッファの形が異なる場合、引数を変える)
 	context->VSSetConstantBuffers(0, 1, &constantBuffer);
+	context->PSSetConstantBuffers(5, 1, &playerDepthBuffer);
 }
 
 void Shader3D_Deferred::SetWorldMatrix(XMFLOAT4X4 * worldMtx)

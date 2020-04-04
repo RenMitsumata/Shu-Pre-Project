@@ -19,6 +19,7 @@ private:
 	ID3D11Buffer* constantBuffer;
 	ID3D11SamplerState* samplerState;
 	CONSTANTS_DEFERRED constantsValue;
+	ID3D11Buffer* playerDepthBuffer;
 	
 public:
 	Shader3D_Deferred();

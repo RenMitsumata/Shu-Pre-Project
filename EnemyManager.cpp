@@ -49,13 +49,25 @@ void EnemyManager::DeleteEnemy(Enemy* enemy)
 void EnemyManager::ChangePhase(EnemyPhase phase)
 {
 	switch (phase) {
-	case e_ENEMYPHASE_ALERT:
-		if (ui) {
-			delete ui;
+		case e_ENEMYPHASE_ALERT:
+		{
+			if (ui) {
+				delete ui;
+			}
+			ui = new UI;
+			ui->SetTextureAndSize("Assets/Textures/alert.png", XMFLOAT3(WINDOW_WIDTH / 2 - 50.0f, 10.0f, 0.0f), 100.0f, 50.0f);
+			// 全てのエネミーを警戒状態に
+			break;
 		}
-		ui = new UI;
-		ui->SetTextureAndSize("Assets/Textures/alert.png", XMFLOAT3(WINDOW_WIDTH / 2 - 50.0f, 10.0f,0.0f), 100.0f, 50.0f);
-		// 全てのエネミーを警戒状態に
-		break;
+		case e_ENEMYPHASE_CAUTION:
+		{
+			if (ui) {
+				delete ui;
+			}
+			ui = new UI;
+			ui->SetTextureAndSize("Assets/Textures/caution.png", XMFLOAT3(WINDOW_WIDTH / 2 - 50.0f, 10.0f, 0.0f), 100.0f, 50.0f);
+			// 全てのエネミーを注意状態に
+			break;
+		}
 	}
 }

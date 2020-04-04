@@ -130,9 +130,21 @@ void Camera::Update()
 		// rot = owner->GetRot() + deltaRot;
 		// 正面。at用。
 		//XMStoreFloat3(&front, XMVector3Normalize(defaultVec));
+		
+		// ownerの深度を計算
+		pos.x = owner->GetPos().x - front.x * focusLength;
+		pos.z = owner->GetPos().z - front.z * focusLength;
+
+		const XMFLOAT3 myPos = pos;
+		const XMFLOAT3 ownerPos = owner->GetPos();
+		// owner->カメラのベクトル
+		XMVECTOR toOwner = XMLoadFloat3(&ownerPos) - XMLoadFloat3(&myPos);
+		float lengthToOwner;
+		XMStoreFloat(&lengthToOwner,XMVector3Length(toOwner));
+		playerDepth = (lengthToOwner - nearDis) / (farDis - nearDis);
+
 	}
-	pos.x = owner->GetPos().x - front.x * focusLength;
-	pos.z = owner->GetPos().z - front.z * focusLength;
+	
 	pos += deltaPos;
 	//pos += offset;
 	at = pos + front * focusLength;

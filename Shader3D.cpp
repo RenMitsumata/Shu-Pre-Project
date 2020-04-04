@@ -102,17 +102,7 @@ void Shader3D::Init(const char * VS_Filename, const char * PS_Filename)
 	device->CreateBuffer(&hBufferDesc, NULL, &constantBuffer);
 	context->VSSetConstantBuffers(0, 1, &constantBuffer);
 
-	/*
-	device->CreateBuffer(&hBufferDesc, NULL, &worldBuffer);
-	context->VSSetConstantBuffers(0, 1, &worldBuffer);
 
-	device->CreateBuffer(&hBufferDesc, NULL, &viewBuffer);
-	context->VSSetConstantBuffers(1, 1, &viewBuffer);
-
-	device->CreateBuffer(&hBufferDesc, NULL, &projectionBuffer);
-	context->VSSetConstantBuffers(2, 1, &projectionBuffer);
-	*/
-	
 	hBufferDesc.ByteWidth = sizeof(MATERIAL);
 
 	device->CreateBuffer(&hBufferDesc, NULL, &materialBuffer);
@@ -124,8 +114,17 @@ void Shader3D::Init(const char * VS_Filename, const char * PS_Filename)
 	device->CreateBuffer(&hBufferDesc, NULL, &lightBuffer);
 	context->VSSetConstantBuffers(2, 1, &lightBuffer);
 	
+	// カメラ位置
+	hBufferDesc.ByteWidth = sizeof(XMFLOAT4);
 
+	device->CreateBuffer(&hBufferDesc, NULL, &cameraPosBuffer);
+	context->PSSetConstantBuffers(4, 1, &cameraPosBuffer);
 
+	// プレイヤーデプスバッファ（プレイヤーより手前にあるオブジェクトは透明に）
+	//hBufferDesc.ByteWidth = sizeof(float);
+
+	device->CreateBuffer(&hBufferDesc, NULL, &playerDepthBuffer);
+	context->PSSetConstantBuffers(5, 1, &playerDepthBuffer);
 
 
 	// 入力レイアウト設定
@@ -201,13 +200,23 @@ void Shader3D::Set()
 
 
 	// 定数バッファ更新
-	constantValue.nearAndFar = manager->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA)->GetNearAndFar();
+	Camera* camera = manager->GetScene()->GetGameObject<Camera>(e_LAYER_CAMERA);
+	constantValue.nearAndFar = camera->GetNearAndFar();
 	context->UpdateSubresource(constantBuffer, 0, NULL, &constantValue, 0, 0);
+	XMFLOAT3 camPos = camera->GetPos();
+	XMFLOAT4 camPosConst = { camPos.x,camPos.y,camPos.z,0.0f };
+	context->UpdateSubresource(cameraPosBuffer, 0, NULL, &camPosConst, 0, 0);
+	float playerDepth = camera->GetPlayerDepth();
+	XMFLOAT4 playerDepthConst = { playerDepth,0.0f,0.0f,0.0f };
+	context->UpdateSubresource(playerDepthBuffer, 0, NULL, &playerDepthConst, 0, 0);
+
 
 	// 定数バッファ設定(定数バッファの形が異なる場合、引数を変える)
 	context->VSSetConstantBuffers(0, 1, &constantBuffer);
 	context->VSSetConstantBuffers(1, 1, &materialBuffer);
 	context->PSSetConstantBuffers(0, 1, &materialBuffer);
+	context->PSSetConstantBuffers(4, 1, &cameraPosBuffer);
+	context->PSSetConstantBuffers(5, 1, &playerDepthBuffer);
 	//context->PSSetConstantBuffers(0, 1, &constantBuffer);
 }
 

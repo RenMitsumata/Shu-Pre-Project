@@ -118,6 +118,9 @@ private:
 	*/
 	ID3D11Buffer*			materialBuffer;
 	ID3D11Buffer*			lightBuffer;
+	ID3D11Buffer*			cameraPosBuffer;
+	ID3D11Buffer*			playerDepthBuffer;
+
 	
 public:
 	Shader3D();

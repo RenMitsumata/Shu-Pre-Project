@@ -9,6 +9,7 @@
 #define DEFAULT_NEAR (0.1f)
 #define DEFAULT_FAR (100.0f)
 
+
 class Camera : public GameObject
 {
 
@@ -29,6 +30,7 @@ private:
 	float nearDis = DEFAULT_NEAR;
 	float farDis = DEFAULT_FAR;
 	bool isMain = false;
+	float playerDepth = 1.0f;
 public:
 	Camera();
 	~Camera();
@@ -42,5 +44,6 @@ public:
 	void SetDeltaRot(XMFLOAT3 rot) { deltaRot = rot; }
 	XMFLOAT2 GetNearAndFar() { return XMFLOAT2(nearDis, farDis); }
 	bool GetMain() { return isMain; }
+	float GetPlayerDepth() { return playerDepth; }
 };
 
