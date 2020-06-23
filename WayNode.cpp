@@ -84,4 +84,12 @@ unsigned short WayNode::GetID()
 	return id;
 }
 
+NEIGHBOR_INFO WayNode::GetNeighborInfo()
+{
+	NEIGHBOR_INFO ret;
+	ret.neighborInfo = neighborInfo;
+	ret.num = arraySize;
+	return ret;
+}
+
 

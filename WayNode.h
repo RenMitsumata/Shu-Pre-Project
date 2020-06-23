@@ -9,6 +9,12 @@ struct WAYNODE_STATUS {
 	float length;
 };
 
+struct NEIGHBOR_INFO {
+	int num;									// ”z—ñ‚Ì—v‘f”
+	WAYNODE_STATUS* neighborInfo = nullptr;		// —×î•ñ
+};
+
+
 class WayNode :	public GameObject
 {
 private:
@@ -25,5 +31,6 @@ public:
 	void SetDistance(unsigned short id, float length);
 	void SetID(unsigned short myID);
 	unsigned short GetID();
+	NEIGHBOR_INFO GetNeighborInfo();
 };
 

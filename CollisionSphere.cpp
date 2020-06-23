@@ -169,7 +169,7 @@ void CollisionSphere::CollisionAction(Collision* other)
 		owner->SetDestroy();
 		Manager::Get()->GetScene()->AddGameObject<ImpactSound>(e_LAYER_UI);
 	}
-	else if (colTag == e_COLTYPE_SOUND) {
+	else if (colTag == e_COLTYPE_SOUND && other->GetTag() == e_COLTYPE_ENEMY) {
 		// “G‚Ì’®Šo”ÍˆÍ‚¾‚Á‚½‚çH‚É‚·‚é
 		EnemyManager* eMgr = Manager::Get()->GetEnemyManager();
 		eMgr->ChangePhase(e_ENEMYPHASE_CAUTION);

@@ -26,8 +26,8 @@ void Camera::Init()
 	offset = XMFLOAT3(1.0f, 0.5f, -1.5f);
 	focusLength = 5;
 	input = Manager::Get()->GetInput();
-	//front = XMFLOAT3(0.0f, 0.0f, 1.0f);
-	front = XMFLOAT3(0.0f, -1.0f, 0.0f);
+	front = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	//front = XMFLOAT3(0.0f, -1.0f, 0.0f);
 	XMFLOAT3 upDir = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	up = XMLoadFloat3(&upDir);
 	XMVECTOR bufv = XMLoadFloat3(&front);
@@ -41,7 +41,7 @@ void Camera::Init()
 	dome->SetOwner(this);
 	componentsList.push_back(dome);
 
-	//front.y = -1.0f;
+	front.y = -0.5f;
 	
 }
 
@@ -200,6 +200,7 @@ void Camera::AddDeltaRot(XMFLOAT3 rot)
 		XMVECTOR RotateInfo = XMQuaternionRotationAxis(upVec, rot.x);
 		frontVec = XMVector3Rotate(frontVec, RotateInfo);
 		XMStoreFloat3(&front, frontVec);
+		up = XMVector3Rotate(up, RotateInfo);
 	}
 
 	

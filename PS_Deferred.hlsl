@@ -66,9 +66,9 @@ void main(in PS_IN input, out PS_OUT output)
 	//output.outDepth = float4(depth, depth, depth, 1.0f);
 
 	// 自分のデプスがプレイヤーのデプスより低ければ、薄くする
-	if (depth < 0.09f) {
-		output.outDiffuse.a *= 0.85f;
-	}
+	/*if (depth < 0.09f) {
+		output.outDiffuse.a *= 0.75f;
+	}*/
 
 
 

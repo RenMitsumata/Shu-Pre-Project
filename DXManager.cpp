@@ -193,7 +193,6 @@ void DXManager::Init()
 
 
 	}
-	int a = 0;
 
 
 	// デファードレンダリング関係の初期化

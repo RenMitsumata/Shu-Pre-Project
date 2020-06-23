@@ -4,6 +4,7 @@
 #define COOLTIME (200)
 
 class WayNodeManager;
+
 #include "DXManager.h"
 
 #include "EnemyState.h"
